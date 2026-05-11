@@ -1,96 +1,225 @@
 <div wire:ignore.self class="modal fade" id="ModalDesaCreate" tabindex="-1" aria-labelledby="ModalDesaCreateLabel"
     aria-hidden="true">
+
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-    
-            <div class="modal-header bg-light p-3">
-                <h5 class="modal-title fw-bold">
-                    <i class="ri-add-circle-line me-1 text-success"></i> Tambah Data Desa
-                </h5>
-    
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+
+            {{-- HEADER --}}
+            <div class="modal-header border-0 pb-0 pt-4 px-4">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="avatar-sm">
+                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-20">
+                            <i class="ri-community-line"></i>
+                        </div>
+                    </div>
+
+                    <div>
+
+                        <h4 class="modal-title fw-bold mb-1" id="ModalDesaCreateLabel">
+
+                            Tambah Data Desa
+
+                        </h4>
+
+                        <p class="text-muted mb-0 fs-13">
+                            Tambahkan informasi desa dan masjid pembina
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <button type="button" class="btn btn-light btn-icon rounded-circle" data-bs-dismiss="modal">
+
+                    <i class="ri-close-line fs-18"></i>
+
+                </button>
+
             </div>
-    
+
             <form wire:submit.prevent="save">
-                <div class="modal-body">
-                    <div class="row g-3">
-    
-                        {{-- Nama Desa --}}
-                        <div class="col-lg-6">
-                            <label class="form-label">
-                                Nama Desa <span class="text-danger">*</span>
-                            </label>
-                            <input type="text" wire:model.defer="nama_desa" class="form-control"
-                                placeholder="Masukkan nama desa">
-                            @error('nama_desa')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
+
+                <div class="modal-body p-4">
+
+                    {{-- INFORMASI UTAMA --}}
+                    <div class="mb-4">
+
+                        <div class="d-flex align-items-center gap-2 mb-3">
+
+                            <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
+                                Informasi Utama
+                            </span>
+
                         </div>
-    
-                        {{-- Nama Masjid --}}
-                        <div class="col-lg-6">
-                            <label class="form-label">
-                                Nama Masjid <span class="text-danger">*</span>
-                            </label>
-                            <input type="text" wire:model.defer="nama_masjid" class="form-control"
-                                placeholder="Masukkan nama masjid">
-                            @error('nama_masjid')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
+
+                        <div class="row g-4">
+
+                            {{-- Nama Desa --}}
+                            <div class="col-lg-6">
+
+                                <label class="form-label fw-semibold">
+                                    Nama Desa
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input type="text" wire:model.defer="nama_desa" class="form-control"
+                                    placeholder="Contoh : Desa Gemolong">
+
+                                @error('nama_desa')
+                                <small class="text-danger d-block mt-1">
+                                    {{ $message }}
+                                </small>
+                                @enderror
+
+                            </div>
+
+                            {{-- Nama Masjid --}}
+                            <div class="col-lg-6">
+
+                                <label class="form-label fw-semibold">
+                                    Nama Masjid
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input type="text" wire:model.defer="nama_masjid" class="form-control"
+                                    placeholder="Contoh : Masjid Al-Hikmah">
+
+                                @error('nama_masjid')
+                                <small class="text-danger d-block mt-1">
+                                    {{ $message }}
+                                </small>
+                                @enderror
+
+                            </div>
+
                         </div>
-    
-                        {{-- Alamat --}}
-                        <div class="col-lg-12">
-                            <label class="form-label">
-                                Alamat
-                            </label>
-                            <input type="text" wire:model.defer="alamat" class="form-control"
-                                placeholder="Alamat lengkap desa">
-                            @error('alamat')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
+
+                    </div>
+
+                    {{-- LOKASI --}}
+                    <div class="mb-4">
+
+                        <div class="d-flex align-items-center gap-2 mb-3">
+
+                            <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill">
+                                Lokasi Desa
+                            </span>
+
                         </div>
-    
-                        {{-- Tautan Google Maps --}}
-                        <div class="col-lg-12">
-                            <label class="form-label">
-                                Tautan Google Maps
-                            </label>
-                            <input type="text" wire:model.defer="peta" class="form-control"
-                                placeholder="https://maps.google.com/...">
-                            @error('peta')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
+
+                        <div class="row g-4">
+
+                            {{-- Alamat --}}
+                            <div class="col-lg-12">
+
+                                <label class="form-label fw-semibold">
+                                    Alamat
+                                </label>
+
+                                <textarea wire:model.defer="alamat" class="form-control" rows="3"
+                                    placeholder="Masukkan alamat lengkap desa"></textarea>
+
+                                @error('alamat')
+                                <small class="text-danger d-block mt-1">
+                                    {{ $message }}
+                                </small>
+                                @enderror
+
+                            </div>
+
+                            {{-- Google Maps --}}
+                            <div class="col-lg-12">
+
+                                <label class="form-label fw-semibold">
+                                    Tautan Google Maps
+                                </label>
+
+                                <div class="input-group">
+
+                                    <span class="input-group-text bg-light">
+                                        <i class="ri-map-pin-line text-danger"></i>
+                                    </span>
+
+                                    <input type="text" wire:model.defer="peta" class="form-control"
+                                        placeholder="https://maps.google.com/...">
+
+                                </div>
+
+                                <div class="form-text">
+                                    Tambahkan tautan lokasi Google Maps jika tersedia
+                                </div>
+
+                                @error('peta')
+                                <small class="text-danger d-block mt-1">
+                                    {{ $message }}
+                                </small>
+                                @enderror
+
+                            </div>
+
                         </div>
-    
+
+                    </div>
+
+                    {{-- DESKRIPSI --}}
+                    <div>
+
+                        <div class="d-flex align-items-center gap-2 mb-3">
+
+                            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
+                                Deskripsi Tambahan
+                            </span>
+
+                        </div>
+
                         {{-- Deskripsi --}}
-                        <div class="col-lg-12">
-                            <label class="form-label">
+                        <div>
+
+                            <label class="form-label fw-semibold">
                                 Deskripsi
                             </label>
-                            <textarea wire:model.defer="deskripsi" class="form-control" rows="3"
-                                placeholder="Catatan tambahan (opsional)"></textarea>
+
+                            <textarea wire:model.defer="deskripsi" class="form-control" rows="4"
+                                placeholder="Tambahkan catatan atau informasi tambahan terkait desa"></textarea>
+
                             @error('deskripsi')
-                            <small class="text-danger">{{ $message }}</small>
+                            <small class="text-danger d-block mt-1">
+                                {{ $message }}
+                            </small>
                             @enderror
+
                         </div>
-    
+
                     </div>
+
                 </div>
-    
-                <div class="modal-footer">
-                    <a href="javascript:void(0);" class="btn btn-link link-success shadow-none fw-medium"
-                        data-bs-dismiss="modal">
-                        <i class="ri-close-line me-1"></i> Tutup
-                    </a>
-    
-                    <button type="submit" class="btn btn-primary">
-                        <i class="ri-save-3-line me-1"></i> Simpan
+
+                {{-- FOOTER --}}
+                <div class="modal-footer border-0 px-4 pb-4 pt-0">
+
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">
+
+                        <i class="ri-close-line me-1"></i>
+                        Tutup
+
                     </button>
+
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">
+
+                        <i class="ri-save-3-line me-1"></i>
+                        Simpan Data
+
+                    </button>
+
                 </div>
-    
+
             </form>
-    
+
         </div>
+
     </div>
+
 </div>

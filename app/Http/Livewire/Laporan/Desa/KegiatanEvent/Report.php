@@ -10,228 +10,356 @@ use Livewire\Component;
 
 class Report extends Component
 {
-    // ==============================
-    // STATE (INPUT / KONTEXT AKTIF)
-    // ==============================
+    // ======================================================
+    // STATE
+    // ======================================================
+
     public $kegiatan;
+
     public $kegiatanId;
+
     public $ms_desa_id;
+
     public $nama_desa = '-';
 
-    public $insightDesa = '-';
+    // ======================================================
+    // TABLE REPORT
+    // ======================================================
+
+    public $laporanRows = [];
+
+    public $grandTotal = [
+        'target_l' => 0,
+        'target_p' => 0,
+        'target_total' => 0,
+
+        'hadir_l' => 0,
+        'hadir_p' => 0,
+        'hadir_total' => 0,
+
+        'alfa' => 0,
+
+        'infaq' => 0,
+    ];
+
+    // ======================================================
+    // LISTENER
+    // ======================================================
 
     protected $listeners = [
         'KegiatanReport' => 'loadReport'
     ];
 
-    // ==============================
-    // EVENT HANDLER
-    // ==============================
+    // ======================================================
+    // LOAD REPORT
+    // ======================================================
+
     public function loadReport($kegiatanId, $desaId)
     {
+        $this->resetReport();
+
         $this->kegiatanId = $kegiatanId;
         $this->ms_desa_id = $desaId;
 
-        // Ambil data desa
+        // =========================================
+        // DESA
+        // =========================================
         $desa = Desa::find($desaId);
+
         $this->nama_desa = $desa?->nama_desa ?? '-';
 
-        // Load kegiatan + relasi
+        // =========================================
+        // KEGIATAN
+        // =========================================
         $this->kegiatan = Kegiatan::with([
             'ms_desa',
-            'ms_kelompok.ms_desa'
+            'ms_kelompok'
         ])->find($kegiatanId);
 
         if (!$this->kegiatan) {
+
             $this->dispatchBrowserEvent('alertify-error', [
                 'message' => 'Data kegiatan tidak ditemukan'
             ]);
+
             return;
         }
 
-        // Broadcast parameter ke child component
+        // =========================================
+        // GENERATE REPORT
+        // =========================================
+        $this->generateTableReport();
+
+        // =========================================
+        // CHILD COMPONENT
+        // =========================================
         $this->emitTo(
             'laporan.desa.kegiatan-event.report.attendance',
             'setKegiatan',
             $kegiatanId,
-            $this->ms_desa_id
+            $desaId
         );
 
         $this->emitTo(
             'laporan.desa.kegiatan-event.report.alfa',
             'setKegiatan',
             $kegiatanId,
-            $this->ms_desa_id
+            $desaId
         );
 
-        // Generate insight awal
-        $this->generateInsightDesa();
-
+        // =========================================
+        // SUCCESS
+        // =========================================
         $this->dispatchBrowserEvent('alertify-success', [
-            'message' => 'Laporan kehadiran dimuat'
+            'message' => 'Laporan kegiatan berhasil dimuat'
         ]);
     }
 
-    // ==============================
-    // SCOPE HELPER (UNTUK VIEW)
-    // ==============================
-    public function getIsScopeDaerahProperty()
+    // ======================================================
+    // GENERATE TABLE REPORT
+    // ======================================================
+
+    private function generateTableReport()
     {
-        return $this->kegiatan?->scope === 'daerah';
-    }
-
-    public function getIsScopeDesaProperty()
-    {
-        return $this->kegiatan?->scope === 'desa';
-    }
-
-    public function getIsScopeKelompokProperty()
-    {
-        return $this->kegiatan?->scope === 'kelompok';
-    }
-
-    // ==============================
-    // STATISTIK DESA (COMPUTED)
-    // ==============================
-
-    /**
-     * Target peserta khusus desa
-     * Mengikuti scope + jenjang dari kegiatan
-     */
-    public function getTargetDesaProperty()
-    {
-        if (!$this->kegiatan || !$this->ms_desa_id) return 0;
-
-        return $this->kegiatan
-            ->targetPesertaQuery()
-            ->whereHas(
-                'ms_kelompok',
-                fn($q) =>
-                $q->where('ms_desa_id', $this->ms_desa_id)
-            )
-            ->count();
-    }
-
-    /**
-     * Total hadir dari desa ini
-     */
-    public function getHadirDesaProperty()
-    {
-        if (!$this->kegiatanId || !$this->ms_desa_id) return 0;
-
-        return PresensiKegiatan::where('ms_kegiatan_id', $this->kegiatanId)
-            ->where('status_hadir', 'hadir')
-            ->whereHas(
-                'ms_generus.ms_kelompok',
-                fn($q) =>
-                $q->where('ms_desa_id', $this->ms_desa_id)
-            )
-            ->count();
-    }
-
-    /**
-     * Total izin dari desa ini
-     */
-    public function getIzinDesaProperty()
-    {
-        if (!$this->kegiatanId || !$this->ms_desa_id) return 0;
-
-        return PresensiKegiatan::where('ms_kegiatan_id', $this->kegiatanId)
-            ->where('status_hadir', 'izin')
-            ->whereHas(
-                'ms_generus.ms_kelompok',
-                fn($q) =>
-                $q->where('ms_desa_id', $this->ms_desa_id)
-            )
-            ->count();
-    }
-
-    /**
-     * Alfa desa = target desa - (hadir + izin + sakit)
-     */
-    public function getAlfaDesaProperty()
-    {
-        if (!$this->kegiatanId || !$this->ms_desa_id) return 0;
-
-        $hadirIzin = PresensiKegiatan::where('ms_kegiatan_id', $this->kegiatanId)
-            ->whereIn('status_hadir', ['hadir', 'izin', 'sakit'])
-            ->whereHas(
-                'ms_generus.ms_kelompok',
-                fn($q) =>
-                $q->where('ms_desa_id', $this->ms_desa_id)
-            )
-            ->count();
-
-        return max(0, $this->targetDesa - $hadirIzin);
-    }
-
-    /**
-     * Presentase hadir desa
-     */
-    public function getPresentaseHadirDesaProperty()
-    {
-        if ($this->targetDesa == 0) return 0;
-
-        return round(($this->hadirDesa / $this->targetDesa) * 100, 1);
-    }
-
-    /**
-     * Presentase izin desa
-     */
-    public function getPresentaseIzinDesaProperty()
-    {
-        if ($this->targetDesa == 0) return 0;
-
-        return round(($this->izinDesa / $this->targetDesa) * 100, 1);
-    }
-
-    /**
-     * Presentase alfa desa
-     */
-    public function getPresentaseAlfaDesaProperty()
-    {
-        if ($this->targetDesa == 0) return 0;
-
-        return round(($this->alfaDesa / $this->targetDesa) * 100, 1);
-    }
-
-    /**
-     * Kontribusi desa terhadap total kehadiran global event
-     */
-    public function getKontribusiDesaProperty()
-    {
-        $totalHadirGlobal = $this->kegiatan?->totalHadir() ?? 0;
-
-        if ($totalHadirGlobal == 0) return 0;
-
-        return round(($this->hadirDesa / $totalHadirGlobal) * 100, 1);
-    }
-
-    /**
-     * Total target global event
-     */
-    public function getTotalTargetProperty()
-    {
-        return $this->kegiatan?->targetPeserta() ?? 0;
-    }
-
-    // ==============================
-    // INSIGHT DESA (UX ANALYTICS)
-    // ==============================
-    private function generateInsightDesa()
-    {
-        $p = $this->presentaseHadirDesa;
-
-        if ($p >= 85) {
-            $this->insightDesa = "🔥 Partisipasi sangat baik. Desa ini responsif & aktif.";
-        } elseif ($p >= 65) {
-            $this->insightDesa = "👍 Partisipasi cukup baik. Masih bisa ditingkatkan.";
-        } elseif ($p >= 40) {
-            $this->insightDesa = "⚠️ Partisipasi rendah. Perlu follow-up ke generus alfa.";
-        } else {
-            $this->insightDesa = "🚨 Partisipasi sangat rendah. Perlu perhatian khusus pengurus desa.";
+        if (!$this->kegiatan) {
+            return;
         }
+
+        // ==================================================
+        // TARGET PESERTA
+        // ==================================================
+
+        $targetQuery = $this->kegiatan
+            ->targetPesertaQuery()
+            ->with([
+                'ms_kelompok.ms_desa'
+            ]);
+
+        // Filter desa jika ada
+        if ($this->ms_desa_id) {
+
+            $targetQuery->whereHas('ms_kelompok', function ($q) {
+
+                $q->where('ms_desa_id', $this->ms_desa_id);
+            });
+        }
+
+        $targetGenerus = $targetQuery->get();
+
+        // ==================================================
+        // PRESENSI
+        // ==================================================
+
+        $presensi = PresensiKegiatan::with([
+            'ms_generus.ms_kelompok'
+        ])
+            ->where('ms_kegiatan_id', $this->kegiatanId)
+            ->where('status_hadir', 'hadir')
+            ->get();
+
+        // ==================================================
+        // GROUP TARGET
+        // ==================================================
+
+        $groupedTarget = $targetGenerus
+            ->groupBy('ms_kelompok_id');
+
+        // ==================================================
+        // GROUP PRESENSI
+        // ==================================================
+
+        $groupedPresensi = $presensi
+            ->groupBy('ms_generus.ms_kelompok_id');
+
+        $rows = [];
+
+        $grand = [
+            'target_l' => 0,
+            'target_p' => 0,
+            'target_total' => 0,
+
+            'hadir_l' => 0,
+            'hadir_p' => 0,
+            'hadir_total' => 0,
+
+            'alfa' => 0,
+
+            'infaq' => 0,
+        ];
+
+        // ==================================================
+        // LOOP KELOMPOK
+        // ==================================================
+
+        foreach ($groupedTarget as $kelompokId => $members) {
+
+            $kelompok = optional($members->first())->ms_kelompok;
+
+            // ==============================================
+            // TARGET
+            // ==============================================
+
+            $targetL = $members
+                ->where('jenis_kelamin', 'laki-laki')
+                ->count();
+
+            $targetP = $members
+                ->where('jenis_kelamin', 'perempuan')
+                ->count();
+
+            $targetTotal = $targetL + $targetP;
+
+            // ==============================================
+            // PRESENSI HADIR
+            // ==============================================
+
+            $hadirCollection = $groupedPresensi[$kelompokId]
+                ?? collect();
+
+            $hadirL = $hadirCollection
+                ->filter(function ($item) {
+
+                    return optional($item->ms_generus)
+                        ->jenis_kelamin === 'laki-laki';
+                })
+                ->count();
+
+            $hadirP = $hadirCollection
+                ->filter(function ($item) {
+
+                    return optional($item->ms_generus)
+                        ->jenis_kelamin === 'perempuan';
+                })
+                ->count();
+
+            $hadirTotal = $hadirL + $hadirP;
+
+            // ==============================================
+            // ALFA
+            // ==============================================
+
+            $alfa = max(0, $targetTotal - $hadirTotal);
+
+            // ==============================================
+            // PRESENTASE
+            // ==============================================
+
+            $presentase = $targetTotal > 0
+                ? round(($hadirTotal / $targetTotal) * 100)
+                : 0;
+
+            // ==============================================
+            // INFAQ
+            // ==============================================
+
+            // sementara dummy
+            $infaq = $hadirTotal * 2500;
+
+            // ==============================================
+            // PUSH ROW
+            // ==============================================
+
+            $rows[] = [
+
+                'kelompok' => strtoupper(
+                    $kelompok?->nama_kelompok ?? '-'
+                ),
+
+                'target_l' => $targetL,
+                'target_p' => $targetP,
+                'target_total' => $targetTotal,
+
+                'hadir_l' => $hadirL,
+                'hadir_p' => $hadirP,
+                'hadir_total' => $hadirTotal,
+
+                'alfa' => $alfa,
+
+                'infaq' => $infaq,
+
+                'presentase' => $presentase,
+            ];
+
+            // ==============================================
+            // GRAND TOTAL
+            // ==============================================
+
+            $grand['target_l'] += $targetL;
+            $grand['target_p'] += $targetP;
+            $grand['target_total'] += $targetTotal;
+
+            $grand['hadir_l'] += $hadirL;
+            $grand['hadir_p'] += $hadirP;
+            $grand['hadir_total'] += $hadirTotal;
+
+            $grand['alfa'] += $alfa;
+
+            $grand['infaq'] += $infaq;
+        }
+
+        // ==================================================
+        // SORT BY PRESENTASE DESC
+        // ==================================================
+
+        usort($rows, function ($a, $b) {
+
+            return $b['presentase'] <=> $a['presentase'];
+        });
+
+        // ==================================================
+        // SET STATE
+        // ==================================================
+
+        $this->laporanRows = $rows;
+
+        $this->grandTotal = $grand;
     }
+
+    // ======================================================
+    // RESET REPORT
+    // ======================================================
+
+    private function resetReport()
+    {
+        $this->laporanRows = [];
+
+        $this->grandTotal = [
+            'target_l' => 0,
+            'target_p' => 0,
+            'target_total' => 0,
+
+            'hadir_l' => 0,
+            'hadir_p' => 0,
+            'hadir_total' => 0,
+
+            'alfa' => 0,
+
+            'infaq' => 0,
+        ];
+    }
+
+    // ======================================================
+    // COMPUTED
+    // ======================================================
+
+    public function getPersentaseGlobalProperty()
+    {
+        if ($this->grandTotal['target_total'] == 0) {
+            return 0;
+        }
+
+        return round(
+            (
+                $this->grandTotal['hadir_total']
+                /
+                $this->grandTotal['target_total']
+            ) * 100
+        );
+    }
+
+    // ======================================================
+    // RENDER
+    // ======================================================
 
     public function render()
     {

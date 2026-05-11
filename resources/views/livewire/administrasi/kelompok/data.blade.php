@@ -1,132 +1,209 @@
 @forelse($listKelompok as $item)
 <div class="col-xxl-4 col-lg-6">
-    <div class="card shadow-sm border mb-3">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="fw-bold mb-0 text-truncate" style="max-width: 70%">
-                Kelompok {{ $item->nama_kelompok }}
-            </h5>
-        
-            <div class="hstack gap-2 fw-semibold">
-        
-                {{-- Tombol Detail --}}
-                <a href="#ModalDetailKelompok" data-bs-toggle="modal" class="text-primary d-inline-block"
-                    title="Detail Kelompok" wire:click.prevent="$emit('KelompokDetail', {{ $item->ms_kelompok_id }})">
-                    <i class="ri-eye-line fs-17 align-middle me-1"></i>Detail
-                </a>
-        
-                {{-- Tombol Edit --}}
-                <a href="#ModalEditKelompok" data-bs-toggle="modal" class="text-warning d-inline-block" title="Edit Kelompok"
-                    wire:click.prevent="$emit('KelompokEdit', {{ $item->ms_kelompok_id }})">
-                    <i class="ri-mark-pen-line fs-17 align-middle me-1"></i>Edit
-                </a>
 
-                {{-- Tombol Hapus --}}
-                <a href="#ModalDeleteKelompok" data-bs-toggle="modal" class="text-danger d-inline-block" title="Hapus Kelompok"
-                    wire:click.prevent="$emit('KelompokDelete', {{ $item->ms_kelompok_id }})">
-                    <i class="ri-delete-bin-5-line fs-17 align-middle"></i>
-                </a>
-        
+    <div class="card border-0 shadow-sm rounded-4 h-100 kelompok-card">
+
+        {{-- HEADER --}}
+        <div class="card-body pb-2">
+
+            <div class="d-flex justify-content-between align-items-start">
+
+                {{-- Identity --}}
+                <div class="flex-grow-1 pe-3">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+
+                        <div class="avatar-sm">
+                            <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-18">
+                                <i class="ri-community-line"></i>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h5 class="mb-0 fw-bold text-truncate">
+                                Kelompok {{ $item->nama_kelompok }}
+                            </h5>
+
+                            <div class="text-muted fs-12 mt-1">
+                                {{ $item->nama_masjid ?? 'Masjid belum diatur' }}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                {{-- Actions --}}
+                <div class="dropdown">
+                    <button class="btn btn-light btn-icon rounded-circle btn-sm" data-bs-toggle="dropdown">
+                        <i class="ri-more-2-fill"></i>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+
+                        <li>
+                            <a class="dropdown-item" href="#ModalDetailKelompok" data-bs-toggle="modal"
+                                wire:click.prevent="$emit('KelompokDetail', {{ $item->ms_kelompok_id }})">
+                                <i class="ri-eye-line me-2 text-primary"></i>
+                                Detail
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="#ModalEditKelompok" data-bs-toggle="modal"
+                                wire:click.prevent="$emit('KelompokEdit', {{ $item->ms_kelompok_id }})">
+                                <i class="ri-pencil-line me-2 text-warning"></i>
+                                Edit
+                            </a>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item text-danger" href="#ModalDeleteKelompok" data-bs-toggle="modal"
+                                wire:click.prevent="$emit('KelompokDelete', {{ $item->ms_kelompok_id }})">
+                                <i class="ri-delete-bin-5-line me-2"></i>
+                                Hapus
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+
             </div>
+
+            {{-- ADDRESS --}}
+            <div class="bg-light rounded-3 p-3 mt-3">
+                <div class="d-flex align-items-start gap-2">
+
+                    <i class="ri-map-pin-line text-danger fs-18 mt-1"></i>
+
+                    <div class="flex-grow-1">
+                        <div class="fs-11 text-muted mb-1">
+                            Alamat
+                        </div>
+
+                        <div class="fw-medium text-body small">
+                            {{ $item->alamat ?? '-' }}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            {{-- META --}}
+            <div class="d-flex flex-wrap gap-3 mt-3 fs-12 text-muted">
+
+                <div class="d-flex align-items-center gap-1">
+                    <i class="ri-government-line text-primary"></i>
+                    {{ $item->ms_desa->nama_desa ?? '-' }}
+                </div>
+
+                <div class="d-flex align-items-center gap-1">
+                    <i class="ri-time-line text-success"></i>
+                    Update {{ $item->updated_at?->format('d M Y') ?? '-' }}
+                </div>
+
+            </div>
+
         </div>
-        <div class="card-body">
-            <div class="d-flex">
-                <div class="flex-grow-1">
-                    <div class="hstack gap-3 flex-wrap text-muted fs-12">
-                        <div>
-                            <i class="ri-building-2-line text-success me-1"></i>
-                            <span class="text-body fw-medium">
-                                {{ $item->nama_masjid ?? '-' }}
-                            </span>
+
+        {{-- STATS --}}
+        <div class="card-body pt-3">
+
+            <div class="row g-3">
+
+                {{-- Generus --}}
+                <div class="col-4">
+                    <div class="bg-light rounded-4 p-3 text-center h-100">
+
+                        <div class="fs-22 text-primary mb-2">
+                            <i class="ri-group-line"></i>
                         </div>
-            
-                        <div class="vr d-none d-md-block"></div>
-                        <div>
-                            <i class="ri-government-line text-primary me-1"></i>
-                            <span class="text-body fw-medium">
-                                Update {{ $item->updated_at?->format('d M Y') ?? '-' }}
-                            </span>
+
+                        <div class="fw-bold fs-18">
+                            {{ $item->jumlah_generus() ?? 0 }}
                         </div>
-        
+
+                        <div class="text-muted fs-11">
+                            Generus
+                        </div>
+
                     </div>
                 </div>
+
+                {{-- Desa --}}
+                <div class="col-4">
+                    <div class="bg-light rounded-4 p-3 text-center h-100">
+
+                        <div class="fs-22 text-success mb-2">
+                            <i class="ri-building-2-line"></i>
+                        </div>
+
+                        <div class="fw-semibold fs-13 text-truncate">
+                            {{ $item->ms_desa->nama_desa ?? '-' }}
+                        </div>
+
+                        <div class="text-muted fs-11">
+                            Desa
+                        </div>
+
+                    </div>
+                </div>
+
+                {{-- Peta --}}
+                <div class="col-4">
+                    <div class="bg-light rounded-4 p-3 text-center h-100">
+
+                        <div class="fs-22 text-danger mb-2">
+                            <i class="ri-map-2-line"></i>
+                        </div>
+
+                        @if($item->peta)
+                        <a href="{{ $item->peta }}" target="_blank"
+                            class="fw-semibold text-primary text-decoration-none fs-13">
+                            Lihat
+                        </a>
+                        @else
+                        <div class="fw-semibold fs-13">
+                            -
+                        </div>
+                        @endif
+
+                        <div class="text-muted fs-11">
+                            Lokasi
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
-            
-            {{-- Address --}}
-            <div class="mt-2">
-                {{-- <i class="ri-map-pin-user-line text-warning me-1"></i> --}}
-                <span class="text-body fw-medium d-inline-block text-truncate" style="max-width: 100%;" data-bs-toggle="tooltip"
-                    title="{{ $item->alamat ?? '-' }}">
-                    {{ $item->alamat ?? '-' }}
-                </span>
+
+        </div>
+
+    </div>
+
+</div>
+@empty
+
+<div class="col-12">
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body text-center py-5">
+
+            <div class="mb-3">
+                <i class="ri-inbox-2-line text-muted" style="font-size: 48px;"></i>
             </div>
-            
-            {{-- 3 Box Info --}}
-            <div class="row mt-4">
-                <div class="col-lg-4 col-sm-6">
-                    <div class="p-2 border border-dashed rounded">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar-sm me-2">
-                                <div class="avatar-title rounded bg-transparent text-secondary fs-24">
-                                    <i class="ri-group-fill"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="text-muted mb-1">Generus :</p>
-                                <h5 class="mb-0 fs-14">
-                                    {{ $item->jumlah_generus() ?? 0 }}
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="col-lg-4 col-sm-6">
-                    <div class="p-2 border border-dashed rounded">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar-sm me-2">
-                                <div class="avatar-title rounded bg-transparent text-secondary fs-24">
-                                    <i class="ri-government-fill"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="text-muted mb-1">Desa :</p>
-                                <h5 class="mb-0 fs-14">
-                                    {{ $item->ms_desa->nama_desa ?? '-' }}
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="col-lg-4 col-sm-6">
-                    <div class="p-2 border border-dashed rounded">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar-sm me-2">
-                                <div class="avatar-title rounded bg-transparent text-secondary fs-24">
-                                    <i class="ri-map-pin-2-fill"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="text-muted mb-1">Peta :</p>
-                                <h5 class="mb-0 fs-14">
-                                    @if($item->peta)
-                                    <a href="{{ $item->peta }}" target="_blank" class="text-primary">
-                                        Lihat Lokasi
-                                    </a>
-                                    @else
-                                    -
-                                    @endif
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+            <h5 class="fw-semibold mb-1">
+                Data kelompok kosong
+            </h5>
+
+            <p class="text-muted mb-0">
+                Belum ada kelompok yang tersedia saat ini
+            </p>
+
         </div>
     </div>
 </div>
-@empty
-<div class="col-12 text-center text-muted py-5">
-    Tidak ada data kelompok
-</div>
+
 @endforelse
