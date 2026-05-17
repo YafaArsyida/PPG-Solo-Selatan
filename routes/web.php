@@ -52,13 +52,12 @@ Route::post('/logout', [LoginController::class, 'logOut'])
     ->name('logout');
 
 Route::get('/operasional/presensi-kegiatan-kartu/{token}',  [PresensiKegiatanKartu::class, 'index'])->name('operasional.presensi-kegiatan-kartu');
-Route::get('/operasional/presensi-kegiatan/{token}',  [PresensiKegiatan::class, 'index'])->name('operasional.presensi-kegiatan');
-
 
 Route::middleware(['auth'])->group(function () {
+    
+    Route::get('/operasional/presensi-kegiatan/{token}',  [PresensiKegiatan::class, 'index'])->name('operasional.presensi-kegiatan');
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard.index');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 
     // =========================

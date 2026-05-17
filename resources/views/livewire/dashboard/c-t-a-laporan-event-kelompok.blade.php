@@ -1,9 +1,9 @@
 <div class="card border-0 shadow-sm h-100 overflow-hidden position-relative">
     {{-- DECORATION --}}
-    <div class="position-absolute top-0 end-0 opacity-10 pe-3 pt-2">
+    {{-- <div class="position-absolute top-0 end-0 opacity-10 pe-3 pt-2">
         <i class="ri-calendar-event-fill display-4 text-primary">
         </i>
-    </div>
+    </div> --}}
     <div class="card-body d-flex flex-column p-4">
         {{-- HEADER --}}
         <div class="d-flex align-items-center mb-4">

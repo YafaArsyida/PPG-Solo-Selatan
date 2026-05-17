@@ -22,7 +22,8 @@ class Index extends Component
     public $endDate;
 
     protected $listeners = [
-        'parameterUpdated' => 'setParameterDesa'
+        'parameterUpdated' => 'setParameterDesa',
+        'KegiatanIndex' => '$refresh',
     ];
 
     public function mount()
@@ -62,6 +63,7 @@ class Index extends Component
         }
 
         return Kegiatan::with(['ms_desa'])
+            ->withSum('tr_infaq', 'nominal')
             ->where('tipe_kegiatan', 'sekali')
             ->where(function ($q) {
                 $q->where('scope', 'daerah') // event daerah selalu tampil

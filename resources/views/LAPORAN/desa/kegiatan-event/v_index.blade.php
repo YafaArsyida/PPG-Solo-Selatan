@@ -21,6 +21,8 @@
                 @livewire('laporan.desa.kegiatan-event.index')
                 @livewire('administrasi.kegiatan-generus.detail')
                 @livewire('laporan.desa.kegiatan-event.report')
+                @livewire('infaq.create')
+                @livewire('infaq.edit')
             </div>
         </div>
 

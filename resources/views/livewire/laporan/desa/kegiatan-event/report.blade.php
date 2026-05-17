@@ -91,7 +91,6 @@
                                 <th>Putra</th>
                                 <th>Putri</th>
                                 <th>Jumlah</th>
-                                <th>Infaq</th>
                                 <th>%</th>
         
                             </tr>
@@ -124,11 +123,7 @@
                                 <td class="fw-bold">
                                     {{ $row['hadir_total'] }}
                                 </td>
-        
-                                <td>
-                                    Rp{{ number_format($row['infaq'], 0, ',', '.') }}
-                                </td>
-        
+
                                 <td class="fw-bold">
                                     {{ $row['presentase'] }}%
                                 </td>
@@ -155,17 +150,21 @@
                                 <td>{{ $grandTotal['hadir_l'] }}</td>
                                 <td>{{ $grandTotal['hadir_p'] }}</td>
                                 <td>{{ $grandTotal['hadir_total'] }}</td>
-        
-                                <td>
-                                    Rp{{ number_format($grandTotal['infaq'], 0, ',', '.') }}
-                                </td>
-        
+    
                                 <td>
                                     {{ $grandTotal['target_total'] > 0
                                     ? round(($grandTotal['hadir_total'] / $grandTotal['target_total']) * 100)
                                     : 0 }}%
                                 </td>
         
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="text-center">
+                                    INFAQ
+                                </td>
+                                <td colspan="7" class="fw-bold">
+                                    RP {{ number_format($totalInfaq, 0, ',', '.') }}
+                                </td>
                             </tr>
         
                         </tfoot>

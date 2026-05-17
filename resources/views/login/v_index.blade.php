@@ -46,7 +46,8 @@
                         <div class="text-center mt-sm-5 mb-4 text-white">
                             <span class="fw-bold fs-3">TemanGenerus X PPG Sragen Barat</span>
                             <p class="mt-3 fs-15 fw-medium text-white-50">
-                                Sistem Manajemen Terintegrasi untuk Generus Sragen Barat
+                                Sistem Manajemen Generus Terintegrasi untuk presensi, kegiatan rutin,
+                                monitoring perkembangan, dan administrasi generus.
                             </p>
                         </div>
                     </div>
@@ -60,8 +61,8 @@
 
                             <div class="card-body p-4">
                                 <div class="text-center mt-2">
-                                    <h5 class="mb-0">Selamat Datang !</h5>
-                                    <p class="text-muted mt-2">Masuk untuk menjadi bagian kami</p>
+                                    <h5 class="mb-0">Selamat Datang 👋</h5>
+                                    <p class="text-muted mt-2">Masuk untuk mengakses dashboard TemanGenerus</p>
                                 </div>
                                 @if (session()->has('loginError'))
                                 <div class="alert alert-danger alert-dismissible alert-label-icon label-arrow fade show"
@@ -111,7 +112,7 @@
                                         </div>
 
                                         <div class="mt-4">
-                                            <button class="btn btn-primary w-100" type="submit">Masuk</button>
+                                            <button class="btn btn-primary w-100" type="submit">Masuk ke Dashboard</button>
                                         </div>
                                     </form>
                                 </div>

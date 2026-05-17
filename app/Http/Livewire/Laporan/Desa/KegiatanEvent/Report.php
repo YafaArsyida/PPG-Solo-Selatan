@@ -15,17 +15,14 @@ class Report extends Component
     // ======================================================
 
     public $kegiatan;
-
     public $kegiatanId;
-
     public $ms_desa_id;
-
     public $nama_desa = '-';
+    public $totalInfaq = 0;
 
     // ======================================================
     // TABLE REPORT
     // ======================================================
-
     public $laporanRows = [];
 
     public $grandTotal = [
@@ -38,14 +35,11 @@ class Report extends Component
         'hadir_total' => 0,
 
         'alfa' => 0,
-
-        'infaq' => 0,
     ];
 
     // ======================================================
     // LISTENER
     // ======================================================
-
     protected $listeners = [
         'KegiatanReport' => 'loadReport'
     ];
@@ -53,11 +47,9 @@ class Report extends Component
     // ======================================================
     // LOAD REPORT
     // ======================================================
-
     public function loadReport($kegiatanId, $desaId)
     {
         $this->resetReport();
-
         $this->kegiatanId = $kegiatanId;
         $this->ms_desa_id = $desaId;
 
@@ -65,7 +57,6 @@ class Report extends Component
         // DESA
         // =========================================
         $desa = Desa::find($desaId);
-
         $this->nama_desa = $desa?->nama_desa ?? '-';
 
         // =========================================
@@ -77,7 +68,6 @@ class Report extends Component
         ])->find($kegiatanId);
 
         if (!$this->kegiatan) {
-
             $this->dispatchBrowserEvent('alertify-error', [
                 'message' => 'Data kegiatan tidak ditemukan'
             ]);
@@ -124,11 +114,16 @@ class Report extends Component
         if (!$this->kegiatan) {
             return;
         }
+        // ==========================================
+        // TOTAL INFAQ
+        // ==========================================
+        $this->totalInfaq = $this->kegiatan
+            ->tr_infaq()
+            ->sum('nominal');
 
         // ==================================================
         // TARGET PESERTA
         // ==================================================
-
         $targetQuery = $this->kegiatan
             ->targetPesertaQuery()
             ->with([
@@ -137,15 +132,12 @@ class Report extends Component
 
         // Filter desa jika ada
         if ($this->ms_desa_id) {
-
             $targetQuery->whereHas('ms_kelompok', function ($q) {
-
                 $q->where('ms_desa_id', $this->ms_desa_id);
             });
         }
 
         $targetGenerus = $targetQuery->get();
-
         // ==================================================
         // PRESENSI
         // ==================================================
@@ -160,14 +152,12 @@ class Report extends Component
         // ==================================================
         // GROUP TARGET
         // ==================================================
-
         $groupedTarget = $targetGenerus
             ->groupBy('ms_kelompok_id');
 
         // ==================================================
         // GROUP PRESENSI
         // ==================================================
-
         $groupedPresensi = $presensi
             ->groupBy('ms_generus.ms_kelompok_id');
 
@@ -184,21 +174,17 @@ class Report extends Component
 
             'alfa' => 0,
 
-            'infaq' => 0,
         ];
 
         // ==================================================
         // LOOP KELOMPOK
         // ==================================================
-
         foreach ($groupedTarget as $kelompokId => $members) {
-
             $kelompok = optional($members->first())->ms_kelompok;
 
             // ==============================================
             // TARGET
             // ==============================================
-
             $targetL = $members
                 ->where('jenis_kelamin', 'laki-laki')
                 ->count();
@@ -212,7 +198,6 @@ class Report extends Component
             // ==============================================
             // PRESENSI HADIR
             // ==============================================
-
             $hadirCollection = $groupedPresensi[$kelompokId]
                 ?? collect();
 
@@ -237,30 +222,16 @@ class Report extends Component
             // ==============================================
             // ALFA
             // ==============================================
-
             $alfa = max(0, $targetTotal - $hadirTotal);
 
             // ==============================================
             // PRESENTASE
             // ==============================================
-
             $presentase = $targetTotal > 0
                 ? round(($hadirTotal / $targetTotal) * 100)
                 : 0;
 
-            // ==============================================
-            // INFAQ
-            // ==============================================
-
-            // sementara dummy
-            $infaq = $hadirTotal * 2500;
-
-            // ==============================================
-            // PUSH ROW
-            // ==============================================
-
             $rows[] = [
-
                 'kelompok' => strtoupper(
                     $kelompok?->nama_kelompok ?? '-'
                 ),
@@ -275,15 +246,12 @@ class Report extends Component
 
                 'alfa' => $alfa,
 
-                'infaq' => $infaq,
-
                 'presentase' => $presentase,
             ];
 
             // ==============================================
             // GRAND TOTAL
             // ==============================================
-
             $grand['target_l'] += $targetL;
             $grand['target_p'] += $targetP;
             $grand['target_total'] += $targetTotal;
@@ -293,16 +261,12 @@ class Report extends Component
             $grand['hadir_total'] += $hadirTotal;
 
             $grand['alfa'] += $alfa;
-
-            $grand['infaq'] += $infaq;
         }
 
         // ==================================================
         // SORT BY PRESENTASE DESC
         // ==================================================
-
         usort($rows, function ($a, $b) {
-
             return $b['presentase'] <=> $a['presentase'];
         });
 
@@ -311,7 +275,6 @@ class Report extends Component
         // ==================================================
 
         $this->laporanRows = $rows;
-
         $this->grandTotal = $grand;
     }
 
@@ -323,6 +286,8 @@ class Report extends Component
     {
         $this->laporanRows = [];
 
+        $this->totalInfaq = 0;
+        
         $this->grandTotal = [
             'target_l' => 0,
             'target_p' => 0,
@@ -333,8 +298,6 @@ class Report extends Component
             'hadir_total' => 0,
 
             'alfa' => 0,
-
-            'infaq' => 0,
         ];
     }
 

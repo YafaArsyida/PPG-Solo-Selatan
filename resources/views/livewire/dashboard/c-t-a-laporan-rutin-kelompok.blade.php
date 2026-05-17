@@ -1,9 +1,9 @@
 <div class="card border-0 shadow-sm h-100 overflow-hidden position-relative">
     {{-- DECORATION --}}
-    <div class="position-absolute top-0 end-0 opacity-10 pe-3 pt-2">
+    {{-- <div class="position-absolute top-0 end-0 opacity-10 pe-3 pt-2">
         <i class="ri-team-fill display-4 text-success">
         </i>
-    </div>
+    </div> --}}
     <div class="card-body d-flex flex-column p-4">
         {{-- HEADER --}}
         <div class="d-flex align-items-center mb-4">
@@ -25,7 +25,7 @@
         {{-- DESCRIPTION --}}
         <div class="mb-4">
             <p class="text-muted mb-3">
-                Monitoring kehadiran generus pada setiap kegiatan dengan tampilan laporan
+                Monitoring kehadiran generus dengan tampilan laporan
                 yang rapi, detail, dan mudah dianalisis.
             </p>
             {{-- FEATURES --}}
@@ -34,21 +34,21 @@
                     <i class="ri-checkbox-circle-fill text-success mt-1">
                     </i>
                     <span class="text-muted fs-14">
-                        Rekap hadir, izin, dan alfa secara otomatis
+                        Rekap hadir, izin, dan alfa otomatis
                     </span>
                 </div>
                 <div class="d-flex align-items-start gap-2">
                     <i class="ri-table-2 text-primary mt-1">
                     </i>
                     <span class="text-muted fs-14">
-                        Tampilan matriks presensi yang mudah dipahami
+                        Tampilan matriks mudah dipahami
                     </span>
                 </div>
                 <div class="d-flex align-items-start gap-2">
                     <i class="ri-download-2-fill text-warning mt-1">
                     </i>
                     <span class="text-muted fs-14">
-                        Siap export untuk kebutuhan administrasi dan evaluasi
+                        Siap export untuk  evaluasi
                     </span>
                 </div>
             </div>

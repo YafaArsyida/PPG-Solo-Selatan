@@ -29,7 +29,7 @@
     <div class="card-body p-0">
         <div class="row align-items-center g-0">
             {{-- LEFT --}}
-            <div class="col-lg-7">
+            <div class="col-lg-12">
                 <div class="p-4 p-lg-5">
                     {{-- BADGE --}}
                     <div class="mb-3">
@@ -133,12 +133,12 @@
                 </div>
             </div>
             {{-- RIGHT IMAGE --}}
-            <div class="col-lg-5 text-center bg-light-subtle">
+            {{-- <div class="col-lg-5 text-center bg-light-subtle">
                 <div class="p-4 p-lg-5">
                     <img src="{{ asset('assets/images/user-illustarator-2.png') }}" class="img-fluid"
                         style="max-height: 380px;" alt="Illustrasi Generus">
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>

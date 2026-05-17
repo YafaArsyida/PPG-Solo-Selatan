@@ -253,4 +253,10 @@ class Kegiatan extends Model
         if ($p >= 40) return "⚠️ Partisipasi Kegiatan rendah";
         return "🚨 Partisipasi Kegiatan sangat rendah, perlu evaluasi";
     }
+
+    // INFAQ
+    public function tr_infaq()
+    {
+        return $this->hasMany(TrInfaq::class, 'ms_kegiatan_id');
+    }
 }

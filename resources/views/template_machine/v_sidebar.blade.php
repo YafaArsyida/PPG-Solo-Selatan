@@ -121,14 +121,14 @@
                 
                 {{-- KELOMPOK --}}
                 @if(in_array($role, ['SUPERADMIN','KELOMPOK']))
-                <li class="menu-title"><span data-key="t-menu">Laporan</span></li>
-                <li class="nav-item">
+                <li class="menu-title"><span data-key="t-menu">Laporan Kelompok</span></li>
+                {{-- <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('laporan.kelompok.rutin') ? 'active' : '' }}"
                         href="{{ route('laporan.kelompok.rutin') }}">
                         <i class="mdi mdi-account-group-outline"></i>
                         <span>Laporan Kegiatan Rutin</span>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('laporan.kelompok.event') ? 'active' : '' }}"
                         href="{{ route('laporan.kelompok.event') }}">
