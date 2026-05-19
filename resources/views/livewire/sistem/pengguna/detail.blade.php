@@ -4,18 +4,26 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
                 {{-- HEADER --}}
-                <div class="modal-header bg-light border-bottom px-4 py-3">
-                    <div>
-                        <h5 class="modal-title fw-bold mb-1">
-                            <i class="ri-user-3-line text-primary me-1">
-                            </i>
-                            Detail Pengguna
-                        </h5>
-                        <small class="text-muted">
-                            Informasi lengkap petugas administrasi & hak akses sistem
-                        </small>
+                <div class="modal-header border-0 pb-0 p-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="avatar-sm">
+                            <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-20">
+                                <i class="ri-user-line">
+                                </i>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="modal-title fw-bold mb-1">
+                                Detail Pengguna
+                            </h5>
+                            <small class="text-muted">
+                                Informasi lengkap petugas administrasi & hak akses sistem
+                            </small>
+                        </div>
                     </div>
-                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-light btn-icon rounded-circle" data-bs-dismiss="modal">
+                        <i class="ri-close-line fs-18">
+                        </i>
                     </button>
                 </div>
                 {{-- BODY --}}
@@ -36,7 +44,7 @@
                                     <h5 class="text-white mb-1 fw-bold">
                                         {{ $nama }}
                                     </h5>
-                                    <div class="text-white-75 small">
+                                    <div class="text-white small">
                                         {{ $email }}
                                     </div>
                                 </div>

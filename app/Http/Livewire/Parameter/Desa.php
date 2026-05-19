@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Parameter;
 
+use App\Models\AksesPengguna;
 use App\Models\Desa as ModelsDesa;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -17,13 +18,19 @@ class Desa extends Component
 
     public function mount()
     {
-        $firstDesa = ModelsDesa::whereIn('ms_desa_id', function ($query) {
-            $query->select('ms_desa_id')
-                ->from('ms_akses_pengguna')
-                ->where('ms_pengguna_id', Auth::id());
-        })->first();
+        $user = Auth::user();
+        // SUPERADMIN
+        if ($user->peran === 'SUPERADMIN') {
+            $firstDesa = ModelsDesa::first();
+            $this->selectedDesa = $firstDesa?->ms_desa_id;
+            return;
+        }
 
-        $this->selectedDesa = $firstDesa->ms_desa_id ?? null;
+        // USER BIASA
+        $akses = AksesPengguna::where('ms_pengguna_id', $user->ms_pengguna_id)
+            ->where('scope_type', 'desa')
+            ->first();
+        $this->selectedDesa = $akses?->scope_id;
     }
 
     private function checkAndEmitParameters()
@@ -42,16 +49,31 @@ class Desa extends Component
 
     public function render()
     {
+        $user = Auth::user();
+
+        // SUPERADMIN -> semua desa
+        if ($user->peran === 'SUPERADMIN') {
+
+            $selectDesa = ModelsDesa::get();
+        } else {
+
+            // USER BIASA -> hanya akses desa
+            $selectDesa = ModelsDesa::whereIn(
+                'ms_desa_id',
+
+                AksesPengguna::where('ms_pengguna_id', $user->ms_pengguna_id)
+                    ->where('scope_type', 'desa')
+                    ->pluck('scope_id')
+
+            )->get();
+        }
+
         if ($this->selectedDesa) {
             $this->emit('parameterUpdated', $this->selectedDesa);
         }
 
         return view('livewire.parameter.desa', [
-            'select_desa' => ModelsDesa::whereIn('ms_desa_id', function ($query) {
-                $query->select('ms_desa_id')
-                    ->from('ms_akses_pengguna')
-                    ->where('ms_pengguna_id', Auth::id());
-            })->get() // <-- WAJIB GET()
+            'select_desa' => $selectDesa
         ]);
     }
 }

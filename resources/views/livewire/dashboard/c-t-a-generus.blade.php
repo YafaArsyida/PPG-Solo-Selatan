@@ -30,7 +30,7 @@
         <div class="row align-items-center g-0">
             {{-- LEFT --}}
             <div class="col-lg-12">
-                <div class="p-4 p-lg-5">
+                <div class="p-4 p-lg-4">
                     {{-- BADGE --}}
                     <div class="mb-3">
                         <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
@@ -119,7 +119,7 @@
                     {{-- BUTTON --}}
                     <div class="d-flex flex-wrap gap-2">
                         <a href="{{ route('administrasi.generasi-penerus') }}"
-                            class="btn btn-primary btn-lg rounded-pill px-4">
+                            class="btn btn-primary rounded-pill px-4">
                             <i class="ri-team-line align-middle me-1">
                             </i>
                             Kelola Data Generus

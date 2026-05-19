@@ -5,26 +5,25 @@
             {{-- TITLE --}}
             <div>
                 <div class="d-flex align-items-center gap-2 mb-1">
-                    <div class="avatar-xs">
-                        <div class="avatar-title bg-warning-subtle text-warning rounded-circle">
+                    <div class="avatar-sm">
+                        <div class="avatar-title bg-warning-subtle text-warning rounded-circle fs-18">
                             <i class="ri-trophy-line">
                             </i>
                         </div>
                     </div>
-                    <h4 class="card-title mb-0 fw-bold">
-                        Ranking Kehadiran
-                    </h4>
+                    <div>
+                        <h5 class="modal-title fw-bold mb-1">
+                            Ranking Kehadiran
+                        </h5>
+                        <small class="text-muted">
+                            Generus dengan kehadiran terbaik
+                        </small>
+                    </div>
                 </div>
-                <p class="text-muted mb-0 fs-13">
-                    Daftar generus dengan tingkat kehadiran terbaik.
-                </p>
             </div>
             {{-- FILTER --}}
             <div class="flex-shrink-0">
-                <label class="form-label text-muted small mb-1">
-                    Periode Ranking
-                </label>
-                <select wire:model="periode" class="form-select form-select-sm rounded-pill shadow-sm border-light">
+                <select wire:model="periode" class="fw-bold form-select bg-primary-subtle text-primary rounded-pill shadow-sm border-light">
                     <option value="1bulan">
                         1 Bulan
                     </option>
@@ -43,14 +42,14 @@
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
-                    <tr>
-                        <th width="70px" class="text-uppercase text-muted fw-semibold">
+                    <tr class="text-uppercase fw-semibold">
+                        <th width="70px" class="">
                             Rank
                         </th>
-                        <th class="text-uppercase text-muted fw-semibold">
+                        <th class="">
                             Generus
                         </th>
-                        <th class="text-center text-uppercase text-muted fw-semibold">
+                        <th class="text-center">
                             Kehadiran
                         </th>
                     </tr>
@@ -96,7 +95,11 @@
                         <td>
                             <div class="d-flex align-items-center gap-2">
                                 <div class="avatar-xs flex-shrink-0">
-                                    <div class="avatar-title bg-primary-subtle text-primary rounded-circle fw-semibold">
+                                    <div class="avatar-title {{ $item->ms_generus->jenis_kelamin == 'perempuan'
+                                        ? 'bg-danger-subtle text-danger'
+                                        : 'bg-primary-subtle text-primary' 
+                                        }} 
+                                        rounded-circle fw-semibold">
                                         {{ strtoupper(substr($item->ms_generus->nama_generus ?? 'G', 0, 1)) }}
                                     </div>
                                 </div>

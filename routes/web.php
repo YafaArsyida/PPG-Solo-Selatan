@@ -6,11 +6,14 @@ use App\Http\Controllers\DesaKelompok;
 use App\Http\Controllers\GenerasiPenerus;
 use App\Http\Controllers\KegiatanGenerus;
 use App\Http\Controllers\Laporan\LaporanKegiatanGenerus;
-use App\Http\Controllers\LaporanKegiatanEvent;
-use App\Http\Controllers\LaporanKegiatanRutin;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PresensiKegiatan;
 use App\Http\Controllers\PresensiKegiatanKartu;
+
+// TEMANPENGURUS
+use App\Http\Controllers\TemanPengurus\Dashboard;
+use App\Http\Controllers\TemanPengurus\DesaKelompok as TemanPengurusDesaKelompok;
+use App\Http\Controllers\TemanPengurus\Pengurus;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -59,6 +62,15 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | TEMAN PENGURUS
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/temanpengurus/dashboard', [Dashboard::class, 'index'])->name('temanpengurus.dashboard.index');
+    Route::get('/temanpengurus/administrasi/desa-kelompok', [TemanPengurusDesaKelompok::class, 'index'])->name('temanpengurus.administrasi.desa-kelompok');
+    Route::get('/temanpengurus/administrasi/pengurus', [Pengurus::class, 'index'])->name('temanpengurus.administrasi.pengurus');
 
     // =========================
     // ADMINISTRASI (SUPERADMIN, DAERAH, DESA, KELOMPOK)

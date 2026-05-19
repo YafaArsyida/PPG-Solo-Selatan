@@ -4,19 +4,21 @@
         <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
             <div>
                 <div class="d-flex align-items-center gap-2 mb-1">
-                    <div class="avatar-xs">
-                        <div class="avatar-title bg-primary-subtle text-primary rounded-circle">
+                    <div class="avatar-sm">
+                        <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-18">
                             <i class="ri-team-line">
                             </i>
                         </div>
                     </div>
-                    <h4 class="card-title mb-0 fw-bold">
-                        Data Generus
-                    </h4>
+                    <div>
+                        <h5 class="modal-title fw-bold mb-1">
+                            Data Generus
+                        </h5>
+                        <small class="text-muted">
+                            Generus dengan jenjang usianya
+                        </small>
+                    </div>
                 </div>
-                <p class="text-muted mb-0 fs-13">
-                    Monitoring data generasi penerus berdasarkan kelompok dan jenjang usia.
-                </p>
             </div>
             {{-- TOTAL --}}
             <div class="text-lg-end">
@@ -29,7 +31,7 @@
         </div>
     </div>
     {{-- FILTER --}}
-    <div class="card-body border-top bg-light-subtle">
+    <div class="card-body border-top bg-light-subtle pb-0">
         <div class="row g-3 align-items-end">
             {{-- SEARCH --}}
             <div class="col-xxl-6 col-lg-6">
@@ -49,9 +51,7 @@
                     Jenjang Usia
                 </label>
                 <select class="form-select rounded-3 shadow-sm border-light" wire:model="jenjangUsia">
-                    <option value="">
-                        Semua Jenjang Usia
-                    </option>
+                    <option value="">Semua Jenjang Usia</option>
                     <option value="caberawit">
                         Caberawit (&lt; 12 Tahun)
                     </option>
@@ -76,19 +76,11 @@
         <div class="table-responsive">
             <table class="table table-hover align-middle table-nowrap mb-0">
                 <thead class="table-light">
-                    <tr>
-                        <th width="60px" class="text-muted text-uppercase fw-semibold">
-                            No
-                        </th>
-                        <th class="text-muted text-uppercase fw-semibold">
-                            Nama Generus
-                        </th>
-                        <th class="text-muted text-uppercase fw-semibold">
-                            Kelompok
-                        </th>
-                        <th class="text-center text-muted text-uppercase fw-semibold">
-                            Usia
-                        </th>
+                    <tr class="text-uppercase fw-semibold">
+                        <th width="60px" class="">No</th>
+                        <th class="">Generus</th>
+                        {{-- <th class="">Kelompok</th> --}}
+                        <th class="text-center ">Usia</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -102,27 +94,24 @@
                         <td>
                             <div class="d-flex align-items-center gap-2">
                                 <div class="avatar-xs flex-shrink-0">
-                                    <div class="avatar-title bg-primary-subtle text-primary rounded-circle fw-semibold">
+                                    <div class="avatar-title 
+                                        {{ $item->jenis_kelamin == 'perempuan'
+                                            ? 'bg-danger-subtle text-danger'
+                                            : 'bg-primary-subtle text-primary' 
+                                        }} 
+                                        rounded-circle fw-semibold">
                                         {{ strtoupper(substr($item->nama_generus, 0, 1)) }}
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="fw-semibold text-body">
+                                    <div class="fw-semibold">
                                         {{ $item->nama_generus }}
                                     </div>
                                     <small class="text-muted">
-                                        Generasi Penerus
+                                        {{ $item->ms_kelompok->nama_kelompok }}
                                     </small>
                                 </div>
                             </div>
-                        </td>
-                        {{-- KELOMPOK --}}
-                        <td>
-                            <span class="badge bg-light text-body border px-3 py-2 fw-medium">
-                                <i class="ri-group-line me-1 text-primary">
-                                </i>
-                                {{ $item->ms_kelompok->nama_kelompok ?? '-' }}
-                            </span>
                         </td>
                         {{-- USIA --}}
                         <td class="text-center">

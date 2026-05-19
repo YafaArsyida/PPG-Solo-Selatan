@@ -4,20 +4,20 @@
         <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
             {{-- TITLE --}}
             <div>
-                <div class="d-flex align-items-center gap-2 mb-1">
+                <div class="d-flex align-items-center gap-3">
                     <div class="avatar-sm">
-                        <div class="avatar-title bg-primary-subtle text-primary rounded-3 fs-20">
-                            <i class="ri-file-chart-line">
-                            </i>
+                        <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-20">
+                            <i class="ri-file-chart-line"></i>
                         </div>
                     </div>
+                    
                     <div>
-                        <h4 class="fw-bold mb-0">
+                        <h5 class="fw-bold mb-1">
                             Laporan Kegiatan Generus
-                        </h4>
-                        <p class="text-muted mb-0 fs-13">
+                        </h5>
+                        <small>
                             Monitoring kehadiran dan aktivitas kegiatan generasi penerus
-                        </p>
+                        </small>
                     </div>
                 </div>
             </div>
@@ -36,9 +36,9 @@
     <div class="card-body border-top border-bottom bg-light-subtle">
         <div class="row g-3 align-items-end">
             {{-- SEARCH --}}
-            <div class="col-12 col-lg-4">
-                <label class="form-label fw-semibold  mb-2">
-                    Pencarian
+            <div class="col-12 col-lg-6 col-xxl-4">
+                <label class="form-label fw-semibold">
+                    Cari Kegiatan
                 </label>
                 <div class="search-box">
                     <input type="text" class="form-control search" placeholder="Cari nama kegiatan..."
@@ -48,8 +48,8 @@
                 </div>
             </div>
             {{-- JENJANG --}}
-            <div class="col-12 col-md-6 col-lg-2">
-                <label class="form-label fw-semibold  mb-2">
+            <div class="col-6 col-md-4 col-lg-3 col-xxl-2">
+                <label class="form-label fw-semibold">
                     Jenjang
                 </label>
                 <select class="form-select rounded-3" wire:model="jenjangUsia">
@@ -74,8 +74,8 @@
                 </select>
             </div>
             {{-- STATUS --}}
-            <div class="col-12 col-md-6 col-lg-2">
-                <label class="form-label fw-semibold  mb-2">
+            <div class="col-6 col-md-4 col-lg-3 col-xxl-2">
+                <label class="form-label fw-semibold">
                     Status
                 </label>
                 <select class="form-select rounded-3" wire:model="status">
@@ -91,15 +91,15 @@
                 </select>
             </div>
             {{-- PERIODE --}}
-            <div class="col-12 col-lg-4">
-                <label class="form-label fw-semibold  mb-2">
+            <div class="col-12 col-xl-8 col-xxl-4">
+                <label class="form-label fw-semibold">
                     Periode
                 </label>
                 <div class="d-flex align-items-center gap-2">
                     <input type="date" class="form-control rounded-3" wire:model="startDate" value="{{ $startDate }}">
-                    <span class="">
+                    <div class="text-muted flex-shrink-0">
                         —
-                    </span>
+                    </div>
                     <input type="date" class="form-control rounded-3" wire:model="endDate" value="{{ $endDate }}">
                     <button type="button" class="btn btn-soft-secondary btn-icon rounded-circle flex-shrink-0"
                         wire:click="resetTanggal" title="Reset Tanggal">
@@ -116,48 +116,20 @@
             <table id="Laporan" class="table table-hover align-middle table-nowrap mb-0">
                 <thead class="bg-light-subtle">
                     <tr class="text-uppercase fs-12">
-                        <th width="60" class="ps-4">
-                            #
-                        </th>
-                        <th>
-                            Tanggal
-                        </th>
-                        <th>
-                            Kegiatan
-                        </th>
-                        <th>
-                            Peserta
-                        </th>
-                        <th>
-                            Tingkat
-                        </th>
-                        <th class="text-center">
-                            Target
-                        </th>
-                        <th class="text-center text-primary">
-                            Hadir
-                        </th>
-                        <th class="text-center">
-                            Izin
-                        </th>
-                        <th class="text-center text-danger">
-                            Alfa
-                        </th>
-                        <th class="text-center">
-                            % Hadir
-                        </th>
-                        <th class="text-center">
-                            % Izin
-                        </th>
-                        <th class="text-center">
-                            % Alfa
-                        </th>
-                        <th class="text-center">
-                            Infaq
-                        </th>
-                        <th class="text-center pe-4">
-                            Aksi
-                        </th>
+                        <th width="60" class="ps-4">#</th>
+                        <th>Tanggal</th>
+                        <th>Kegiatan</th>
+                        <th>Peserta</th>
+                        <th>Tingkat</th>
+                        <th class="text-center">Target</th>
+                        <th class="text-center text-primary">Hadir</th>
+                        <th class="text-center">Izin</th>
+                        <th class="text-center text-danger">Alfa</th>
+                        <th class="text-center text-primary">% Hadir</th>
+                        <th class="text-center">% Izin</th>
+                        <th class="text-center text-danger">% Alfa</th>
+                        <th class="text-center">Infaq</th>
+                        <th class="text-center pe-4">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -203,15 +175,24 @@
                         </td>
                         {{-- PESERTA --}}
                         <td>
-                            @php if ($item->jenjang) { [$jenjangLabel, $jenjangClass] = match($item->jenjang)
-                            { 'caberawit' => ['Caberawit', 'bg-info-subtle text-info'], 'remaja' =>
-                            ['Remaja', 'bg-primary-subtle text-primary'], 'gp' => ['GP', 'bg-success-subtle
-                            text-success'], 'mandiri' => ['Mandiri', 'bg-danger-subtle text-danger'],
-                            default => ['-', 'bg-light text-muted'], }; } else { [$jenjangLabel, $jenjangClass]
-                            = ['Semua Jenjang', 'bg-light text-muted']; } @endphp
-                            <span class="badge {{ $jenjangClass }} rounded-pill px-3 py-2">
+                            @php 
+                            if ($item->jenjang) { [$jenjangLabel, $jenjangClass] = match($item->jenjang)
+                                { 
+                                    'caberawit' => ['Caberawit', 'text-info'], 
+                                    'remaja' => ['Remaja', 'text-primary'], 
+                                    'gp' => ['GP', 'text-success'], 
+                                    'mandiri' => ['Mandiri', 'text-danger'],
+
+                                    default => ['-', 'text-muted'], 
+                                }; 
+                            } else 
+                                { 
+                                    [$jenjangLabel, $jenjangClass] = ['Semua Jenjang', 'text-muted']; 
+                                } 
+                            @endphp
+                            <div class="{{ $jenjangClass }}">
                                 {{ $jenjangLabel }}
-                            </span>
+                            </div>
                         </td>
                         {{-- TINGKAT --}}
                         <td>
@@ -223,10 +204,8 @@
                             </div>
                         </td>
                         {{-- TARGET --}}
-                        <td class="text-center">
-                            <span class="badge bg-light text-dark rounded-pill px-3 py-2">
-                                {{ $item->targetPeserta() }}
-                            </span>
+                        <td class="text-center fw-bold">
+                            {{ $item->targetPeserta() }}
                         </td>
                         {{-- HADIR --}}
                         <td class="text-center">
@@ -247,22 +226,16 @@
                             </div>
                         </td>
                         {{-- % HADIR --}}
-                        <td class="text-center">
-                            <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2">
-                                {{ $item->presentaseHadir() }}%
-                            </span>
+                        <td class="text-center text-primary">
+                            {{ $item->presentaseHadir() }}%
                         </td>
                         {{-- % IZIN --}}
-                        <td class="text-center">
-                            <span class="badge bg-secondary-subtle text-secondary rounded-pill px-3 py-2">
-                                {{ $item->presentaseIzin() }}%
-                            </span>
+                        <td class="text-center text-secondary">
+                            {{ $item->presentaseIzin() }}%
                         </td>
                         {{-- % ALFA --}}
-                        <td class="text-center">
-                            <span class="badge bg-danger-subtle text-danger rounded-pill px-3 py-2">
-                                {{ $item->presentaseAlfa() }}%
-                            </span>
+                        <td class="text-center text-danger">
+                            {{ $item->presentaseAlfa() }}%
                         </td>
                         <td class="text-center">
                             @php 
@@ -272,7 +245,7 @@
                             {{-- SUDAH ADA INFAQ --}}
                             <a href="#ModalInfaqEdit" data-bs-toggle="modal"
                                 wire:click.prevent="$emit('InfaqEdit', {{ $item->ms_kegiatan_id }})"
-                                class="btn btn-soft-success rounded-pill px-3">
+                                class="btn btn-primary rounded-pill px-3">
                                 <i class="ri-money-dollar-circle-line me-1">
                                 </i>
                                 Rp {{ number_format($totalInfaq, 0, ',', '.') }}
@@ -292,19 +265,17 @@
                         <td class="text-center pe-4">
                             <div class="d-flex justify-content-center gap-2">
                                 {{-- DETAIL --}}
-                                <a href="#ModalDetailKegiatan" data-bs-toggle="modal"
-                                    wire:click.prevent="$emit('KegiatanDetail', {{ $item->ms_kegiatan_id }})"
-                                    class="btn btn-soft-primary btn-icon rounded-circle" title="Detail Kegiatan">
-                                    <i class="ri-eye-line">
-                                    </i>
+                                <a href="#ModalDetailKegiatan" data-bs-toggle="modal" class="btn btn-soft-primary btn-sm rounded-pill px-3"
+                                    title="Detail Kegiatan" wire:click.prevent="$emit('KegiatanDetail', {{ $item->ms_kegiatan_id }})">
+                                    <i class="ri-eye-line me-1"></i>
+                                    Detail
                                 </a>
                                 {{-- REPORT --}}
-                                <a href="javascript:void(0)" data-bs-toggle="offcanvas"
+                                <a href="javascript:void(0)" data-bs-toggle="offcanvas" class="btn btn-success btn-sm rounded-pill px-3"
                                     data-bs-target="#offcanvasLaporan" aria-controls="offcanvasLaporan"
-                                    wire:click.prevent="$emit('KegiatanReport', {{ $item->ms_kegiatan_id }}, {{ $ms_desa_id }})"
-                                    class="btn btn-soft-success btn-icon rounded-circle" title="Laporan Kehadiran">
-                                    <i class="ri-file-chart-line">
-                                    </i>
+                                    title="Laporan Kegiatan" wire:click.prevent="$emit('KegiatanReport', {{ $item->ms_kegiatan_id }}, {{ $ms_desa_id }})">
+                                    <i class="ri-file-chart-line"></i>
+                                    Laporan
                                 </a>
                             </div>
                         </td>

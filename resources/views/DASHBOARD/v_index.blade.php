@@ -72,12 +72,12 @@ $title = "Dashboard"
             <div class="col-xxl-7">
                 <div class="row h-100">
                     <!-- Presensi Hari Ini -->
-                    <div class="col-xl-7">
+                    <div class="col-xl-6">
                         @livewire('dashboard.list-generus-jenjang')
                     </div>
                 
                     <!-- Jumlah Kehadiran -->
-                    <div class="col-xl-5">
+                    <div class="col-xl-6">
                         @livewire('dashboard.ranking-kehadiran-generus')
                     </div>
                 </div> <!-- end row -->

@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
             {{-- HEADER --}}
-            <div class="modal-header border-0 pb-0 pt-4 px-4">
+            <div class="modal-header border-0 pb-0 p-4">
                 <div class="d-flex align-items-center gap-3">
                     <div class="avatar-sm">
                         <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-20">
@@ -11,12 +11,12 @@
                         </div>
                     </div>
                     <div>
-                        <h4 class="modal-title fw-bold mb-1">
+                        <h5 class="fw-bold mb-1">
                             Input Infaq
-                        </h4>
-                        <p class="text-muted mb-0 fs-13">
+                        </h5>
+                        <small>
                             Tambahkan nominal infaq kegiatan
-                        </p>
+                        </small>
                     </div>
                 </div>
                 <button type="button" class="btn btn-light btn-icon rounded-circle" data-bs-dismiss="modal">

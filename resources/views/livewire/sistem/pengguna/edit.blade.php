@@ -2,20 +2,28 @@
     <div wire:ignore.self class="modal fade" id="ModalEditPengguna" tabindex="-1"
         aria-labelledby="ModalEditPenggunaLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content border-0 overflow-hidden rounded-4">
+            <div class="modal-content border-0 shadow-lg overflow-hidden rounded-4">
                 {{-- HEADER --}}
-                <div class="modal-header bg-light border-bottom px-4 py-3">
-                    <div>
-                        <h5 class="modal-title fw-bold mb-1">
-                            <i class="ri-user-settings-line text-warning me-1">
-                            </i>
-                            Edit Data Petugas
-                        </h5>
-                        <small class="text-muted">
-                            Perbarui informasi pengguna, role, dan hak akses sistem
-                        </small>
+                <div class="modal-header border-0 pb-0 p-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="avatar-sm">
+                            <div class="avatar-title bg-warning-subtle text-warning rounded-circle fs-20">
+                                <i class="ri-user-settings-line text-warning me-1">
+                                </i>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="modal-title fw-bold mb-1">
+                                Edit Pengguna
+                            </h5>
+                            <small class="text-muted">
+                                Perbarui informasi pengguna, role, dan hak akses sistem
+                            </small>
+                        </div>
                     </div>
-                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-light btn-icon rounded-circle" data-bs-dismiss="modal">
+                        <i class="ri-close-line fs-18">
+                        </i>
                     </button>
                 </div>
                 {{-- FORM --}}
@@ -37,7 +45,7 @@
                                         <h5 class="text-white fw-bold mb-1">
                                             {{ $nama ?: 'Nama Pengguna' }}
                                         </h5>
-                                        <small class="text-white-75">
+                                        <small class="text-white">
                                             {{ $email ?: 'email@example.com' }}
                                         </small>
                                     </div>

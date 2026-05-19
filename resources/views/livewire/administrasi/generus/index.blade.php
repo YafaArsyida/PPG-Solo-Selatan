@@ -4,7 +4,7 @@
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-4">
             {{-- TITLE --}}
             <div>
-                <div class="d-flex align-items-center gap-3 mb-2">
+                <div class="d-flex align-items-center gap-3">
                     <div class="avatar-sm">
                         <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-20">
                             <i class="ri-team-line">
@@ -12,12 +12,12 @@
                         </div>
                     </div>
                     <div>
-                        <h4 class="fw-bold mb-1">
+                        <h5 class="fw-bold mb-1">
                             Administrasi Data Generasi Penerus
-                        </h4>
-                        <p class="text-muted mb-0 fs-13">
+                        </h5>
+                        <small>
                             Kelola data generus berdasarkan kelompok dan jenjang usia
-                        </p>
+                        </small>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
         </div>
     </div>
     {{-- FILTER --}}
-    <div class="card-body border-top border-light p-4">
+    <div class="card-body border-top border-bottom bg-light-subtle">
         <div class="row g-3 align-items-end">
             {{-- SEARCH --}}
             <div class="col-xxl-7 col-lg-6">
@@ -115,7 +115,7 @@
         </div>
     </div>
     {{-- CONTENT --}}
-    <div class="card-body pt-0 px-4 pb-4">
+    <div class="card-body">
         <div class="border rounded-4 overflow-hidden">
             {{-- TAB NAV --}}
             <div class="bg-light px-3 pt-3">
@@ -148,43 +148,20 @@
             <div class="bg-white p-3 p-lg-4">
                 <div class="tab-content">
                     {{-- SEMUA GENERUS --}}
-                    <div class="tab-pane fade {{ $activeTab === 'semua' ? 'show active' : '' }}" id="tabSemua"
-                        role="tabpanel">
-                        @php $listGenerus = $allGenerus; @endphp
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-                            <div>
-                                <h5 class="fw-bold mb-1">
-                                    Semua Generus
-                                </h5>
-                                <p class="text-muted mb-0 fs-13">
-                                    Menampilkan seluruh data generasi penerus
-                                </p>
-                            </div>
-                            <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
-                                {{ count($listGenerus) }} Generus
-                            </span>
+                    <div class="tab-pane fade {{ $activeTab === 'semua' ? 'show active' : '' }}" id="tabSemua" role="tabpanel">
+                        <div class="row g-4">
+                            @include('livewire.administrasi.generus.data', [ 'listGenerus' => $allGenerus])
                         </div>
-                        @include('livewire.administrasi.generus.data', compact('listGenerus'))
                     </div>
-                    {{-- PER KELOMPOK --}} @foreach($kelompok as $grp)
-                    <div class="tab-pane fade {{ $activeTab === 'kelompok-'.$grp->ms_kelompok_id ? 'show active' : '' }}"
-                        id="tabKelompok{{ $grp->ms_kelompok_id }}" role="tabpanel">
-                        @php $listGenerus = $allGenerus->where( 'ms_kelompok_id', $grp->ms_kelompok_id
-                        ); @endphp
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-                            <div>
-                                <h5 class="fw-bold mb-1">
-                                    Kelompok {{ $grp->nama_kelompok }}
-                                </h5>
-                                <p class="text-muted mb-0 fs-13">
-                                    Data generus berdasarkan kelompok binaan
-                                </p>
-                            </div>
-                            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
-                                {{ count($listGenerus) }} Generus
-                            </span>
+                    {{-- PER KELOMPOK --}} 
+                    @foreach($kelompok as $grp)
+                    <div class="tab-pane fade {{ $activeTab === 'kelompok-'.$grp->ms_kelompok_id ? 'show active' : '' }}" id="tabKelompok{{ $grp->ms_kelompok_id }}" role="tabpanel">
+                        @php 
+                            $listGenerus = $allGenerus->where('ms_kelompok_id', $grp->ms_kelompok_id); 
+                        @endphp
+                        <div class="row g-4">
+                            @include('livewire.administrasi.generus.data', [ 'listGenerus' => $listGenerus])
                         </div>
-                        @include('livewire.administrasi.generus.data', compact('listGenerus'))
                     </div>
                     @endforeach
                 </div>

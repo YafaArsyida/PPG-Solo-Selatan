@@ -4,7 +4,7 @@
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-4">
             {{-- TITLE --}}
             <div>
-                <div class="d-flex align-items-center gap-3 mb-2">
+                <div class="d-flex align-items-center gap-3">
                     <div class="avatar-sm">
                         <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-20">
                             <i class="ri-team-line"></i>
@@ -12,12 +12,12 @@
                     </div>
     
                     <div>
-                        <h4 class="fw-bold mb-1">
+                        <h5 class="fw-bold mb-1">
                             Kegiatan Generasi Penerus
-                        </h4>
-                        <p class="text-muted mb-0 fs-13">
+                        </h5>
+                        <small>
                             Kelola data kegiatan generus sesuai jenjang usia
-                        </p>
+                        </small>
                     </div>
                 </div>
             </div>
@@ -41,38 +41,45 @@
 
     {{-- FILTER --}}
     <div class="card-body border-top border-bottom bg-light-subtle">
-        <div class="row g-3">
+        <div class="row g-3 align-items-end">
             {{-- SEARCH --}}
-            <div class="col-xxl-3 col-md-6">
+            <div class="col-12 col-lg-6 col-xxl-3">
                 <label class="form-label fw-semibold">
                     Cari Kegiatan
                 </label>
                 <div class="search-box">
-                    <input type="text" class="form-control" placeholder="Cari nama kegiatan..." wire:model.debounce.500ms="search">
-                    <i class="ri-search-line search-icon"></i>
+                    <input type="text" class="form-control" placeholder="Cari nama kegiatan..."
+                        wire:model.debounce.500ms="search">
+                    <i class="ri-search-line search-icon">
+                    </i>
                 </div>
             </div>
-
             {{-- TIPE --}}
-            <div class="col-xxl-2 col-md-6">
+            <div class="col-6 col-md-4 col-lg-3 col-xxl-2">
                 <label class="form-label fw-semibold">
                     Tipe Kegiatan
                 </label>
                 <select class="form-select" wire:model="tipeKegiatan">
-                    <option value="">Semua Kegiatan</option>
-                    <option value="rutin">Kegiatan Rutin</option>
-                    <option value="sekali">Event / Sekali</option>
+                    <option value="">
+                        Semua Kegiatan
+                    </option>
+                    <option value="rutin">
+                        Kegiatan Rutin
+                    </option>
+                    <option value="sekali">
+                        Event / Sekali
+                    </option>
                 </select>
             </div>
-
             {{-- KELOMPOK --}}
-            <div class="col-xxl-2 col-md-6">
+            <div class="col-6 col-md-4 col-lg-3 col-xxl-2">
                 <label class="form-label fw-semibold">
                     Kelompok
                 </label>
-
                 <select class="form-select" wire:model="ms_kelompok_id">
-                    <option value="">Semua Kelompok</option>
+                    <option value="">
+                        Semua Kelompok
+                    </option>
                     @foreach($listKelompok as $k)
                     <option value="{{ $k->ms_kelompok_id }}">
                         {{ $k->nama_kelompok }}
@@ -80,41 +87,49 @@
                     @endforeach
                 </select>
             </div>
-
             {{-- JENJANG --}}
-            <div class="col-xxl-2 col-md-6">
+            <div class="col-6 col-md-4 col-lg-3 col-xxl-2">
                 <label class="form-label fw-semibold">
                     Jenjang Usia
                 </label>
                 <select class="form-select" wire:model="jenjangUsia">
-                    <option value="">Semua Jenjang</option>
-                    <option value="caberawit">Caberawit</option>
-                    <option value="remaja">Remaja</option>
-                    <option value="gp">GP</option>
-                    {{-- <option value="pra_nikah">Pra Nikah</option> --}}
-                    <option value="mandiri">Mandiri</option>
+                    <option value="">
+                        Semua Jenjang
+                    </option>
+                    <option value="caberawit">
+                        Caberawit
+                    </option>
+                    <option value="remaja">
+                        Remaja
+                    </option>
+                    <option value="gp">
+                        GP
+                    </option>
+                    {{--
+                    <option value="pra_nikah">
+                        Pra Nikah
+                    </option>
+                    --}}
+                    <option value="mandiri">
+                        Mandiri
+                    </option>
                 </select>
             </div>
-
-            {{-- SCOPE --}}
-            <div class="col-xxl-1 col-md-6">
-                <label class="form-label fw-semibold">Tingkat</label>
-                <select class="form-select" wire:model="scope">
-                    <option value="">Semua</option>
-                    <option value="daerah">Daerah</option>
-                    <option value="desa">Desa</option>
-                    <option value="kelompok">Kelompok</option>
-                </select>
-            </div>
-
             {{-- PERIODE --}}
-            <div class="col-xxl-2 col-md-6">
-                <label class="form-label fw-semibold">Periode</label>
-                <div class="input-group">
-                    <input type="date" class="form-control" wire:model="startDate">
-                    <input type="date" class="form-control" wire:model="endDate">
-                    <button type="button" class="btn btn-light border" wire:click="resetTanggal" title="Reset Filter">
-                        <i class="ri-refresh-line"></i>
+            <div class="col-12 col-xl-8 col-xxl-3">
+                <label class="form-label fw-semibold">
+                    Periode
+                </label>
+                <div class="d-flex align-items-center gap-2">
+                    <input type="date" class="form-control rounded-3" wire:model="startDate" value="{{ $startDate }}">
+                    <div class="text-muted flex-shrink-0">
+                        —
+                    </div>
+                    <input type="date" class="form-control rounded-3" wire:model="endDate" value="{{ $endDate }}">
+                    <button type="button" class="btn btn-soft-secondary btn-icon rounded-circle flex-shrink-0"
+                        wire:click="resetTanggal" title="Reset Tanggal">
+                        <i class="ri-refresh-line">
+                        </i>
                     </button>
                 </div>
             </div>
@@ -126,7 +141,7 @@
         <div class="table-responsive">
             <table id="Laporan" class="table table-hover align-middle table-nowrap mb-0">
                 <thead class="table-light">
-                    <tr>
+                    <tr class="text-uppercase fw-semibold">
                         <th width="50">#</th>
                         <th>Jadwal</th>
                         <th>Kegiatan</th>
@@ -200,7 +215,7 @@
                                 @elseif($item->scope === 'desa')
                                     Desa {{ $item->ms_desa->nama_desa ?? '-' }}
                                 @else
-                                    Daerah Eragen Barat
+                                    Daerah Sragen Barat
                                 @endif
                             </div>
                         </td>
@@ -235,18 +250,24 @@
                         <td>
                             <div class="d-flex justify-content-center gap-2">
                                 {{-- DETAIL --}}
-                                <a href="#ModalDetailKegiatan" data-bs-toggle="modal" class="btn btn-light btn-sm" title="Detail" wire:click.prevent="$emit('KegiatanDetail', {{ $item->ms_kegiatan_id }})">
-                                    <i class="ri-eye-line text-primary"></i>
+                                <a href="#ModalDetailKegiatan" data-bs-toggle="modal" class="btn btn-soft-primary btn-sm rounded-pill px-3"
+                                    title="Detail Kegiatan" wire:click.prevent="$emit('KegiatanDetail', {{ $item->ms_kegiatan_id }})">
+                                    <i class="ri-eye-line me-1"></i>
+                                    Detail
                                 </a>
 
                                 {{-- EDIT --}}
-                                <a href="#ModalEditKegiatan" data-bs-toggle="modal" class="btn btn-light btn-sm" title="Edit" wire:click.prevent="$emit('KegiatanEdit', {{ $item->ms_kegiatan_id }}, {{ $ms_desa_id }})">
-                                    <i class="ri-pencil-line text-warning"></i>
+                                <a href="#ModalEditKegiatan" data-bs-toggle="modal" class="btn btn-warning btn-sm rounded-pill px-3"
+                                    title="Edit Kegiatan" wire:click.prevent="$emit('KegiatanEdit', {{ $item->ms_kegiatan_id }}, {{ $ms_desa_id }})">
+                                    <i class="ri-pencil-line me-1"></i>
+                                    Edit
                                 </a>
 
                                 {{-- DELETE --}}
-                                <a href="#ModalDeleteKegiatan" data-bs-toggle="modal" class="btn btn-light btn-sm" title="Hapus" wire:click.prevent="$emit('KegiatanDelete', {{ $item->ms_kegiatan_id }})">
-                                    <i class="ri-delete-bin-5-line text-danger"></i>
+                                <a href="#ModalDeleteKegiatan" data-bs-toggle="modal" class="btn btn-danger btn-sm rounded-pill px-3"
+                                    title="Hapus Kegiatan" wire:click.prevent="$emit('KegiatanDelete', {{ $item->ms_kegiatan_id }})">
+                                    <i class="ri-eye-line me-1"></i>
+                                    Hapus
                                 </a>
                             </div>
                         </td>
@@ -353,8 +374,27 @@
             </div>
         </div>
     </div>
-
     <script>
+        window.copyToClipboard = function(text) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    if (window.alertify) {
+                        alertify.success('URL berhasil dicopy!');
+                    } else {
+                        alert('URL berhasil dicopy!');
+                    }
+                })
+                .catch(err => {
+                    console.error('Gagal menyalin:', err);
+
+                    if (window.alertify) {
+                        alertify.error('Gagal menyalin URL');
+                    } else {
+                        alert('Gagal menyalin URL');
+                    }
+                });
+        }
+
         document.getElementById('konfirmasiExportLaporan').addEventListener('click', function () {
             alertify.success("Menyiapkan Dokumen");
 

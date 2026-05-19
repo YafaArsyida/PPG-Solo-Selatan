@@ -2,27 +2,26 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
             {{-- HEADER --}}
-            <div class="modal-header border-0 bg-light-subtle px-4 py-3">
-                <div>
-                    <div class="d-flex align-items-center gap-2 mb-1">
-                        <div class="avatar-xs">
-                            <div class="avatar-title bg-success-subtle text-success rounded-circle">
-                                <i class="ri-calendar-event-line"></i>
-                            </div>
+            <div class="modal-header border-0 pb-0 p-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="avatar-sm">
+                        <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-20">
+                            <i class="ri-calendar-event-line">
+                            </i>
                         </div>
-                        <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2">
-                            Administrasi Kegiatan
-                        </span>
                     </div>
-                    <h4 class="modal-title fw-bold mb-0">
-                        Tambah Kegiatan Generus
-                    </h4>
-                    <p class="text-muted mb-0 fs-13 mt-1">
-                        Tambahkan agenda kegiatan generasi penerus dengan pengaturan tingkat, jadwal, dan lokasi.
-                    </p>
+                    <div>
+                        <h5 class="fw-bold mb-1">
+                            Tambah Kegiatan Generus
+                        </h5>
+                        <small>
+                            Tambahkan agenda kegiatan generasi penerus dengan pengaturan tingkat, jadwal, dan lokasi.
+                        </small>
+                    </div>
                 </div>
-                <button type="button" class="btn btn-light btn-icon rounded-circle shadow-sm" data-bs-dismiss="modal">
-                    <i class="ri-close-line fs-18"></i>
+                <button type="button" class="btn btn-light btn-icon rounded-circle" data-bs-dismiss="modal">
+                    <i class="ri-close-line fs-18">
+                    </i>
                 </button>
             </div>
             <form wire:submit.prevent="save">
@@ -33,7 +32,7 @@
                             <div class="border rounded-4 p-4 bg-light-subtle">
                                 <div class="d-flex align-items-center gap-2 mb-4">
                                     <div class="avatar-sm">
-                                        <div class="avatar-title bg-primary-subtle text-primary rounded-circle">
+                                        <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-20">
                                             <i class="ri-information-line">
                                             </i>
                                         </div>
@@ -42,9 +41,9 @@
                                         <h5 class="fw-semibold mb-0">
                                             Informasi Kegiatan
                                         </h5>
-                                        <p class="text-muted fs-13 mb-0">
+                                        <small>
                                             Atur cakupan dan identitas kegiatan generus.
-                                        </p>
+                                        </small>
                                     </div>
                                 </div>
                                 <div class="row g-3">
@@ -126,7 +125,7 @@
                             <div class="border rounded-4 p-4">
                                 <div class="d-flex align-items-center gap-2 mb-4">
                                     <div class="avatar-sm">
-                                        <div class="avatar-title bg-success-subtle text-success rounded-circle">
+                                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-20">
                                             <i class="ri-repeat-line"></i>
                                         </div>
                                     </div>
@@ -134,9 +133,9 @@
                                         <h5 class="fw-semibold mb-0">
                                             Jadwal Kegiatan
                                         </h5>
-                                        <p class="text-muted fs-13 mb-0">
+                                        <small>
                                             Tentukan apakah kegiatan berlangsung sekali atau rutin.
-                                        </p>
+                                        </small>
                                     </div>
                                 </div>
                                 <div class="row g-3">
@@ -153,10 +152,10 @@
                                                     <div class="d-flex align-items-start gap-3">
                                                         <input type="radio" wire:model="tipe_kegiatan" value="sekali" class="form-check-input mt-1">
                                                         <div>
-                                                            <h6 class="fw-semibold mb-1">
+                                                            <h5 class="fw-semibold mb-1">
                                                                 Kegiatan Sekali
-                                                            </h6>
-                                                            <p class="text-muted fs-13 mb-0">Digunakan untuk event atau kegiatan pada tanggal tertentu.</p>
+                                                            </h5>
+                                                            <small>Digunakan untuk event atau kegiatan pada tanggal tertentu.</small>
                                                         </div>
                                                     </div>
                                                 </label>
@@ -167,10 +166,10 @@
                                                     <div class="d-flex align-items-start gap-3">
                                                         <input type="radio" wire:model="tipe_kegiatan" value="rutin" class="form-check-input mt-1">
                                                         <div>
-                                                            <h6 class="fw-semibold mb-1">
+                                                            <h5 class="fw-semibold mb-1">
                                                                 Kegiatan Rutin
-                                                            </h6>
-                                                            <p class="text-muted fs-13 mb-0">Digunakan untuk kegiatan mingguan yang berulang.</p>
+                                                            </h5>
+                                                            <small>Digunakan untuk kegiatan mingguan yang berulang.</small>
                                                         </div>
                                                     </div>
                                                 </label>
@@ -236,15 +235,19 @@
                                     </div>
                                     <div class="col-12">
                                         <div class="alert alert-info border-0 rounded-4 mb-0">
-                                            <div class="d-flex gap-3">
-                                                <i class="ri-information-line fs-20"></i>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="avatar-sm">
+                                                    <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-20">
+                                                        <i class="ri-information-line"></i>
+                                                    </div>
+                                                </div>
                                                 <div>
-                                                    <h6 class="fw-semibold mb-1">
+                                                    <h5 class="fw-semibold mb-0">
                                                         Informasi Kegiatan Rutin
-                                                    </h6>
-                                                    <p class="mb-0 fs-13">
+                                                    </h5>
+                                                    <small>
                                                         Lokasi kegiatan dapat disesuaikan kembali saat presensi apabila terjadi perpindahan tempat.
-                                                    </p>
+                                                    </small>
                                                 </div>
                                             </div>
                                         </div>
@@ -258,7 +261,7 @@
                             <div class="border rounded-4 p-4 bg-light-subtle">
                                 <div class="d-flex align-items-center gap-2 mb-4">
                                     <div class="avatar-sm">
-                                        <div class="avatar-title bg-warning-subtle text-warning rounded-circle">
+                                        <div class="avatar-title bg-warning-subtle text-warning rounded-circle fs-20">
                                             <i class="ri-map-pin-2-line"></i>
                                         </div>
                                     </div>
@@ -266,26 +269,23 @@
                                         <h5 class="fw-semibold mb-0">
                                             Lokasi Kegiatan
                                         </h5>
-                                        <p class="text-muted fs-13 mb-0">
+                                        <small>
                                             Gunakan lokasi default atau tambahkan lokasi alternatif.
-                                        </p>
+                                        </small>
                                     </div>
                                 </div>
                                 @if($scope && $lokasi_default)
                                 <div class="border rounded-4 p-4 bg-white mb-4">
                                     <div class="d-flex align-items-start gap-3">
                                         <div class="avatar-sm flex-shrink-0">
-                                            <div class="avatar-title bg-success-subtle text-success rounded-circle">
+                                            <div class="avatar-title bg-success-subtle text-success rounded-circle fs-20">
                                                 <i class="ri-building-line"></i>
                                             </div>
                                         </div>
                                         <div>
-                                            <h6 class="fw-semibold mb-1">
-                                                Lokasi Default
-                                            </h6>
-                                            <p class="mb-1 text-dark fw-medium">
+                                            <h5 class="fw-semibold mb-1">
                                                 {{ $lokasi_default['tempat'] ?? '-' }}
-                                            </p>
+                                            </h5>
                                             <p class="text-muted fs-13 mb-2">
                                                 {{ $lokasi_default['alamat'] ?? '-' }}
                                             </p>
@@ -301,11 +301,11 @@
                                 @endif {{-- Toggle --}}
                                 <div class="form-check form-switch form-switch-md mb-4">
                                     <input class="form-check-input" type="checkbox" wire:model="use_custom_lokasi" id="useCustomLokasi">
-                                    <label class="form-check-label fw-semibold" for="useCustomLokasi">
+                                    <h5 class="form-check-label fw-semibold" for="useCustomLokasi">
                                         Gunakan lokasi alternatif
-                                    </label>
-                                    <div class="text-muted fs-13">
-                                        Aktifkan jika kegiatan tidak dilakukan di lokasi default.
+                                    </h5>
+                                    <div class="">
+                                        Aktifkan jika kegiatan tidak dilakukan di lokasi diatas.
                                     </div>
                                 </div>
                                 {{-- Custom Lokasi --}} @if($use_custom_lokasi)

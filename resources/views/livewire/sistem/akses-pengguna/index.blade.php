@@ -1,25 +1,40 @@
 <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
     {{-- HEADER --}}
     <div class="card-header bg-white border-0 p-4">
-        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-4">
             {{-- TITLE --}}
             <div>
-                <h4 class="card-title mb-1 fw-bold d-flex align-items-center gap-2">
-                    <i class="ri-team-line text-primary">
-                    </i>
-                    Petugas Administrasi
-                </h4>
-                <p class="text-muted mb-0 fs-13">
-                    Kelola akun petugas, akses sistem, dan keamanan pengguna aplikasi.
-                </p>
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="avatar-sm">
+                        <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-20">
+                            <i class="ri-team-line"></i>
+                        </div>
+                    </div>
+    
+                    <div>
+                        <h4 class="fw-bold mb-1">
+                            Petugas Administrasi
+                        </h4>
+                        <p class="text-muted mb-0 fs-13">
+                            Kelola akun petugas, akses sistem, dan keamanan pengguna aplikasi.
+                        </p>
+                    </div>
+                </div>
             </div>
+    
             {{-- ACTION --}}
             <div class="d-flex gap-2 flex-wrap">
-                <button class="btn btn-primary rounded-pill px-4 shadow-sm" data-bs-toggle="modal"
-                    data-bs-target="#ModalAddPengguna" wire:click="$emit('openCreatePengguna')">
-                    <i class="ri-user-add-line align-bottom me-1">
-                    </i>
-                    Petugas Baru
+                {{-- IMPORT --}}
+                <button type="button" class="btn btn-light border rounded-pill px-4" data-bs-toggle="modal"
+                    data-bs-target="#ExportLaporanExcel">
+                    <i class="ri-database-2-line me-1 text-secondary"></i>
+                    Export Data
+                </button>
+    
+                {{-- TAMBAH --}}
+                <button type="button" class="btn btn-success rounded-pill px-4" data-bs-toggle="modal"
+                    data-bs-target="#ModalAddPengguna" wire:click.prevent="$emit('openCreatePengguna')">
+                    <i class="ri-add-line me-1"></i>Petugas Baru
                 </button>
             </div>
         </div>
@@ -44,29 +59,16 @@
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table align-middle table-hover mb-0">
-                <thead class="bg-light text-muted">
-                    <tr>
-                        <th width="60" class="ps-4">
-                            #
-                        </th>
-                        <th>
-                            Petugas
-                        </th>
-                        <th>
-                            Username
-                        </th>
-                        <th>
-                            Telepon
-                        </th>
-                        <th>
-                            Peran
-                        </th>
-                        <th>
-                            Akses
-                        </th>
-                        <th width="240" class="text-center">
-                            Aksi
-                        </th>
+                <thead class="table-light">
+                    <tr class="text-uppercase fw-semibold">
+                        <th width="60" class="ps-4">#</th>
+                        <th width="50" class="text-center">Hapus</th>
+                        <th>Petugas</th>
+                        <th>Username</th>
+                        <th>Telepon</th>
+                        <th>Peran</th>
+                        <th>Akses</th>
+                        <th width="240" class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -78,18 +80,26 @@
                                 {{ $index + 1 }}
                             </span>
                         </td>
+                        <td class="text-center">
+                            {{-- DELETE --}}
+                            <a href="#ModalDeletePengguna" data-bs-toggle="modal" class="btn btn-sm btn-soft-danger rounded-pill"
+                                wire:click.prevent="$emit('deletePengguna', {{ $user['ms_pengguna_id'] }})">
+                                <i class="ri-delete-bin-6-line">
+                                </i>
+                            </a>
+                        </td>
                         {{-- PETUGAS --}}
                         <td>
                             <div class="d-flex align-items-center gap-3">
-                                <div class="avatar-sm">
-                                    <div class="avatar-title rounded-circle bg-soft-primary text-primary fw-bold">
+                                <div class="avatar-xs flex-shrink-0">
+                                    <div class="avatar-title bg-primary-subtle text-primary rounded-circle fw-semibold">
                                         {{ strtoupper(substr($user['nama'], 0, 1)) }}
                                     </div>
                                 </div>
                                 <div>
-                                    <h6 class="mb-0 fw-semibold">
+                                    <div class="fw-semibold">
                                         {{ $user['nama'] }}
-                                    </h6>
+                                    </div>
                                     <small class="text-muted">
                                         ID Pengguna
                                     </small>
@@ -134,7 +144,7 @@
                             </div>
                         </td>
                         {{-- AKSI --}}
-                        <td>
+                        <td style="white-space: nowrap">
                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                 {{-- DETAIL --}}
                                 <a href="#ModalDetailPengguna" data-bs-toggle="modal"
@@ -146,7 +156,7 @@
                                 </a>
                                 {{-- EDIT --}}
                                 <a href="#ModalEditPengguna" data-bs-toggle="modal"
-                                    class="btn btn-sm btn-warning-subtle text-warning border-0 rounded-pill"
+                                    class="btn btn-warning btn-sm rounded-pill px-3"
                                     wire:click.prevent="$emit('editPengguna', {{ $user['ms_pengguna_id'] }})">
                                     <i class="ri-pencil-line me-1">
                                     </i>
@@ -154,25 +164,18 @@
                                 </a>
                                 {{-- RESET --}}
                                 <a href="#ModalKonfirmasiReset" data-bs-toggle="modal"
-                                    class="btn btn-sm btn-danger-subtle text-danger border-0 rounded-pill"
+                                    class="btn btn-sm btn-danger rounded-pill px-3"
                                     wire:click.prevent="$emit('resetPassword', {{ $user['ms_pengguna_id'] }})">
                                     <i class="ri-lock-unlock-line me-1">
                                     </i>
                                     Reset
-                                </a>
-                                {{-- DELETE --}}
-                                <a href="#ModalDeletePengguna" data-bs-toggle="modal"
-                                    class="btn btn-sm btn-soft-danger rounded-pill"
-                                    wire:click.prevent="$emit('deletePengguna', {{ $user['ms_pengguna_id'] }})">
-                                    <i class="ri-delete-bin-6-line">
-                                    </i>
                                 </a>
                             </div>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7">
+                        <td colspan="8">
                             <div class="text-center py-5">
                                 <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
                                     colors="primary:#405189,secondary:#0ab39c" style="width:90px;height:90px">

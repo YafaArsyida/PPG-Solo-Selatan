@@ -97,25 +97,33 @@ class Index extends Component
 
     public function getQueryProperty()
     {
+        // guard clause
+        if (!$this->ms_desa_id) {
+            return Kegiatan::query()->whereRaw('1 = 0');
+        }
+
         $query = Kegiatan::query()
-            ->with(['ms_desa', 'ms_kelompok.ms_desa']); // eager load
+            ->with(['ms_desa', 'ms_kelompok.ms_desa']);
 
         // VISIBILITY RULE
         $query->where(function ($q) {
-            $q->where('scope', 'daerah'); // selalu tampil
-            if ($this->ms_desa_id) {
-                $q->orWhere(
-                    fn($qq) => $qq
-                        ->where('scope', 'desa')
-                        ->where('ms_desa_id', $this->ms_desa_id)
-                );
-            }
+
+            $q->where('scope', 'daerah');
 
             $q->orWhere(function ($qq) {
+                $qq->where('scope', 'desa')
+                    ->where('ms_desa_id', $this->ms_desa_id);
+            });
+
+            $q->orWhere(function ($qq) {
+
                 $qq->where('scope', 'kelompok');
+
                 if ($this->ms_kelompok_id) {
+
                     $qq->where('ms_kelompok_id', $this->ms_kelompok_id);
-                } elseif ($this->ms_desa_id) {
+                } else {
+
                     $qq->whereIn('ms_kelompok_id', function ($sub) {
                         $sub->select('ms_kelompok_id')
                             ->from('ms_kelompok')
@@ -128,31 +136,6 @@ class Index extends Component
         // FILTER TAMBAHAN
         if ($this->search) {
             $query->where('nama_kegiatan', 'like', "%{$this->search}%");
-        }
-
-        if ($this->tipeKegiatan) {
-            $query->where('tipe_kegiatan', $this->tipeKegiatan);
-        }
-
-        if ($this->status) {
-            $query->where('status', $this->status);
-        }
-
-        if ($this->scope) {
-            $query->where('scope', $this->scope);
-        }
-
-        // Filter Jenjang
-        if ($this->jenjangUsia) {
-            $query->where('jenjang', $this->jenjangUsia);
-        }
-
-        // FILTER PERIODE
-        if ($this->startDate && $this->endDate) {
-            $query->where(function ($q) {
-                $q->where('tipe_kegiatan', 'rutin') // selalu tampil
-                    ->orWhereBetween('tanggal', [$this->startDate, $this->endDate]);
-            });
         }
 
         return $query->orderByRaw("

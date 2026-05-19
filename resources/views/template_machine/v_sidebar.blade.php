@@ -83,7 +83,7 @@
                 
                 {{-- DAERAH --}}
                 @if(in_array($role, ['SUPERADMIN','DAERAH']))
-                <li class="menu-title"><span data-key="t-menu">Laporan Daerah</span></li>
+                {{-- <li class="menu-title"><span data-key="t-menu">Laporan Daerah</span></li> --}}
                 {{-- <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('laporan.daerah.rutin') ? 'active' : '' }}"
                         href="{{ route('laporan.daerah.rutin') }}">
@@ -91,18 +91,19 @@
                         <span>Laporan Kegiatan Rutin</span>
                     </a>
                 </li> --}}
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('laporan.daerah.event') ? 'active' : '' }}"
                         href="{{ route('laporan.daerah.event') }}">
                         <i class="mdi mdi-calendar-check-outline"></i>
                         <span>Laporan Kegiatan Event</span>
                     </a>
-                </li>
+                </li> --}}
                 @endif
                 
                 {{-- DESA --}}
                 @if(in_array($role, ['SUPERADMIN','DESA']))
-                <li class="menu-title"><span data-key="t-menu">Laporan Desa</span></li>
+                {{-- <li class="menu-title"><span data-key="t-menu">Laporan Desa</span></li> --}}
+                <li class="menu-title"><span data-key="t-menu">Laporan</span></li>
                 {{-- <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('laporan.desa.rutin') ? 'active' : '' }}"
                         href="{{ route('laporan.desa.rutin') }}">
@@ -121,7 +122,7 @@
                 
                 {{-- KELOMPOK --}}
                 @if(in_array($role, ['SUPERADMIN','KELOMPOK']))
-                <li class="menu-title"><span data-key="t-menu">Laporan Kelompok</span></li>
+                {{-- <li class="menu-title"><span data-key="t-menu">Laporan Kelompok</span></li> --}}
                 {{-- <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('laporan.kelompok.rutin') ? 'active' : '' }}"
                         href="{{ route('laporan.kelompok.rutin') }}">
@@ -129,13 +130,13 @@
                         <span>Laporan Kegiatan Rutin</span>
                     </a>
                 </li> --}}
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('laporan.kelompok.event') ? 'active' : '' }}"
                         href="{{ route('laporan.kelompok.event') }}">
                         <i class="mdi mdi-calendar-check-outline"></i>
                         <span>Laporan Kegiatan Event</span>
                     </a>
-                </li>
+                </li> --}}
                 @endif
                 {{-- <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('administrasi.kegiatan-generus') ? 'active' : '' }}"
@@ -144,6 +145,15 @@
                         <span>Rekapitulasi Bulanan</span>
                     </a>
                 </li> --}}
+                <li class="menu-title"><span data-key="t-menu">MODUL</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ request()->routeIs('temanpengurus.dashboard.index') ? 'active' : '' }}"
+                        href="{{ route('temanpengurus.dashboard.index') }}" target="_blank">
+                        <i class="mdi mdi-shield-account-outline"></i>
+                        <span>TemamPengurus</span>
+                    </a>
+                </li>
+                @if(in_array($role, ['SUPERADMIN']))
                 <li class="menu-title"><span data-key="t-menu">sistem</span></li>
                 <!-- Akses Petugas -->
                 <li class="nav-item">
@@ -153,6 +163,7 @@
                         <span>Akses Pengguna</span>
                     </a>
                 </li>
+                @endif
             </ul>
         </div>
         <!-- Sidebar -->

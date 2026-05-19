@@ -2,8 +2,10 @@
 
 namespace App\Http\Livewire\Administrasi\Kelompok;
 
+use App\Models\AksesPengguna;
 use App\Models\Desa;
 use App\Models\Kelompok;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -128,8 +130,25 @@ class Edit extends Component
 
     public function render()
     {
+        $user = Auth::user();
+
+        // SUPERADMIN -> semua desa
+        if ($user->peran === 'SUPERADMIN') {
+            $listDesa = Desa::orderBy('nama_desa')->get();
+        } else {
+
+            // USER BIASA -> hanya desa yg memiliki akses
+            $listDesa = Desa::whereIn(
+                'ms_desa_id',
+
+                AksesPengguna::where('ms_pengguna_id', $user->ms_pengguna_id)
+                    ->where('scope_type', 'desa')
+                    ->pluck('scope_id')
+
+            )->orderBy('nama_desa')->get();
+        }
         return view('livewire.administrasi.kelompok.edit',[
-            'listDesa' => Desa::orderBy('nama_desa')->get()
+            'listDesa' => $listDesa
         ]);
     }
 }

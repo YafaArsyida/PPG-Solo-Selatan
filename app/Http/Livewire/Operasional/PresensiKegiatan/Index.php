@@ -211,50 +211,6 @@ class Index extends Component
         }
     }
 
-    public function getRiwayatAbsensiProperty()
-    {
-        return PresensiKegiatan::with('ms_generus.ms_kelompok')
-
-            ->where('ms_kegiatan_id', $this->kegiatan->ms_kegiatan_id)
-
-            // SEARCH PRESENSI
-            ->when(
-                $this->searchPresensi,
-                fn($q) =>
-                $q->whereHas(
-                    'ms_generus',
-                    fn($g) =>
-                    $g->where('nama_generus', 'like', "%{$this->searchPresensi}%")
-                )
-            )
-
-            // FILTER KELOMPOK PRESENSI
-            ->when(
-                $this->kelompokPresensi,
-                fn($q) =>
-                $q->whereHas(
-                    'ms_generus',
-                    fn($g) =>
-                    $g->where('ms_kelompok_id', $this->kelompokPresensi)
-                )
-            )
-
-            // FILTER GENDER PRESENSI
-            ->when(
-                $this->genderPresensi,
-                fn($q) =>
-                $q->whereHas(
-                    'ms_generus',
-                    fn($g) =>
-                    $g->where('jenis_kelamin', $this->genderPresensi)
-                )
-            )
-
-            ->orderByDesc('waktu_hadir')
-            ->get();
-            // ->paginate(20);
-    }
-
     public function hadir($generusId)
     {
         $presensi = PresensiKegiatan::firstOrCreate(
