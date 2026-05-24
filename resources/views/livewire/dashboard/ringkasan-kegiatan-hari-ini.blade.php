@@ -30,7 +30,7 @@
                     -- Pilih Kegiatan Bulan Ini --
                 </option>
                 @foreach ($listKegiatan as $kegiatan)
-                <option value="{{ $kegiatan->ms_kegiatan_id }}">
+                <option value="{{ $kegiatan->ms_kegiatan_generus_id }}">
                     {{ $kegiatan->nama_kegiatan }} — {{ $kegiatan->waktu }}
                 </option>
                 @endforeach

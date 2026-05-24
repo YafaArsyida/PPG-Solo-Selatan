@@ -2,9 +2,8 @@
 
 namespace App\Http\Livewire\Dashboard;
 
-use App\Models\Kegiatan;
-use App\Models\PresensiKegiatan;
-use Carbon\Carbon;
+use App\Models\KegiatanGenerus;
+use App\Models\PresensiKegiatanGenerus;
 use Livewire\Component;
 
 class RingkasanKegiatanHariIni extends Component
@@ -48,7 +47,7 @@ class RingkasanKegiatanHariIni extends Component
             return;
         }
 
-        $this->listKegiatan = Kegiatan::query()
+        $this->listKegiatan = KegiatanGenerus::query()
             ->where('ms_desa_id', $this->selectedDesa)
             // ->whereDate('tanggal', Carbon::today())
             ->whereBetween('tanggal', [
@@ -66,7 +65,7 @@ class RingkasanKegiatanHariIni extends Component
             return;
         }
 
-        $query = PresensiKegiatan::where('ms_kegiatan_id', $this->selectedKegiatan);
+        $query = PresensiKegiatanGenerus::where('ms_kegiatan_generus_id', $this->selectedKegiatan);
 
         $this->hadir = (clone $query)->where('status_hadir', 'hadir')->count();
         $this->izin = (clone $query)->where('status_hadir', 'izin')->count();

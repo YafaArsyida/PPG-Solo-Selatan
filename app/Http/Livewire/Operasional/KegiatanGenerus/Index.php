@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Administrasi\KegiatanGenerus;
+namespace App\Http\Livewire\Operasional\KegiatanGenerus;
 
 use App\Models\KegiatanGenerus;
 use App\Models\Kelompok;
@@ -103,7 +103,20 @@ class Index extends Component
         }
 
         $query = KegiatanGenerus::query()
-            ->with(['ms_desa', 'ms_kelompok.ms_desa']);
+            ->with([
+                'ms_desa',
+                'ms_kelompok.ms_desa'
+            ])
+            ->withSum('tr_infaq', 'nominal')
+            ->withCount([
+                'presensi_kegiatan_generus as hadir_count' => function ($q) {
+                    $q->where('status_hadir', 'hadir');
+                },
+
+                'presensi_kegiatan_generus as izin_count' => function ($q) {
+                    $q->where('status_hadir', 'izin');
+                },
+            ]);
 
         // VISIBILITY RULE
         $query->where(function ($q) {
@@ -137,7 +150,10 @@ class Index extends Component
         $query->when(
             $this->startDate && $this->endDate,
             fn($q) =>
-            $q->whereBetween('tanggal', [$this->startDate, $this->endDate])
+            $q->whereBetween('tanggal', [
+                $this->startDate,
+                $this->endDate
+            ])
         );
 
         // FILTER TIPE KEGIATAN
@@ -146,24 +162,25 @@ class Index extends Component
             fn($q) =>
             $q->where('tipe_kegiatan', $this->tipeKegiatan)
         );
-        
-        // FILTER TAMBAHAN
-        if ($this->search) {
-            $query->where('nama_kegiatan', 'like', "%{$this->search}%");
-        }
+
+        // FILTER SEARCH
+        $query->when(
+            $this->search,
+            fn($q) =>
+            $q->where('nama_kegiatan', 'like', "%{$this->search}%")
+        );
 
         return $query->orderByRaw("
-            CASE 
-                WHEN tipe_kegiatan = 'rutin' THEN 0 
-                ELSE 1 
-            END,
-            tanggal ASC
-        ");
+        CASE 
+            WHEN tipe_kegiatan = 'rutin' THEN 0 
+            ELSE 1 
+        END,
+        tanggal ASC
+    ");
     }
-
     public function render()
     {
-        return view('livewire.administrasi.kegiatan-generus.index',[
+        return view('livewire.operasional.kegiatan-generus.index',[
             'listKegiatan' => $this->query->paginate(25)
         ]);
     }

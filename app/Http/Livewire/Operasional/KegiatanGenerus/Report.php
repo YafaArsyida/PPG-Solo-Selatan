@@ -1,28 +1,20 @@
 <?php
 
-namespace App\Http\Livewire\Laporan\Desa\KegiatanEvent;
+namespace App\Http\Livewire\Operasional\KegiatanGenerus;
 
 use App\Models\Desa;
-use App\Models\Generus;
-use App\Models\Kegiatan;
-use App\Models\PresensiKegiatan;
+use App\Models\KegiatanGenerus;
+use App\Models\PresensiKegiatanGenerus;
 use Livewire\Component;
 
 class Report extends Component
 {
-    // ======================================================
-    // STATE
-    // ======================================================
-
     public $kegiatan;
     public $kegiatanId;
     public $ms_desa_id;
     public $nama_desa = '-';
     public $totalInfaq = 0;
 
-    // ======================================================
-    // TABLE REPORT
-    // ======================================================
     public $laporanRows = [];
 
     public $grandTotal = [
@@ -37,32 +29,22 @@ class Report extends Component
         'alfa' => 0,
     ];
 
-    // ======================================================
-    // LISTENER
-    // ======================================================
     protected $listeners = [
         'KegiatanReport' => 'loadReport'
     ];
 
-    // ======================================================
-    // LOAD REPORT
-    // ======================================================
     public function loadReport($kegiatanId, $desaId)
     {
         $this->resetReport();
         $this->kegiatanId = $kegiatanId;
         $this->ms_desa_id = $desaId;
 
-        // =========================================
         // DESA
-        // =========================================
         $desa = Desa::find($desaId);
         $this->nama_desa = $desa?->nama_desa ?? '-';
 
-        // =========================================
         // KEGIATAN
-        // =========================================
-        $this->kegiatan = Kegiatan::with([
+        $this->kegiatan = KegiatanGenerus::with([
             'ms_desa',
             'ms_kelompok'
         ])->find($kegiatanId);
@@ -75,55 +57,35 @@ class Report extends Component
             return;
         }
 
-        // =========================================
         // GENERATE REPORT
-        // =========================================
         $this->generateTableReport();
 
-        // =========================================
         // CHILD COMPONENT
-        // =========================================
         $this->emitTo(
-            'laporan.desa.kegiatan-event.report.attendance',
+            'operasional.kegiatan-generus.attendance',
             'setKegiatan',
             $kegiatanId,
             $desaId
         );
 
-        $this->emitTo(
-            'laporan.desa.kegiatan-event.report.alfa',
-            'setKegiatan',
-            $kegiatanId,
-            $desaId
-        );
-
-        // =========================================
         // SUCCESS
-        // =========================================
         $this->dispatchBrowserEvent('alertify-success', [
             'message' => 'Laporan kegiatan berhasil dimuat'
         ]);
     }
 
-    // ======================================================
     // GENERATE TABLE REPORT
-    // ======================================================
-
     private function generateTableReport()
     {
         if (!$this->kegiatan) {
             return;
         }
-        // ==========================================
         // TOTAL INFAQ
-        // ==========================================
         $this->totalInfaq = $this->kegiatan
             ->tr_infaq()
             ->sum('nominal');
 
-        // ==================================================
         // TARGET PESERTA
-        // ==================================================
         $targetQuery = $this->kegiatan
             ->targetPesertaQuery()
             ->with([
@@ -138,26 +100,19 @@ class Report extends Component
         }
 
         $targetGenerus = $targetQuery->get();
-        // ==================================================
         // PRESENSI
-        // ==================================================
-
-        $presensi = PresensiKegiatan::with([
+        $presensi = PresensiKegiatanGenerus::with([
             'ms_generus.ms_kelompok'
         ])
-            ->where('ms_kegiatan_id', $this->kegiatanId)
+            ->where('ms_kegiatan_generus_id', $this->kegiatanId)
             ->where('status_hadir', 'hadir')
             ->get();
 
-        // ==================================================
         // GROUP TARGET
-        // ==================================================
         $groupedTarget = $targetGenerus
             ->groupBy('ms_kelompok_id');
 
-        // ==================================================
         // GROUP PRESENSI
-        // ==================================================
         $groupedPresensi = $presensi
             ->groupBy('ms_generus.ms_kelompok_id');
 
@@ -176,15 +131,11 @@ class Report extends Component
 
         ];
 
-        // ==================================================
         // LOOP KELOMPOK
-        // ==================================================
         foreach ($groupedTarget as $kelompokId => $members) {
             $kelompok = optional($members->first())->ms_kelompok;
 
-            // ==============================================
             // TARGET
-            // ==============================================
             $targetL = $members
                 ->where('jenis_kelamin', 'laki-laki')
                 ->count();
@@ -195,9 +146,7 @@ class Report extends Component
 
             $targetTotal = $targetL + $targetP;
 
-            // ==============================================
             // PRESENSI HADIR
-            // ==============================================
             $hadirCollection = $groupedPresensi[$kelompokId]
                 ?? collect();
 
@@ -219,14 +168,10 @@ class Report extends Component
 
             $hadirTotal = $hadirL + $hadirP;
 
-            // ==============================================
             // ALFA
-            // ==============================================
             $alfa = max(0, $targetTotal - $hadirTotal);
 
-            // ==============================================
             // PRESENTASE
-            // ==============================================
             $presentase = $targetTotal > 0
                 ? round(($hadirTotal / $targetTotal) * 100)
                 : 0;
@@ -249,9 +194,7 @@ class Report extends Component
                 'presentase' => $presentase,
             ];
 
-            // ==============================================
             // GRAND TOTAL
-            // ==============================================
             $grand['target_l'] += $targetL;
             $grand['target_p'] += $targetP;
             $grand['target_total'] += $targetTotal;
@@ -263,31 +206,23 @@ class Report extends Component
             $grand['alfa'] += $alfa;
         }
 
-        // ==================================================
         // SORT BY PRESENTASE DESC
-        // ==================================================
         usort($rows, function ($a, $b) {
             return $b['presentase'] <=> $a['presentase'];
         });
 
-        // ==================================================
         // SET STATE
-        // ==================================================
-
         $this->laporanRows = $rows;
         $this->grandTotal = $grand;
     }
 
-    // ======================================================
     // RESET REPORT
-    // ======================================================
-
     private function resetReport()
     {
         $this->laporanRows = [];
 
         $this->totalInfaq = 0;
-        
+
         $this->grandTotal = [
             'target_l' => 0,
             'target_p' => 0,
@@ -301,10 +236,7 @@ class Report extends Component
         ];
     }
 
-    // ======================================================
     // COMPUTED
-    // ======================================================
-
     public function getPersentaseGlobalProperty()
     {
         if ($this->grandTotal['target_total'] == 0) {
@@ -320,12 +252,9 @@ class Report extends Component
         );
     }
 
-    // ======================================================
     // RENDER
-    // ======================================================
-
     public function render()
     {
-        return view('livewire.laporan.desa.kegiatan-event.report');
+        return view('livewire.operasional.kegiatan-generus.report');
     }
 }

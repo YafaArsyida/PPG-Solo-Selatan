@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Infaq;
 
 use App\Models\Kegiatan;
+use App\Models\KegiatanGenerus;
 use App\Models\TRInfaq;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -10,7 +11,7 @@ use Livewire\Component;
 
 class Create extends Component
 {
-    public $ms_kegiatan_id;
+    public $ms_kegiatan_generus_id;
     public $nama_kegiatan;
     public $nominal;
     public $tanggal;
@@ -23,13 +24,13 @@ class Create extends Component
         $this->tanggal = now()->format('Y-m-d');
     }
 
-    public function InfaqCreate($ms_kegiatan_id)
+    public function InfaqCreate($ms_kegiatan_generus_id)
     {
         $this->resetInput();
 
-        $kegiatan = Kegiatan::findOrFail($ms_kegiatan_id);
+        $kegiatan = KegiatanGenerus::findOrFail($ms_kegiatan_generus_id);
 
-        $this->ms_kegiatan_id = $kegiatan->ms_kegiatan_id;
+        $this->ms_kegiatan_generus_id = $kegiatan->ms_kegiatan_generus_id;
         $this->nama_kegiatan  = $kegiatan->nama_kegiatan;
 
         $this->tanggal = now()->format('Y-m-d');
@@ -38,7 +39,7 @@ class Create extends Component
     }
 
     protected $rules = [
-        'ms_kegiatan_id' => 'required|exists:ms_kegiatan,ms_kegiatan_id',
+        'ms_kegiatan_generus_id' => 'required|exists:ms_kegiatan_generus,ms_kegiatan_generus_id',
         'nominal'        => 'required|numeric|min:1000',
         'tanggal'        => 'required|date',
         'keterangan'     => 'nullable|string|max:500',
@@ -70,7 +71,7 @@ class Create extends Component
         try {
 
             TRInfaq::create([
-                'ms_kegiatan_id' => $this->ms_kegiatan_id,
+                'ms_kegiatan_generus_id' => $this->ms_kegiatan_generus_id,
                 'ms_pengguna_id' => Auth::id(),
                 'nominal'        => $this->nominal,
                 'tanggal'        => $this->tanggal,
@@ -102,7 +103,7 @@ class Create extends Component
 
     public function resetInput()
     {
-        $this->ms_kegiatan_id = '';
+        $this->ms_kegiatan_generus_id = '';
         $this->nama_kegiatan  = '';
         $this->nominal        = '';
         $this->tanggal        = now()->format('Y-m-d');

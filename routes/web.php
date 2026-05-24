@@ -7,8 +7,7 @@ use App\Http\Controllers\GenerasiPenerus;
 use App\Http\Controllers\KegiatanGenerus;
 use App\Http\Controllers\Laporan\LaporanKegiatanGenerus;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\PresensiKegiatan;
-use App\Http\Controllers\PresensiKegiatanKartu;
+use App\Http\Controllers\OperasionalKegiatanGenerus;
 
 // TEMANPENGURUS
 use App\Http\Controllers\TemanPengurus\Dashboard;
@@ -56,14 +55,12 @@ Route::post('/login', [LoginController::class, 'authenticate'])
 Route::post('/logout', [LoginController::class, 'logOut'])
     ->name('logout');
 
-Route::get('/operasional/presensi-kegiatan-kartu/{token}',  [PresensiKegiatanKartu::class, 'index'])->name('operasional.presensi-kegiatan-kartu');
+Route::get('/operasional/presensi-kegiatan-kartu/{token}',  [OperasionalKegiatanGenerus::class, 'kartu'])->name('operasional.presensi-kegiatan-kartu');
+
+Route::get('/operasional/presensi-kegiatan/{token}',  [OperasionalKegiatanGenerus::class, 'manual'])->name('operasional.presensi-kegiatan');
 
 Route::middleware(['auth'])->group(function () {
-    
-    Route::get('/operasional/presensi-kegiatan/{token}',  [PresensiKegiatan::class, 'index'])->name('operasional.presensi-kegiatan');
-
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-
 
     /*
     |--------------------------------------------------------------------------
@@ -89,6 +86,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/administrasi/kegiatan-generus', [KegiatanGenerus::class, 'index'])
             ->name('administrasi.kegiatan-generus');
+
+        Route::get('/operasional/kegiatan-generus', [OperasionalKegiatanGenerus::class, 'index'])
+            ->name('operasional.kegiatan-generus');
     });
 
 
@@ -102,19 +102,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/kegiatan-event', [LaporanKegiatanGenerus::class, 'eventDaerah'])
             ->name('event');
     });
-
-
-    // =========================
-    // LAPORAN DESA
-    // =========================
-    Route::middleware(['peran:SUPERADMIN,DESA'])->prefix('laporan/desa')->name('laporan.desa.')->group(function () {
-        Route::get('/kegiatan-rutin', [LaporanKegiatanGenerus::class, 'rutinDesa'])
-            ->name('rutin');
-
-        Route::get('/kegiatan-event', [LaporanKegiatanGenerus::class, 'eventDesa'])
-            ->name('event');
-    });
-
 
     // =========================
     // LAPORAN KELOMPOK

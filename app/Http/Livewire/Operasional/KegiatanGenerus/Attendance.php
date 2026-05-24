@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Livewire\Laporan\Desa\KegiatanEvent\Report;
+namespace App\Http\Livewire\Operasional\KegiatanGenerus;
 
-use App\Models\Desa;
 use App\Models\Kelompok;
-use App\Models\PresensiKegiatan;
+use App\Models\PresensiKegiatanGenerus;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -14,7 +13,7 @@ class Attendance extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $ms_kegiatan_id;
+    public $ms_kegiatan_generus_id;
     public $ms_desa_id;
 
     public $search = '';
@@ -30,12 +29,12 @@ class Attendance extends Component
 
     public function mount($kegiatanId = null)
     {
-        $this->ms_kegiatan_id = $kegiatanId;
+        $this->ms_kegiatan_generus_id = $kegiatanId;
     }
 
     public function setKegiatan($kegiatanId, $desaId)
     {
-        $this->ms_kegiatan_id = $kegiatanId;
+        $this->ms_kegiatan_generus_id = $kegiatanId;
         $this->ms_desa_id = $desaId; // FIXED
         $this->ms_kelompok_id = null;
 
@@ -45,7 +44,7 @@ class Attendance extends Component
 
         $this->resetPage();
     }
-    
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -63,10 +62,10 @@ class Attendance extends Component
 
     public function getPresensiProperty()
     {
-        return PresensiKegiatan::with([
+        return PresensiKegiatanGenerus::with([
             'ms_generus.ms_kelompok.ms_desa'
         ])
-            ->where('ms_kegiatan_id', $this->ms_kegiatan_id)
+            ->where('ms_kegiatan_generus_id', $this->ms_kegiatan_generus_id)
 
             // 🔒 FIXED DESA
             ->whereHas('ms_generus.ms_kelompok', function ($q) {
@@ -97,7 +96,7 @@ class Attendance extends Component
 
     public function render()
     {
-        return view('livewire.laporan.desa.kegiatan-event.report.attendance',[
+        return view('livewire.operasional.kegiatan-generus.attendance',[
             'presensi' => $this->presensi,
             'listKelompok' => $this->listKelompok,
         ]);

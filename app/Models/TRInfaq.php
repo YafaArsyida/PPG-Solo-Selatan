@@ -16,16 +16,16 @@ class TRInfaq extends Model
     protected $primaryKey = 'tr_infaq_id';
 
     protected $fillable = [
-        'ms_kegiatan_id',
+        'ms_kegiatan_generus_id',
         'ms_pengguna_id',
         'nominal',
         'tanggal',
         'keterangan',
     ];
 
-    public function ms_kegiatan()
+    public function ms_kegiatan_generus()
     {
-        return $this->belongsTo(Kegiatan::class, 'ms_kegiatan_id');
+        return $this->belongsTo(KegiatanGenerus::class, 'ms_kegiatan_generus_id');
     }
 
     public function ms_pengguna()

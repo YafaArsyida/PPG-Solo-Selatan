@@ -7,8 +7,8 @@
             <div class="col-12">
                 <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                     <div class="flex-grow-1">
-                        <h4 class="fs-16 mb-1">Laporan Kegiatan Rutin Generus</h4>
-                        <p class="text-muted mb-0">Laporan > Laporan Kegiatan Rutin Generus</p>
+                        <h4 class="fs-16 mb-1">Operasional Kegiatan Generus</h4>
+                        <p class="text-muted mb-0">Operasional > Kegiatan Generus</p>
                     </div>
                     @livewire('parameter.desa')
                 </div><!-- end card header -->
@@ -18,8 +18,15 @@
     
         <div class="row">
             <div class="row-xxl-12">
-                @livewire('laporan.kegiatan-rutin.index')
-                @livewire('administrasi.kegiatan-generus.report')
+                @livewire('operasional.kegiatan-generus.index')
+                @livewire('operasional.kegiatan-generus.report')
+                @livewire('operasional.kegiatan-generus.status')
+
+                @livewire('administrasi.kegiatan-generus.create')
+
+                @livewire('administrasi.kegiatan-generus.detail')
+                @livewire('infaq.create')
+                @livewire('infaq.edit')
             </div>
         </div>
     

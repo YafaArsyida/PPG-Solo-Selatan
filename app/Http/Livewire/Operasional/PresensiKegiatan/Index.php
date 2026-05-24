@@ -4,8 +4,10 @@ namespace App\Http\Livewire\Operasional\PresensiKegiatan;
 
 use App\Models\Generus;
 use App\Models\Kegiatan;
+use App\Models\KegiatanGenerus;
 use App\Models\Kelompok;
 use App\Models\PresensiKegiatan;
+use App\Models\PresensiKegiatanGenerus;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -68,7 +70,7 @@ class Index extends Component
     {
         $this->token = $token;
 
-        $this->kegiatan = Kegiatan::with([
+        $this->kegiatan = KegiatanGenerus::with([
             'ms_desa',
             'ms_kelompok'
         ])
@@ -186,7 +188,7 @@ class Index extends Component
 
     protected function loadPresensiMap()
     {
-        $existing = PresensiKegiatan::where('ms_kegiatan_id', $this->kegiatan->ms_kegiatan_id)
+        $existing = PresensiKegiatanGenerus::where('ms_kegiatan_generus_id', $this->kegiatan->ms_kegiatan_generus_id)
             ->get()
             ->keyBy('ms_generus_id');
 
@@ -211,9 +213,9 @@ class Index extends Component
 
     public function hadir($generusId)
     {
-        $presensi = PresensiKegiatan::firstOrCreate(
+        $presensi = PresensiKegiatanGenerus::firstOrCreate(
             [
-                'ms_kegiatan_id' => $this->kegiatan->ms_kegiatan_id,
+                'ms_kegiatan_generus_id' => $this->kegiatan->ms_kegiatan_generus_id,
                 'ms_generus_id'  => $generusId,
                 'tanggal_presensi' => today(),
             ],
@@ -241,9 +243,9 @@ class Index extends Component
 
     public function izin($generusId)
     {
-        $presensi = PresensiKegiatan::firstOrCreate(
+        $presensi = PresensiKegiatanGenerus::firstOrCreate(
             [
-                'ms_kegiatan_id' => $this->kegiatan->ms_kegiatan_id,
+                'ms_kegiatan_generus_id' => $this->kegiatan->ms_kegiatan_generus_id,
                 'ms_generus_id'  => $generusId,
                 'tanggal_presensi' => today(),
             ],
@@ -270,7 +272,7 @@ class Index extends Component
 
     public function batalPresensi($generusId)
     {
-        PresensiKegiatan::where('ms_kegiatan_id', $this->kegiatan->ms_kegiatan_id)
+        PresensiKegiatanGenerus::where('ms_kegiatan_generus_id', $this->kegiatan->ms_kegiatan_generus_id)
             ->where('ms_generus_id', $generusId)
             ->delete();
 

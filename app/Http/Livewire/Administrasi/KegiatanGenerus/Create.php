@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Administrasi\KegiatanGenerus;
 
 use App\Models\Daerah;
 use App\Models\Desa;
-use App\Models\Kegiatan;
+use App\Models\KegiatanGenerus;
 use App\Models\Kelompok;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -238,7 +238,7 @@ class Create extends Component
 
         DB::beginTransaction();
         try {
-            Kegiatan::create([
+            KegiatanGenerus::create([
                 'scope' => $this->scope,
                 'ms_kelompok_id' => $this->ms_kelompok_id,
                 'ms_desa_id' => $this->ms_desa_id,

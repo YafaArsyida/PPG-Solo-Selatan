@@ -10,7 +10,7 @@ class Edit extends Component
 {
     public $tr_infaq_id;
 
-    public $ms_kegiatan_id;
+    public $ms_kegiatan_generus_id;
 
     public $nama_kegiatan;
 
@@ -22,9 +22,9 @@ class Edit extends Component
 
     protected $listeners = ['InfaqEdit'];
 
-    public function InfaqEdit($ms_kegiatan_id)
+    public function InfaqEdit($ms_kegiatan_generus_id)
     {
-        $infaq = TRInfaq::where('ms_kegiatan_id', $ms_kegiatan_id)->first();
+        $infaq = TRInfaq::where('ms_kegiatan_generus_id', $ms_kegiatan_generus_id)->first();
 
         if (!$infaq) {
             return;
@@ -32,10 +32,10 @@ class Edit extends Component
 
         $this->tr_infaq_id   = $infaq->tr_infaq_id;
 
-        $this->ms_kegiatan_id = $infaq->ms_kegiatan_id;
+        $this->ms_kegiatan_generus_id = $infaq->ms_kegiatan_generus_id;
 
         $this->nama_kegiatan = optional(
-            $infaq->ms_kegiatan
+            $infaq->ms_kegiatan_generus
         )->nama_kegiatan;
 
         $this->nominal = $infaq->nominal;

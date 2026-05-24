@@ -5,23 +5,23 @@
             {{-- TITLE --}}
             <div class="d-flex align-items-center gap-3">
                 <div class="avatar-sm">
-                    <div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-18">
+                    <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-18">
                         <i class="ri-team-line">
                         </i>
                     </div>
                 </div>
                 <div>
                     <h5 class="fw-bold mb-1">
-                        Generus Alfa/Tidak Hadir
+                        Kehadiran Generus
                     </h5>
                     <small>
-                        Monitoring generus yang belum hadir pada kegiatan.
+                        Monitoring data hadir, izin, dan verifikasi peserta kegiatan
                     </small>
                 </div>
             </div>
             {{-- ACTION --}}
             <div class="d-flex gap-2 flex-wrap">
-                <button id="btnExportAttendance" class="btn btn-success rounded-pill px-4 shadow-sm">
+                <button id="btnExportAttendance" class="btn btn-success rounded-pill px-4">
                     <i class="ri-file-excel-2-line me-1">
                     </i>
                     Export Excel
@@ -38,8 +38,8 @@
                     Cari Nama Generus
                 </label>
                 <div class="search-box">
-                    <input type="text" class="form-control border-light rounded-3"
-                        wire:model.debounce.400ms="search" placeholder="Ketik nama generus...">
+                    <input type="text" class="form-control rounded-3" wire:model.debounce.400ms="search"
+                        placeholder="Ketik nama generus...">
                     <i class="ri-search-line search-icon">
                     </i>
                 </div>
@@ -49,8 +49,7 @@
                 <label class="form-label fw-semibold">
                     Kelompok
                 </label>
-                <select class="form-select rounded-3 border-light" wire:model="ms_kelompok_id" {{ !$ms_desa_id
-                    ? 'disabled' : '' }}>
+                <select class="form-select rounded-3" wire:model="ms_kelompok_id" {{ !$ms_desa_id ? 'disabled' : '' }}>
                     <option value="">
                         Semua Kelompok
                     </option>
@@ -66,7 +65,7 @@
                 <label class="form-label fw-semibold">
                     Gender
                 </label>
-                <select class="form-select rounded-3 border-light" wire:model="gender">
+                <select class="form-select rounded-3" wire:model="gender">
                     <option value="">
                         Semua Generus
                     </option>
@@ -83,42 +82,45 @@
     {{-- TABLE --}}
     <div class="card-body pt-0">
         <div class="table-responsive">
-            <table id="Alfa" class="table align-middle table-hover mb-0">
-                <thead class="bg-light">
+            <table id="Attendance" class="table align-middle table-hover mb-0">
+                <thead class="table-light">
                     <tr class="text-uppercase fw-semibold">
-                        <th style="width: 60px">#</th>
+                        <th style="width:70px;">#</th>
                         <th>Generus</th>
                         <th>Kelompok</th>
-                        <th class="text-center">status</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Verifikasi</th>
+                        <th>
+                            Waktu Hadir
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($alfa as $i => $g)
+                    @forelse($presensi as $i => $row)
                     <tr>
                         {{-- NO --}}
                         <td class="text-muted fw-semibold">
-                            {{ ($alfa->currentPage() - 1) * $alfa->perPage() + $loop->iteration }}
+                            {{ $presensi->firstItem() + $i }}
                         </td>
                         {{-- NAMA --}}
                         <td>
                             <div class="d-flex align-items-center gap-3">
                                 <div class="avatar-xs flex-shrink-0">
                                     <div class="avatar-title 
-                                        {{ $g->jenis_kelamin == 'perempuan'
+                                        {{ $row->ms_generus->jenis_kelamin == 'perempuan'
                                         ? 'bg-danger-subtle text-danger'
                                         : 'bg-primary-subtle text-primary' 
                                         }} 
-                                        rounded-circle fw-semibold"
-                                    >
-                                        {{ strtoupper(substr($g->nama_generus, 0, 1)) }}
+                                        rounded-circle fw-semibold">
+                                        {{ strtoupper(substr($row->ms_generus->nama_generus, 0, 1)) }}
                                     </div>
                                 </div>
                                 <div>
                                     <div class="fw-semibold">
-                                        {{ $g->nama_generus }}
+                                        {{ $row->ms_generus->nama_generus }}
                                     </div>
                                     <small class="text-muted">
-                                        {{ strtoupper($g->jenis_kelamin) }}
+                                        {{ strtoupper($row->ms_generus->jenis_kelamin) }}
                                     </small>
                                 </div>
                             </div>
@@ -126,29 +128,46 @@
                         {{-- KELOMPOK --}}
                         <td>
                             <div class="fw-semibold">
-                                Kelompok {{ $g->ms_kelompok->nama_kelompok ?? '-' }}
+                                Kelompok {{ $row->ms_generus->ms_kelompok->nama_kelompok ?? '-' }}
                             </div>
                         </td>
                         {{-- STATUS --}}
-                        <td class="text-danger fw-semibold text-center">
-                            Alfa
+                        <td>
+                            @php $statusClass = match($row->status_hadir) { 'hadir' => 'primary',
+                            'izin' => 'danger', default => 'danger' }; @endphp
+                            <div class="text-{{ $statusClass }} fw-semibold text-center">
+                                {{ ucfirst($row->status_hadir) }}
+                            </div>
+                        </td>
+                        {{-- VERIFIKASI --}}
+                        <td class="text-center">
+                            {{ ucfirst($row->verifikasi ?? '-') }}
+                        </td>
+                        {{-- WAKTU --}}
+                        <td>
+                            <div class="fw-semibold text-dark">
+                                {{ \Carbon\Carbon::parse($row->waktu_hadir)->format('d M Y') }}
+                            </div>
+                            <small class="text-muted">
+                                {{ \Carbon\Carbon::parse($row->waktu_hadir)->format('H:i') }} WIB
+                            </small>
                         </td>
                     </tr>
-                    @empty {{-- EMPTY --}}
+                    @empty
                     <tr>
-                        <td colspan="4" class="text-center py-5">
+                        <td colspan="6" class="text-center py-5">
                             <div class="d-flex flex-column align-items-center">
                                 <div class="avatar-md mb-3">
-                                    <div class="avatar-title bg-light text-muted rounded-circle fs-24">
+                                    <div class="avatar-title rounded-circle bg-light text-muted fs-24">
                                         <i class="ri-inbox-archive-line">
                                         </i>
                                     </div>
                                 </div>
                                 <h6 class="fw-semibold mb-1">
-                                    Belum Ada Data Alfa
+                                    Belum Ada Data Presensi
                                 </h6>
                                 <p class="text-muted mb-0 fs-13">
-                                    Semua generus hadir atau belum ada data presensi.
+                                    Data kehadiran generus akan tampil di sini
                                 </p>
                             </div>
                         </td>
@@ -164,20 +183,20 @@
             <div class="text-muted fs-13">
                 Menampilkan
                 <span class="fw-semibold">
-                    {{ $alfa->firstItem() ?? 0 }}
+                    {{ $presensi->firstItem() ?? 0 }}
                 </span>
                 -
                 <span class="fw-semibold">
-                    {{ $alfa->lastItem() ?? 0 }}
+                    {{ $presensi->lastItem() ?? 0 }}
                 </span>
                 dari
                 <span class="fw-semibold">
-                    {{ $alfa->total() }}
+                    {{ $presensi->total() }}
                 </span>
-                data alfa
+                data presensi
             </div>
             <div>
-                {{ $alfa->links() }}
+                {{ $presensi->links() }}
             </div>
         </div>
     </div>

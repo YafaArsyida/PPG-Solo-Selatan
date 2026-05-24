@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Kegiatan extends Model
+class KegiatanGenerus extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = 'ms_kegiatan'; // Nama tabel
-    protected $primaryKey = 'ms_kegiatan_id'; // Nama kolom primary key
+    protected $table = 'ms_kegiatan_generus'; // Nama tabel
+    protected $primaryKey = 'ms_kegiatan_generus_id'; // Nama kolom primary key
 
     protected $fillable = [
         'scope',
@@ -135,9 +135,9 @@ class Kegiatan extends Model
         ];
     }
 
-    public function ms_presensi()
+    public function presensi_kegiatan_generus()
     {
-        return $this->hasMany(PresensiKegiatan::class, 'ms_kegiatan_id');
+        return $this->hasMany(PresensiKegiatanGenerus::class, 'ms_kegiatan_generus_id');
     }
 
     public function targetPesertaQuery()
@@ -257,6 +257,6 @@ class Kegiatan extends Model
     // INFAQ
     public function tr_infaq()
     {
-        return $this->hasMany(TRInfaq::class, 'ms_kegiatan_id');
+        return $this->hasMany(TRInfaq::class, 'ms_kegiatan_generus_id');
     }
 }

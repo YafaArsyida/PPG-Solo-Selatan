@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire\Administrasi\KegiatanGenerus;
 
-use App\Models\Generus;
 use App\Models\Kegiatan;
+use App\Models\KegiatanGenerus;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -17,7 +17,7 @@ class Detail extends Component
 
     public function KegiatanDetail($kegiatanId)
     {
-        $this->kegiatan = Kegiatan::with([
+        $this->kegiatan = KegiatanGenerus::with([
             'ms_desa',
             'ms_kelompok.ms_desa'
         ])->find($kegiatanId);
@@ -57,7 +57,7 @@ class Detail extends Component
             'message' => 'Pengumuman sedang disiapkan...'
         ]);
 
-        $kegiatan = Kegiatan::with(['ms_desa', 'ms_kelompok.ms_desa'])
+        $kegiatan = KegiatanGenerus::with(['ms_desa', 'ms_kelompok.ms_desa'])
             ->find($kegiatanId);
 
         if (!$kegiatan) {

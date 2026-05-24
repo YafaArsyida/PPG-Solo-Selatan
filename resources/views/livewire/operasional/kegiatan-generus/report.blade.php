@@ -141,12 +141,8 @@
         {{-- CONTENT --}}
         <div class="row g-4">
             {{-- PRESENSI --}}
-            <div class="col-xxl-7 col-lg-7">
-                @livewire('laporan.desa.kegiatan-event.report.attendance', [ 'kegiatanId' => $kegiatanId ])
-            </div>
-            {{-- ALFA --}}
-            <div class="col-xxl-5 col-lg-5">
-                @livewire('laporan.desa.kegiatan-event.report.alfa', [ 'kegiatanId' => $kegiatanId ])
+            <div class="col-xxl-12 col-lg-12">
+                @livewire('operasional.kegiatan-generus.attendance', [ 'kegiatanId' => $kegiatanId ])
             </div>
         </div>
         @endif

@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Dashboard;
 
-use App\Models\PresensiKegiatan;
+use App\Models\PresensiKegiatanGenerus;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -45,7 +45,7 @@ class RankingKehadiranGenerus extends Component
     {
         [$start, $end] = $this->getRangeTanggal();
 
-        return PresensiKegiatan::query()
+        return PresensiKegiatanGenerus::query()
             ->select(
                 'ms_generus_id',
                 DB::raw('COUNT(*) as total_hadir')

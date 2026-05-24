@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Administrasi\KegiatanGenerus;
 
-use App\Models\Kegiatan;
+use App\Models\KegiatanGenerus;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -23,7 +23,7 @@ class Delete extends Component
     {
         if (!$this->kegiatanId) return;
 
-        $kegiatan = Kegiatan::find($this->kegiatanId);
+        $kegiatan = KegiatanGenerus::find($this->kegiatanId);
 
         // if ($kegiatan->presensis()->exists()) {
         //     $this->dispatchBrowserEvent('alertify-error', [

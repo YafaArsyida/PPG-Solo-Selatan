@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Administrasi\KegiatanGenerus;
 
 use App\Models\Daerah;
 use App\Models\Desa;
-use App\Models\Kegiatan;
+use App\Models\KegiatanGenerus;
 use App\Models\Kelompok;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -55,7 +55,7 @@ class Edit extends Component
     public function loadData($id, $desaId = null)
     {
         $this->selectedDesa = $desaId;
-        $kegiatan = Kegiatan::find($id);
+        $kegiatan = KegiatanGenerus::find($id);
 
         if (!$kegiatan) {
             $this->dispatchBrowserEvent('alertify-error', [
@@ -64,7 +64,7 @@ class Edit extends Component
             return;
         }
 
-        $this->kegiatanId     = $kegiatan->ms_kegiatan_id;
+        $this->kegiatanId     = $kegiatan->ms_kegiatan_generus_id;
         $this->scope          = $kegiatan->scope;
         $this->ms_desa_id     = $kegiatan->ms_desa_id;
         $this->ms_kelompok_id = $kegiatan->ms_kelompok_id;
@@ -272,7 +272,7 @@ class Edit extends Component
 
         DB::beginTransaction();
         try {
-            Kegiatan::where('ms_kegiatan_id', $this->kegiatanId)->update([
+            KegiatanGenerus::where('ms_kegiatan_generus_id', $this->kegiatanId)->update([
                 'scope' => $this->scope,
                 'ms_desa_id' => $this->ms_desa_id,
                 'ms_kelompok_id' => $this->ms_kelompok_id,

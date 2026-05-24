@@ -5,7 +5,7 @@
             <div class="modal-header border-0 pb-0 p-4">
                 <div class="d-flex align-items-center gap-3">
                     <div class="avatar-sm">
-                        <div class="avatar-title bg-warning-subtle text-warning rounded-circle fs-18">
+                        <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-18">
                             <i class="ri-edit-2-line">
                             </i>
                         </div>

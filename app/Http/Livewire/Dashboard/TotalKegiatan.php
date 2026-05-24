@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Dashboard;
 
-use App\Models\Kegiatan;
+use App\Models\KegiatanGenerus;
 use Livewire\Component;
 
 class TotalKegiatan extends Component
@@ -28,7 +28,7 @@ class TotalKegiatan extends Component
 
     public function loadData()
     {
-        $query = Kegiatan::query();
+        $query = KegiatanGenerus::query();
 
         if ($this->selectedDesa) {
             $query->where('ms_desa_id', $this->selectedDesa);

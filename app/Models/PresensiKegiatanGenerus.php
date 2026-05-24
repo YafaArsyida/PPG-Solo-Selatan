@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PresensiKegiatan extends Model
+class PresensiKegiatanGenerus extends Model
 {
     use HasFactory;
 
-    protected $table = 'ms_presensi_kegiatan'; // Nama tabel
-    protected $primaryKey = 'ms_presensi_kegiatan_id'; // Nama kolom primary key
+    protected $table = 'presensi_kegiatan_generus'; // Nama tabel
+    protected $primaryKey = 'presensi_kegiatan_generus_id'; // Nama kolom primary key
 
     protected $fillable = [
-        'ms_kegiatan_id',
+        'ms_kegiatan_generus_id',
         'ms_generus_id',
         'tanggal_presensi',
         'waktu_hadir',
@@ -23,9 +23,9 @@ class PresensiKegiatan extends Model
         'deskripsi',
     ];
 
-    public function ms_kegiatan()
+    public function ms_kegiatan_generus()
     {
-        return $this->belongsTo(Kegiatan::class, 'ms_kegiatan_id', 'ms_kegiatan_id');
+        return $this->belongsTo(KegiatanGenerus::class, 'ms_kegiatan_generus_id', 'ms_kegiatan_generus_id');
     }
 
     public function ms_generus()
