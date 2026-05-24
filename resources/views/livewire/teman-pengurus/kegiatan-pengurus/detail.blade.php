@@ -298,13 +298,13 @@
                                                 </div>
                                                 @else
                                                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                                                    <a href="{{ route('temanpengurus.presensi-kegiatan', $kegiatan->token) }}"
+                                                    <a href="{{ route('temanpengurus.operasional.presensi-kegiatan', $kegiatan->token) }}"
                                                         target="_blank" class="fw-semibold text-secondary">
                                                         Buka Presensi
                                                     </a>
                                                     <button type="button"
                                                         class="btn btn-sm btn-light btn-icon rounded-circle"
-                                                        onclick="copyToClipboard('{{ route('temanpengurus.presensi-kegiatan', $kegiatan->token) }}')">
+                                                        onclick="copyToClipboard('{{ route('temanpengurus.operasional.presensi-kegiatan', $kegiatan->token) }}')">
                                                         <i class="mdi mdi-content-copy">
                                                         </i>
                                                     </button>

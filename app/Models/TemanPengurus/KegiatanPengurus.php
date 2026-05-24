@@ -5,6 +5,7 @@ namespace App\Models\TemanPengurus;
 use App\Models\Desa;
 use App\Models\Kelompok;
 use App\Models\PresensiKegiatan;
+use App\Models\TemanPengurus\PresensiKegiatan as TemanPengurusPresensiKegiatan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -46,7 +47,7 @@ class KegiatanPengurus extends Model
             }
         });
     }
-    
+
     // public function ms_kelompok()
     // {
     //     return $this->belongsTo(Kelompok::class, 'ms_kelompok_id', 'ms_kelompok_id');
@@ -58,8 +59,14 @@ class KegiatanPengurus extends Model
     //     return $this->belongsTo(Desa::class, 'ms_desa_id', 'ms_desa_id');
     // }
 
-    // public function ms_presensi()
-    // {
-    //     return $this->hasMany(PresensiKegiatan::class, 'ms_kegiatan_id');
-    // }
+    public function presensi_kegiatan_pengurus()
+    {
+        return $this->hasMany(PresensiKegiatanPengurus::class, 'ms_kegiatan_pengurus_id');
+    }
+
+    // INFAQ
+    public function tr_infaq_pengurus()
+    {
+        return $this->hasMany(TRInfaqPengurus::class, 'ms_kegiatan_pengurus_id');
+    }
 }

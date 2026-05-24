@@ -5,7 +5,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesaKelompok;
 use App\Http\Controllers\GenerasiPenerus;
 use App\Http\Controllers\KegiatanGenerus;
-use App\Http\Controllers\Laporan\LaporanKegiatanGenerus;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OperasionalKegiatanGenerus;
 
@@ -13,8 +12,8 @@ use App\Http\Controllers\OperasionalKegiatanGenerus;
 use App\Http\Controllers\TemanPengurus\Dashboard;
 use App\Http\Controllers\TemanPengurus\DesaKelompok as TemanPengurusDesaKelompok;
 use App\Http\Controllers\TemanPengurus\KegiatanPengurus;
+use App\Http\Controllers\TemanPengurus\OperasionalKegiatanPengurus;
 use App\Http\Controllers\TemanPengurus\Pengurus;
-use App\Http\Controllers\TemanPengurus\PresensiKegiatan as TemanPengurusPresensiKegiatan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -72,7 +71,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/temanpengurus/administrasi/pengurus', [Pengurus::class, 'index'])->name('temanpengurus.administrasi.pengurus');
     Route::get('/temanpengurus/administrasi/kegiatan', [KegiatanPengurus::class, 'index'])->name('temanpengurus.administrasi.kegiatan-pengurus');
 
-    Route::get('/temanpengurus/presensi-kegiatan/{token}',  [TemanPengurusPresensiKegiatan::class, 'index'])->name('temanpengurus.presensi-kegiatan');
+    Route::get('/temanpengurus/operasional/kegiatan', [OperasionalKegiatanPengurus::class, 'index'])->name('temanpengurus.operasional.kegiatan-pengurus');
+
+    Route::get('/temanpengurus/operasional/presensi-kegiatan/{token}',  [OperasionalKegiatanPengurus::class, 'manual'])->name('temanpengurus.operasional.presensi-kegiatan');
 
     // =========================
     // ADMINISTRASI (SUPERADMIN, DAERAH, DESA, KELOMPOK)
@@ -95,24 +96,24 @@ Route::middleware(['auth'])->group(function () {
     // =========================
     // LAPORAN DAERAH
     // =========================
-    Route::middleware(['peran:SUPERADMIN,DAERAH'])->prefix('laporan/daerah')->name('laporan.daerah.')->group(function () {
-        Route::get('/kegiatan-rutin', [LaporanKegiatanGenerus::class, 'rutinDaerah'])
-            ->name('rutin');
+    // Route::middleware(['peran:SUPERADMIN,DAERAH'])->prefix('laporan/daerah')->name('laporan.daerah.')->group(function () {
+    //     Route::get('/kegiatan-rutin', [LaporanKegiatanGenerus::class, 'rutinDaerah'])
+    //         ->name('rutin');
 
-        Route::get('/kegiatan-event', [LaporanKegiatanGenerus::class, 'eventDaerah'])
-            ->name('event');
-    });
+    //     Route::get('/kegiatan-event', [LaporanKegiatanGenerus::class, 'eventDaerah'])
+    //         ->name('event');
+    // });
 
     // =========================
     // LAPORAN KELOMPOK
     // =========================
-    Route::middleware(['peran:SUPERADMIN,KELOMPOK'])->prefix('laporan/kelompok')->name('laporan.kelompok.')->group(function () {
-        Route::get('/kegiatan-rutin', [LaporanKegiatanGenerus::class, 'rutinKelompok'])
-            ->name('rutin');
+    // Route::middleware(['peran:SUPERADMIN,KELOMPOK'])->prefix('laporan/kelompok')->name('laporan.kelompok.')->group(function () {
+    //     Route::get('/kegiatan-rutin', [LaporanKegiatanGenerus::class, 'rutinKelompok'])
+    //         ->name('rutin');
 
-        Route::get('/kegiatan-event', [LaporanKegiatanGenerus::class, 'eventKelompok'])
-            ->name('event');
-    });
+    //     Route::get('/kegiatan-event', [LaporanKegiatanGenerus::class, 'eventKelompok'])
+    //         ->name('event');
+    // });
 
     // sistem
     Route::get('/sistem/akses-pengguna',  [AksesPengguna::class, 'index'])->name('sistem.akses-pengguna');

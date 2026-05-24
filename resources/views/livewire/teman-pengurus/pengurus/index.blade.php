@@ -37,7 +37,7 @@
                     Master Dapukan
                 </button>
                 {{-- TAMBAH --}}
-                <button type="button" class="btn btn-success rounded-pill px-4" data-bs-toggle="modal"
+                <button type="button" class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal"
                     data-bs-target="#PengurusCreate"
                     wire:click.prevent="$emit('PengurusCreate')">
                     <i class="ri-add-line me-1"></i>Tambah Pengurus
@@ -123,96 +123,104 @@
                 </thead>
                 <tbody>
                     @forelse($data as $index => $item)
-                    <tr>
-                        <tr>
-                            {{-- NO --}}
-                            <td>
-                                {{ $data->firstItem() + $index }}
-                            </td>
-                            <td class="text-center">
-                                {{-- DELETE --}}
-                                <a href="#PengurusDelete" data-bs-toggle="modal" class="btn btn-soft-danger btn-sm rounded-pill px-3"
-                                    title="Hapus Data Pengurus" wire:click.prevent="$emit('PengurusDelete', {{ $item->ms_pengurus_id }})">
-                                    <i class="ri-delete-bin-5-line me-1"></i>
-                                    Hapus
-                                </a>
-                            </td>
-                            {{-- PENGURUS --}}
-                            <td>
-                                <div class="d-flex flex-column">
-                                    <span class="fw-semibold">
+                    <tr class="fw-semibold">
+                        {{-- NO --}}
+                        <td>
+                            {{ $data->firstItem() + $index }}
+                        </td>
+                        <td class="text-center">
+                            {{-- DELETE --}}
+                            <a href="#PengurusDelete" data-bs-toggle="modal" class="btn btn-soft-danger btn-sm rounded-pill px-3"
+                                title="Hapus Data Pengurus" wire:click.prevent="$emit('PengurusDelete', {{ $item->ms_pengurus_id }})">
+                                <i class="ri-delete-bin-5-line me-1"></i>
+                                Hapus
+                            </a>
+                        </td>
+                        {{-- PENGURUS --}}
+                        <td>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar-xs flex-shrink-0">
+                                    <div class="avatar-title 
+                                        {{ $item->jenis_kelamin == 'perempuan'
+                                        ? 'bg-danger-subtle text-danger'
+                                        : 'bg-primary-subtle text-primary' 
+                                        }} 
+                                        rounded-circle fw-semibold">
+                                        {{ strtoupper(substr($item->nama_pengurus, 0, 1)) }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">
                                         {{ $item->nama_pengurus }}
-                                    </span>
+                                    </div>
                                     <small class="text-muted">
-                                        {{ ucfirst($item->jenis_kelamin ?? '-') }}
+                                        {{ ucfirst($item->jenis_kelamin) }}
                                     </small>
                                 </div>
-                            </td>
-                            {{-- TELEPON --}}
-                            <td>
-                                @if($item->telepon)
-                                <div class="d-flex align-items-center text-success">
-                                    <i class="ri-whatsapp-line me-2 fs-16">
-                                    </i>
-                                    <a href="https://wa.me/{{ $item->telepon }}" target="_blank" class="fw-medium text-success">
-                                        {{ $item->telepon }}
-                                    </a>
-                                </div>
-                                @else
-                                    <span class="text-muted">
-                                        -
-                                    </span>
-                                @endif
-                            </td>
-                            {{-- KELOMPOK --}}
-                            <td>
-                                <span class="badge bg-primary-subtle text-primary">
-                                    {{ optional($item->ms_kelompok)->nama_kelompok ?? '-' }}
+                            </div>
+                        </td>
+                        {{-- TELEPON --}}
+                        <td>
+                            @if($item->telepon)
+                            <div class="d-flex align-items-center text-success">
+                                <i class="ri-whatsapp-line me-2 fs-16">
+                                </i>
+                                <a href="https://wa.me/{{ $item->telepon }}" target="_blank" class="fw-medium text-body">
+                                    {{ $item->telepon }}
+                                </a>
+                            </div>
+                            @else
+                                <span class="text-muted">
+                                    -
                                 </span>
-                            </td>
-                            {{-- UMUR --}}
-                            <td>
-                                {{ $item->usia }} Tahun
-                            </td>
-                            <td>
-                                @if($item->ms_penempatan_dapukan_count > 0)
-                                <a href="#PenempatanDapukan" data-bs-toggle="modal"
-                                    wire:click.prevent="$emit('PenempatanDapukan', {{ $item->ms_pengurus_id }})"
-                                    class="btn btn-primary rounded-pill px-3">
-                                    <i class="ri-shield-user-line me-1">
+                            @endif
+                        </td>
+                        {{-- KELOMPOK --}}
+                        <td>
+                            {{ optional($item->ms_kelompok)->nama_kelompok ?? '-' }}
+                        </td>
+                        {{-- UMUR --}}
+                        <td>
+                            {{ $item->usia }} Tahun
+                        </td>
+                        <td>
+                            @if($item->ms_penempatan_dapukan_count > 0)
+                            <a href="#PenempatanDapukan" data-bs-toggle="modal"
+                                wire:click.prevent="$emit('PenempatanDapukan', {{ $item->ms_pengurus_id }})"
+                                class="btn btn-sm btn-primary rounded-pill px-3">
+                                <i class="ri-shield-user-line me-1">
+                                </i>
+                                {{ $item->ms_penempatan_dapukan_count }} Dapukan
+                            </a>
+                            @else
+                            <a href="#PenempatanDapukan" data-bs-toggle="modal"
+                                wire:click.prevent="$emit('PenempatanDapukan', {{ $item->ms_pengurus_id }})"
+                                class="btn btn-sm btn-soft-primary rounded-pill px-3">
+                                <i class="ri-shield-user-line me-1">
+                                </i>
+                                Tambah Dapukan
+                            </a>
+                            @endif
+                        </td>
+                        {{-- AKSI --}}
+                        <td>
+                            <div class="d-flex justify-content-center gap-2">
+                                {{-- DETAIL --}}
+                                <a href="#PengurusDetail" data-bs-toggle="modal" class="btn btn-sm btn-soft-primary border rounded-pill"
+                                    wire:click.prevent="$emit('PengurusDetail', {{ $item->ms_pengurus_id }})">
+                                    <i class="ri-eye-line me-1">
                                     </i>
-                                    {{ $item->ms_penempatan_dapukan_count }} Dapukan
+                                    Detail
                                 </a>
-                                @else
-                                <a href="#PenempatanDapukan" data-bs-toggle="modal"
-                                    wire:click.prevent="$emit('PenempatanDapukan', {{ $item->ms_pengurus_id }})"
-                                    class="btn btn-soft-primary rounded-pill px-3">
-                                    <i class="ri-shield-user-line me-1">
+                                {{-- EDIT --}}
+                                <a href="#PengurusEdit" data-bs-toggle="modal" class="btn btn-primary btn-sm rounded-pill px-3"
+                                    wire:click.prevent="$emit('PengurusEdit', {{ $item->ms_pengurus_id }})">
+                                    <i class="ri-pencil-line me-1">
                                     </i>
-                                    Tambah Dapukan
+                                    Edit
                                 </a>
-                                @endif
-                            </td>
-                            {{-- AKSI --}}
-                            <td>
-                                <div class="d-flex justify-content-center gap-2">
-                                    {{-- DETAIL --}}
-                                    <a href="#PengurusDetail" data-bs-toggle="modal" class="btn btn-sm btn-soft-primary border rounded-pill"
-                                        wire:click.prevent="$emit('PengurusDetail', {{ $item->ms_pengurus_id }})">
-                                        <i class="ri-eye-line me-1">
-                                        </i>
-                                        Detail
-                                    </a>
-                                    {{-- EDIT --}}
-                                    <a href="#PengurusEdit" data-bs-toggle="modal" class="btn btn-primary btn-sm rounded-pill px-3"
-                                        wire:click.prevent="$emit('PengurusEdit', {{ $item->ms_pengurus_id }})">
-                                        <i class="ri-pencil-line me-1">
-                                        </i>
-                                        Edit
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
+                            </div>
+                        </td>
                     </tr>
                     @empty
                     <tr>

@@ -1,4 +1,4 @@
-<div class="card border-0 shadow-sm rounded-4 overflow-hidden" id="kegiatanPengurusList">
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden" id="kegiatanGenerusList">
     {{-- HEADER --}}
     <div class="card-header bg-white border-0 p-4">
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-4">
@@ -14,10 +14,10 @@
 
                     <div>
                         <h5 class="fw-bold mb-1">
-                            Kegiatan Pengurus
+                            Operasional Kegiatan Pengurus
                         </h5>
                         <small>
-                            Kelola data kegiatan pengurus
+                            Kelola presensi, infaq, dan laporan kegiatan yang sedang berjalan
                         </small>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
 
                 {{-- TAMBAH --}}
                 <button type="button" class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal"
-                    data-bs-target="#KegiatanCreate"
+                    data-bs-target="#ModalKegiatanCreate"
                     wire:click.prevent="$emit('KegiatanCreate')">
                     <i class="ri-add-line me-1"></i>Tambah Kegiatan
                 </button>
@@ -85,11 +85,12 @@
                 <thead class="table-light">
                     <tr class="text-uppercase fw-semibold">
                         <th class="text-center" width="50">No</th>
-                        <th class="text-center" width="50">Hapus</th>
+                        <th class="text-center" width="50">Status</th>
                         <th>Jadwal</th>
                         <th>Kegiatan</th>
                         <th>Peserta</th>
-                        <th>Tempat</th>
+                        <th class="text-center">Presensi</th>
+                        <th class="text-center">Infaq</th>
                         <th class="text-center" width="170">Aksi</th>
                     </tr>
                 </thead>
@@ -100,60 +101,90 @@
                         <td class="text-muted text-center">
                             {{ $listKegiatan->firstItem() + $index }}
                         </td>
+                        {{-- STATUS --}}
                         <td class="text-center">
-                            {{-- DELETE --}}
-                            <a href="#KegiatanDelete" data-bs-toggle="modal" class="btn btn-soft-danger btn-sm rounded-pill px-3" title="Hapus Kegiatan"
-                                wire:click.prevent="$emit('KegiatanDelete', {{ $item->ms_kegiatan_pengurus_id }})">
-                            
-                                <i class="ri-delete-bin-line me-1"></i>
-                                Hapus
+                            @if($item->status === 'aktif')
+                            <a href="#KegiatanStatus" data-bs-toggle="modal"
+                                wire:click.prevent="$emit('KegiatanStatus', {{ $item->ms_kegiatan_pengurus_id }})"
+                                class="btn btn-sm btn-success rounded-pill px-3">
+                                <i class="ri-radio-button-line me-1"></i>
+                                Aktif
                             </a>
+                            @else
+                            <a href="#KegiatanStatus" data-bs-toggle="modal"
+                                wire:click.prevent="$emit('KegiatanStatus', {{ $item->ms_kegiatan_pengurus_id }})"
+                                class="btn btn-sm btn-primary rounded-pill px-3">
+                                <i class="ri-checkbox-circle-line me-1"></i>
+                                Selesai
+                            </a>
+                            @endif
                         </td>
-                
                         {{-- JADWAL --}}
                         <td class="align-middle">
                             <div>
                                 <i class="ri-calendar-event-line text-primary me-1"></i>
-                
+                        
                                 {{ $item->tanggal
                                 ? \App\Http\Controllers\HelperController::formatTanggalIndonesia($item->tanggal, 'd F Y')
                                 : '-' }}
                             </div>
-                
+                        
                             <div class="text-muted fs-12 mt-1">
                                 <i class="ri-time-line me-1"></i>
                                 {{ $item->waktu ?: '-' }}
                             </div>
                         </td>
-                
+                        
                         {{-- KEGIATAN --}}
                         <td class="align-middle">
                             <div class="fw-semibold text-dark">
                                 {{ $item->nama_kegiatan }}
                             </div>
-                
+                        
                             @if($item->deskripsi)
                             <div class="text-muted fs-12 mt-1 text-truncate" style="max-width: 250px;" title="{{ $item->deskripsi }}">
                                 {{ $item->deskripsi }}
                             </div>
                             @endif
                         </td>
+
+                        {{-- PESERTA --}}
                         <td>
-                            Pengurus
+                            Pengurus, Bidang BK, PPG
                         </td>
-                
-                        {{-- TEMPAT --}}
-                        <td class="align-middle">
-                            <div class="fw-semibold text-truncate" style="max-width: 220px;" title="{{ $item->tempat }}">
-                                <i class="ri-map-pin-line text-danger me-1"></i>
-                                {{ $item->tempat ?: '-' }}
-                            </div>
-                
-                            @if($item->alamat)
-                            <div class="text-muted fs-12 mt-1 text-truncate" style="max-width: 220px;" title="{{ $item->alamat }}">
-                                {{ $item->alamat }}
-                            </div>
+                        <td class="text-center">
+                            {{ $item->hadir_count }}
+                            hadir
+                            @if($item->izin_count > 0)
+                            / {{ $item->izin_count }} izin
                             @endif
+
+                        </td>
+                        <td class="text-center">
+                            @php $totalInfaq = $item->tr_infaq_pengurus_sum_nominal ?? 0; @endphp {{-- KEGIATAN
+                            SELESAI --}} @if($item->status === 'selesai')
+                            <span class="btn btn-sm btn-light rounded-pill px-3">
+                                <i class="ri-lock-line me-1">
+                                </i>
+                                Rp {{ number_format($totalInfaq, 0, ',', '.') }}
+                            </span>
+                            @else {{-- SUDAH ADA INFAQ --}} @if($totalInfaq > 0)
+                            <a href="#ModalInfaqEdit" data-bs-toggle="modal"
+                                wire:click.prevent="$emit('InfaqEdit', {{ $item->ms_kegiatan_pengurus_id }})"
+                                class="btn btn-sm btn-primary rounded-pill px-3">
+                                <i class="ri-money-dollar-circle-line me-1">
+                                </i>
+                                Rp {{ number_format($totalInfaq, 0, ',', '.') }}
+                            </a>
+                            @else {{-- BELUM ADA --}}
+                            <a href="#ModalInfaqCreate" data-bs-toggle="modal"
+                                wire:click.prevent="$emit('InfaqCreate', {{ $item->ms_kegiatan_pengurus_id }})"
+                                class="btn btn-sm btn-soft-primary rounded-pill px-3">
+                                <i class="ri-hand-coin-line me-1">
+                                </i>
+                                Catat Infaq
+                            </a>
+                            @endif @endif
                         </td>
                         {{-- AKSI --}}
                         <td>
@@ -162,26 +193,23 @@
                                 <a href="#KegiatanDetail" data-bs-toggle="modal"
                                     class="btn btn-soft-primary btn-sm rounded-pill px-3" title="Detail Kegiatan"
                                     wire:click.prevent="$emit('KegiatanDetail', {{ $item->ms_kegiatan_pengurus_id }})">
-                
                                     <i class="ri-eye-line me-1"></i>
                                     Detail
                                 </a>
-                
-                                {{-- EDIT --}}
-                                <a href="#KegiatanEdit" data-bs-toggle="modal"
-                                    class="btn btn-primary btn-sm rounded-pill px-3" title="Edit Kegiatan"
-                                    wire:click.prevent="$emit('KegiatanEdit', {{ $item->ms_kegiatan_pengurus_id }})">
-                
-                                    <i class="ri-pencil-line me-1"></i>
-                                    Edit
+                                {{-- REPORT --}}
+                                <a href="javascript:void(0)" data-bs-toggle="offcanvas"
+                                    class="btn btn-primary btn-sm rounded-pill px-3" data-bs-target="#KegiatanReport"
+                                    aria-controls="KegiatanReport" title="Laporan Kegiatan"
+                                    wire:click.prevent="$emit('KegiatanReport', {{ $item->ms_kegiatan_pengurus_id }})">
+                                    <i class="ri-file-chart-line"></i>
+                                    Laporan
                                 </a>
                             </div>
                         </td>
-                
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="text-center py-5">
+                        <td colspan="8" class="text-center py-5">
                             <div class="d-flex flex-column align-items-center">
                                 <div class="avatar-md mb-3">
                                     <div class="avatar-title bg-light text-muted rounded-circle fs-2">
@@ -192,7 +220,7 @@
                                     Belum Ada Data Kegiatan
                                 </h6>
                                 <p class="text-muted mb-0 fs-13">
-                                    Data kegiatan pengurus akan tampil di sini
+                                    Data kegiatan generus akan tampil di sini
                                 </p>
                             </div>
                         </td>
@@ -225,7 +253,6 @@
                 </div>
             </div>
         </div>
-
     </div>
     {{-- MODAL EXPORT --}}
     <div class="modal fade" id="ExportLaporanExcel" tabindex="-1" aria-labelledby="exportRecordLabel" aria-hidden="true"
@@ -302,75 +329,4 @@
             </div>
         </div>
     </div>
-    <script>
-        window.copyToClipboard = function(text) {
-            navigator.clipboard.writeText(text)
-                .then(() => {
-                    if (window.alertify) {
-                        alertify.success('URL berhasil dicopy!');
-                    } else {
-                        alert('URL berhasil dicopy!');
-                    }
-                })
-                .catch(err => {
-                    console.error('Gagal menyalin:', err);
-
-                    if (window.alertify) {
-                        alertify.error('Gagal menyalin URL');
-                    } else {
-                        alert('Gagal menyalin URL');
-                    }
-                });
-        }
-
-        document.getElementById('konfirmasiExportLaporan').addEventListener('click', function () {
-            alertify.success("Menyiapkan Dokumen");
-
-            setTimeout(function () {
-                var table = document.getElementById("Laporan");
-
-                var data = [];
-                // Kolom yang ingin diexport 
-                var exportCols = [0,1,2,3,4,5];
-
-                // Ambil header
-                var headers = [];
-                for(var i=0; i<exportCols.length; i++){
-                    headers.push(table.tHead.rows[0].cells[exportCols[i]].innerText.trim());
-                }
-                data.push(headers);
-
-                // Ambil data tbody
-                for(var i=0; i<table.tBodies[0].rows.length; i++){
-                    var row = table.tBodies[0].rows[i];
-                    var rowData = [];
-                    for(var j=0; j<exportCols.length; j++){
-                        rowData.push(row.cells[exportCols[j]].innerText.trim());
-                    }
-                    data.push(rowData);
-                }
-
-                // Ambil data tfoot (jika ada)
-                if(table.tFoot){
-                    for(var i=0; i<table.tFoot.rows.length; i++){
-                        var row = table.tFoot.rows[i];
-                        var rowData = [];
-                        for(var j=0; j<exportCols.length; j++){
-                            rowData.push(row.cells[exportCols[j]].innerText.trim());
-                        }
-                        data.push(rowData);
-                    }
-                }
-
-                // Buat workbook
-                var wb = XLSX.utils.book_new();
-                var ws = XLSX.utils.aoa_to_sheet(data);
-                XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-
-                XLSX.writeFile(wb, "Laporan-Kegiatan-Generus.xlsx");
-
-            }, 1000);
-        });
-        
-    </script>
 </div>

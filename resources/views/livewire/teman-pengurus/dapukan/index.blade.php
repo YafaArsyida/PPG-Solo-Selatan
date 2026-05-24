@@ -30,13 +30,14 @@
             <table class="table align-middle mb-0">
                 <thead class="table-light">
                     <tr class="text-uppercase fw-semibold">
-                        <th width="80" class="text-center">
+                        <th width="60" class="text-center">No</th>
+                        <th width="100" class="text-center">
                             Hapus
                         </th>
                         <th class="">
                             Informasi Dapukan
                         </th>
-                        <th width="220" class="text-center">
+                        <th width="80" class="text-center">
                             Aksi
                         </th>
                     </tr>
@@ -44,38 +45,31 @@
                 <tbody>
                     @forelse($data as $index => $item)
                     <tr>
+                        <td class="text-center text-muted fw-semibold">
+                            {{ ($data->currentPage() - 1) * $data->perPage() + $loop->iteration }}
+                        </td>
                         <td class="text-center">
                             {{-- {{ $index + 1 }} --}}
-                            <a href="#ModalDeleteDapukan" data-bs-toggle="modal" class="btn btn-soft-danger btn-sm rounded-pill"
+                            <a href="#ModalDeleteDapukan" data-bs-toggle="modal" class="btn btn-soft-danger btn-sm rounded-pill px-3"
                                 wire:click.prevent="$emit('DapukanDelete', {{ $item->ms_dapukan_id }})">
-                                <i class="ri-delete-bin-5-line">
-                                </i>
+                                <i class="ri-delete-bin-5-line"></i> Hapus
                             </a>
                         </td>
                         {{-- INFORMASI --}}
                         <td>
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="avatar-xs flex-shrink-0">
-                                    <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-14">
-                                        <i class="ri-shield-user-line"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h6 class="fw-bold mb-1">
-                                        {{ $item->nama_dapukan }}
-                                    </h6>
-                                    <small style="white-space: nowrap">
-                                        {{ $item->deskripsi ?? 'Tidak ada deskripsi' }}
-                                    </small>
-                                </div>
+                            <div class="fw-semibold">
+                                {{ $item->nama_dapukan }}
                             </div>
+                            <small style="white-space: nowrap">
+                                {{ $item->deskripsi ?? 'Tidak ada deskripsi' }}
+                            </small>
                         </td>
                         {{-- ACTION --}}
                         <td>
                             <div class="d-flex justify-content-center gap-2 flex-wrap">
                                 {{-- EDIT --}}
                                 <a href="#DapukanEdit" data-bs-toggle="modal"
-                                    class="btn btn-warning btn-sm rounded-pill text-white"
+                                    class="btn btn-primary btn-sm rounded-pill text-white"
                                     wire:click.prevent="$emit('DapukanEdit', {{ $item->ms_dapukan_id }})">
                                     <i class="ri-pencil-line me-1">
                                     </i>

@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PresensiKegiatan extends Model
+class PresensiKegiatanPengurus extends Model
 {
     use HasFactory;
 
-    protected $table = 'presensi_pengurus'; // Nama tabel
-    protected $primaryKey = 'presensi_pengurus_id'; // Nama kolom primary key
+    protected $table = 'presensi_kegiatan_pengurus'; // Nama tabel
+    protected $primaryKey = 'presensi_kegiatan_pengurus_id'; // Nama kolom primary key
 
     protected $fillable = [
         'ms_kegiatan_pengurus_id',

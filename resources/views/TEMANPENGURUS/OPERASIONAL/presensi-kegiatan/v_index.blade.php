@@ -42,7 +42,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card overflow-hidden m-0">
-                            @livewire('teman-pengurus.presensi-kegiatan.index', [
+                            @livewire('teman-pengurus.operasional.presensi-kegiatan.index', [
                                 'token' => $token
                             ])
                         </div>

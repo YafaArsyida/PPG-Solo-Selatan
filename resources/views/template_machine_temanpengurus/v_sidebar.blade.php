@@ -1,24 +1,6 @@
  <div class="app-menu navbar-menu">
     <!-- LOGO -->
     <div class="navbar-brand-box">
-        <!-- Dark Logo-->
-        {{-- <a href="index.html" class="logo logo-dark">
-            <span class="logo-sm">
-                <img src="{{asset('assets')}}/images/logo-sm.png" alt="" height="22">
-            </span>
-            <span class="logo-lg">
-                <img src="{{asset('assets')}}/images/logo-dark.png" alt="" height="17">
-            </span>
-        </a>
-        <!-- Light Logo-->
-        <a href="index.html" class="logo logo-light">
-            <span class="logo-sm">
-                <img src="{{asset('assets')}}/images/logo-sm.png" alt="" height="22">
-            </span>
-            <span class="logo-lg">
-                <img src="{{asset('assets')}}/images/logo-light.png" alt="" height="17">
-            </span>
-        </a> --}}
         <a href="index.html" class="logo logo-dark">
             <span class="logo-sm">
                 <span class="fw-bold fs-5">Teman</span>
@@ -79,13 +61,13 @@
                         <span>Kegiatan Pengurus</span>
                     </a>
                 </li>                                
-                {{-- LAPORAN --}}
-                <li class="menu-title"><span data-key="t-menu">Laporan</span></li>
+                {{-- OPERASIONAL --}}
+                <li class="menu-title"><span data-key="t-menu">Operasional</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ request()->routeIs('laporan.desa.event') ? 'active' : '' }}"
-                        href="{{ route('laporan.desa.event') }}">
+                    <a class="nav-link menu-link {{ request()->routeIs('temanpengurus.operasional.kegiatan-pengurus') ? 'active' : '' }}"
+                        href="{{ route('temanpengurus.operasional.kegiatan-pengurus') }}">
                         <i class="mdi mdi-calendar-check-outline"></i>
-                        <span>Laporan Kegiatan Pengurus</span>
+                        <span>Operasional Kegiatan</span>
                     </a>
                 </li>
             </ul>

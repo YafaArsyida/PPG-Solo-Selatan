@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Livewire\TemanPengurus\PresensiKegiatan;
+namespace App\Http\Livewire\TemanPengurus\Operasional\PresensiKegiatan;
 
 use App\Models\TemanPengurus\Dapukan;
 use App\Models\TemanPengurus\KegiatanPengurus;
 use App\Models\TemanPengurus\Pengurus;
-use App\Models\TemanPengurus\PresensiKegiatan;
+use App\Models\TemanPengurus\PresensiKegiatanPengurus;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -102,7 +102,7 @@ class Index extends Component
 
     protected function loadPresensiMap()
     {
-        $existing = PresensiKegiatan::where('ms_kegiatan_pengurus_id', $this->kegiatan->ms_kegiatan_pengurus_id)
+        $existing = PresensiKegiatanPengurus::where('ms_kegiatan_pengurus_id', $this->kegiatan->ms_kegiatan_pengurus_id)
             ->get()
             ->keyBy('ms_pengurus_id');
 
@@ -122,7 +122,7 @@ class Index extends Component
 
     public function hadir($pengurusId)
     {
-        $presensi = PresensiKegiatan::firstOrCreate(
+        $presensi = PresensiKegiatanPengurus::firstOrCreate(
             [
                 'ms_kegiatan_pengurus_id' => $this->kegiatan->ms_kegiatan_pengurus_id,
                 'ms_pengurus_id'  => $pengurusId,
@@ -152,7 +152,7 @@ class Index extends Component
 
     public function izin($pengurusId)
     {
-        $presensi = PresensiKegiatan::firstOrCreate(
+        $presensi = PresensiKegiatanPengurus::firstOrCreate(
             [
                 'ms_kegiatan_pengurus_id' => $this->kegiatan->ms_kegiatan_pengurus_id,
                 'ms_pengurus_id'  => $pengurusId,
@@ -181,7 +181,7 @@ class Index extends Component
 
     public function batalPresensi($pengurusId)
     {
-        PresensiKegiatan::where('ms_kegiatan_pengurus_id', $this->kegiatan->ms_kegiatan_pengurus_id)
+        PresensiKegiatanPengurus::where('ms_kegiatan_pengurus_id', $this->kegiatan->ms_kegiatan_pengurus_id)
             ->where('ms_Pengurus_id', $pengurusId)
             ->delete();
 
@@ -194,6 +194,6 @@ class Index extends Component
 
     public function render()
     {
-        return view('livewire.teman-pengurus.presensi-kegiatan.index');
+        return view('livewire.teman-pengurus.operasional.presensi-kegiatan.index');
     }
 }
