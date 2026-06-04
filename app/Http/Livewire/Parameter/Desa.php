@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire\Parameter;
 
-use App\Models\AksesPengguna;
 use App\Models\Desa as ModelsDesa;
+use App\Models\Kelompok;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -11,26 +11,70 @@ class Desa extends Component
 {
     public $selectedDesa = null;
 
-    public function updatedSelectedDesa()
+     private function getDesaQuery()
     {
-        $this->checkAndEmitParameters();
+        $user = Auth::user();
+
+        // SUPERADMIN
+        if ($user->peran === 'SUPERADMIN') {
+            return ModelsDesa::query();
+        }
+
+        $aksesPengguna = $user->ms_akses_pengguna;
+
+        if ($aksesPengguna->isEmpty()) {
+            return ModelsDesa::query()->whereRaw('1 = 0');
+        }
+
+        $query = ModelsDesa::query();
+
+        $query->where(function ($q) use ($aksesPengguna) {
+
+            foreach ($aksesPengguna as $akses) {
+
+                switch ($akses->scope_type) {
+
+                    // akses daerah -> semua desa dalam daerah
+                    case 'daerah':
+
+                        $q->orWhere('ms_daerah_id', $akses->scope_id);
+
+                        break;
+
+                    // akses desa -> desa tersebut
+                    case 'desa':
+
+                        $q->orWhere('ms_desa_id', $akses->scope_id);
+
+                        break;
+
+                    // akses kelompok -> desa dari kelompok tersebut
+                    case 'kelompok':
+
+                        $q->orWhereIn(
+                            'ms_desa_id', Kelompok::query()
+                            ->where('ms_kelompok_id', $akses->scope_id)
+                            ->pluck('ms_desa_id')
+                        );
+
+                        break;
+                }
+            }
+        });
+
+        return $query;
     }
 
     public function mount()
     {
-        $user = Auth::user();
-        // SUPERADMIN
-        if ($user->peran === 'SUPERADMIN') {
-            $firstDesa = ModelsDesa::first();
-            $this->selectedDesa = $firstDesa?->ms_desa_id;
-            return;
-        }
+        $this->selectedDesa = $this->getDesaQuery()
+            ->orderBy('nama_desa')
+            ->value('ms_desa_id');
+    }
 
-        // USER BIASA
-        $akses = AksesPengguna::where('ms_pengguna_id', $user->ms_pengguna_id)
-            ->where('scope_type', 'desa')
-            ->first();
-        $this->selectedDesa = $akses?->scope_id;
+    public function updatedSelectedDesa()
+    {
+        $this->checkAndEmitParameters();
     }
 
     private function checkAndEmitParameters()
@@ -49,31 +93,10 @@ class Desa extends Component
 
     public function render()
     {
-        $user = Auth::user();
-
-        // SUPERADMIN -> semua desa
-        if ($user->peran === 'SUPERADMIN') {
-
-            $selectDesa = ModelsDesa::get();
-        } else {
-
-            // USER BIASA -> hanya akses desa
-            $selectDesa = ModelsDesa::whereIn(
-                'ms_desa_id',
-
-                AksesPengguna::where('ms_pengguna_id', $user->ms_pengguna_id)
-                    ->where('scope_type', 'desa')
-                    ->pluck('scope_id')
-
-            )->get();
-        }
-
-        if ($this->selectedDesa) {
-            $this->emit('parameterUpdated', $this->selectedDesa);
-        }
-
         return view('livewire.parameter.desa', [
-            'select_desa' => $selectDesa
+            'select_desa' => $this->getDesaQuery()
+                ->orderBy('nama_desa')
+                ->get(),
         ]);
     }
 }

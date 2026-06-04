@@ -46,21 +46,21 @@
 
             <div id="two-column-menu">
             </div>
-            @php($role = auth()->user()->peran)
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="nav-item">
                     <a href="{{ route('dashboard.index') }}"
                         class="nav-link menu-link {{ request()->routeIs('dashboard.index') ? 'active' : '' }}">
-                        <i class="mdi mdi-view-dashboard-outline"></i>
+                        <i class="mdi mdi-view-dashboard"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
+                @can('view-administrasi')
                 <li class="menu-title"><span data-key="t-menu">Administrasi</span></li>
                 <!-- Desa & Kelompok -->
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('administrasi.desa-kelompok') ? 'active' : '' }}"
                         href="{{ route('administrasi.desa-kelompok') }}">
-                        <i class="mdi mdi-map-marker-multiple-outline"></i>
+                        <i class="mdi mdi-home-city"></i>
                         <span>Desa & Kelompok</span>
                     </a>
                 </li>
@@ -68,7 +68,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('administrasi.generasi-penerus') ? 'active' : '' }}"
                         href="{{ route('administrasi.generasi-penerus') }}">
-                        <i class="mdi mdi-account-multiple-outline"></i>
+                        <i class="mdi mdi-account-group"></i>
                         <span>Generasi Penerus</span>
                     </a>
                 </li>
@@ -80,46 +80,53 @@
                         <span>Kegiatan Generus</span>
                     </a>
                 </li>     
-                @if(in_array($role, ['SUPERADMIN','DESA']))
+                @endcan
+                @can('view-operasional')
                 <li class="menu-title"><span data-key="t-menu">Operasional</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('operasional.kegiatan-generus') ? 'active' : '' }}"
                         href="{{ route('operasional.kegiatan-generus') }}">
-                        <i class="mdi mdi-calendar-check-outline"></i>
+                        <i class="mdi mdi-clipboard-check-outline"></i>
                         <span>Operasional Kegiatan</span>
                     </a>
-                </li>
-                @endif    
-                
+                </li>        
+                @endcan
+                @can('view-kurikulum')        
                 <li class="menu-title"><span data-key="t-menu">Kurikulum KBM</span></li>
+                @can('manage-periode')
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('kurikulum-kbm.periode-jenjang') ? 'active' : '' }}"
                         href="{{ route('kurikulum-kbm.periode-jenjang') }}">
-                        <i class="mdi mdi-calendar-check-outline"></i>
+                        <i class="mdi mdi-timeline-clock-outline"></i>
                         <span>Periode & Jenjang</span>
                     </a>
                 </li>
+                @endcan
+                @can('manage-aspek')
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('kurikulum-kbm.aspek-materi') ? 'active' : '' }}"
                         href="{{ route('kurikulum-kbm.aspek-materi') }}">
-                        <i class="mdi mdi-calendar-check-outline"></i>
+                        <i class="mdi mdi-book-open-page-variant"></i>
                         <span>Aspek Materi</span>
                     </a>
                 </li>
+                @endcan
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('kurikulum-kbm.laporan-kbm') ? 'active' : '' }}"
                         href="{{ route('kurikulum-kbm.laporan-kbm') }}">
-                        <i class="mdi mdi-calendar-check-outline"></i>
+                        <i class="mdi mdi-file-document-edit-outline"></i>
                         <span>Laporan KBM</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('kurikulum-kbm.monitoring-kbm') ? 'active' : '' }}"
                         href="{{ route('kurikulum-kbm.monitoring-kbm') }}">
-                        <i class="mdi mdi-calendar-check-outline"></i>
+                        <i class="mdi mdi-chart-line"></i>
                         <span>Monitoring Kurikulum</span>
                     </a>
                 </li>
+                @endcan
+                @can('view-modul')
                 <li class="menu-title"><span data-key="t-menu">MODUL</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('temanpengurus.dashboard.index') ? 'active' : '' }}"
@@ -128,17 +135,18 @@
                         <span>TemanPengurus</span>
                     </a>
                 </li>
-                @if(in_array($role, ['SUPERADMIN']))
+                @endcan
+                @can('is-superadmin')
                 <li class="menu-title"><span data-key="t-menu">sistem</span></li>
                 <!-- Akses Petugas -->
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ request()->routeIs('sistem.akses-pengguna') ? 'active' : '' }}"
                         href="{{ route('sistem.akses-pengguna') }}">
-                        <i class="mdi mdi-shield-account-outline"></i>
+                        <i class="mdi mdi-account-key"></i>
                         <span>Akses Pengguna</span>
                     </a>
                 </li>
-                @endif
+                @endcan
             </ul>
         </div>
         <!-- Sidebar -->

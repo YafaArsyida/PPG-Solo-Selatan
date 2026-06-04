@@ -71,10 +71,7 @@
                         </i>
                     </span>
                     <select wire:model.live="selectedKelompok" class="form-select border-start-0 shadow-none"
-                        style="cursor: pointer;" 
-                        @if(Auth::user()->peran !== 'SUPERADMIN') 
-                            disabled 
-                        @endif > 
+                        style="cursor: pointer;" > 
                         @foreach ($select_kelompok as $item)
                             <option value="{{ $item->ms_kelompok_id }}">
                                 {{ $item->nama_kelompok }}

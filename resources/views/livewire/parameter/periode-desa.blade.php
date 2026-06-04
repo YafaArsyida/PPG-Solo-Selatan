@@ -31,8 +31,8 @@
                         </i>
                     </span>
                     <select wire:model.live="selectedDesa" class="form-select border-start-0 shadow-none"
-                        style="cursor: pointer;" @if(Auth::user()->
-                        peran !== 'SUPERADMIN') disabled @endif > @foreach ($select_desa as $item)
+                        style="cursor: pointer;">
+                        @foreach ($select_desa as $item)
                         <option value="{{ $item->ms_desa_id }}">
                             {{ $item->nama_desa }}
                         </option>

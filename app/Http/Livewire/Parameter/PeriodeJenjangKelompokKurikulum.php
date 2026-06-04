@@ -14,10 +14,53 @@ class PeriodeJenjangKelompokKurikulum extends Component
     public $selectedJenjang = null;
     public $selectedKelompok = null;
 
-    public function mount()
+    private function getKelompokQuery()
     {
         $user = Auth::user();
 
+        // SUPERADMIN lihat semua
+        if ($user->peran === 'SUPERADMIN') {
+            return Kelompok::query();
+        }
+
+        $aksesPengguna = $user->ms_akses_pengguna;
+
+        if ($aksesPengguna->isEmpty()) {
+            return Kelompok::query()->whereRaw('1 = 0');
+        }
+
+        $query = Kelompok::query();
+
+        $query->where(function ($q) use ($aksesPengguna) {
+
+            foreach ($aksesPengguna as $akses) {
+                switch ($akses->scope_type) {
+                    case 'kelompok':
+                        $q->orWhere('ms_kelompok_id', $akses->scope_id);
+                        break;
+
+                    case 'desa':
+                        $q->orWhere('ms_desa_id', $akses->scope_id);
+                        break;
+
+                    case 'daerah':
+
+                        $q->orWhereIn(
+                            'ms_desa_id', Desa::query()
+                                ->where('ms_daerah_id', $akses->scope_id)
+                                ->pluck('ms_desa_id')
+                        );
+
+                        break;
+                }
+            }
+        });
+
+        return $query;
+    }
+
+    public function mount()
+    {
         // PERIODE DEFAULT
         $this->selectedPeriode = PeriodeKurikulum::query()
             ->where('status', 'aktif')
@@ -27,16 +70,9 @@ class PeriodeJenjangKelompokKurikulum extends Component
         $this->selectedJenjang = JenjangKurikulum::query()
             ->value('ms_jenjang_kurikulum_id');
 
-        // SUPERADMIN
-        if ($user->peran === 'SUPERADMIN') {
-            $this->selectedKelompok = Kelompok::query()
-                ->value('ms_kelompok_id');
-
-            return;
-        }
-
-        // USER KELOMPOK
-        $this->selectedKelompok = $user->ms_kelompok_id;
+        $this->selectedKelompok = $this->getKelompokQuery()
+            ->orderBy('nama_kelompok')
+            ->value('ms_kelompok_id');
     }
 
     public function updatedSelectedPeriode()
@@ -100,9 +136,9 @@ class PeriodeJenjangKelompokKurikulum extends Component
                 ->orderBy('nama_jenjang')
                 ->get(),
 
-            'select_kelompok' => $user->peran === 'SUPERADMIN'
-                ? Kelompok::query()->orderBy('nama_kelompok')->get()
-                : Kelompok::query()->where('ms_kelompok_id',$user->ms_kelompok_id)->get(),
+            'select_kelompok' => $this->getKelompokQuery()
+                ->orderBy('nama_kelompok')
+                ->get(),
         ]);
     }
 }

@@ -7,8 +7,8 @@
                 <div class="modal-header border-0 pb-0 p-4">
                     <div class="d-flex align-items-center gap-3">
                         <div class="avatar-sm">
-                            <div class="avatar-title bg-warning-subtle text-warning rounded-circle fs-20">
-                                <i class="ri-user-settings-line text-warning me-1">
+                            <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-20">
+                                <i class="ri-user-settings-line text-primary me-1">
                                 </i>
                             </div>
                         </div>
@@ -35,10 +35,10 @@
                             <div class="col-xl-4">
                                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
                                     {{-- HEADER --}}
-                                    <div class="bg-warning bg-gradient p-4 text-center">
+                                    <div class="bg-primary bg-gradient p-4 text-center">
                                         <div class="avatar-lg mx-auto mb-3">
                                             <div
-                                                class="avatar-title rounded-circle bg-white text-warning fs-2 fw-bold shadow">
+                                                class="avatar-title rounded-circle bg-white text-primary fs-2 fw-bold shadow">
                                                 {{ strtoupper(substr($nama,0,1)) }}
                                             </div>
                                         </div>
@@ -159,7 +159,7 @@
                                                 </small>
                                             </div>
                                             <div>
-                                                <span class="badge bg-warning-subtle text-warning px-3 py-2">
+                                                <span class="badge bg-primary-subtle text-primary px-3 py-2">
                                                     EDIT MODE
                                                 </span>
                                             </div>
@@ -341,7 +341,7 @@
                             </i>
                             Tutup
                         </button>
-                        <button type="submit" class="btn btn-warning rounded-pill px-4 text-white">
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 text-white">
                             <i class="ri-save-3-line me-1">
                             </i>
                             Simpan Perubahan

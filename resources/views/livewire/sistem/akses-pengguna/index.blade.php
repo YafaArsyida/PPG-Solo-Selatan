@@ -155,12 +155,13 @@
                                 </a>
                                 {{-- EDIT --}}
                                 <a href="#ModalEditPengguna" data-bs-toggle="modal"
-                                    class="btn btn-warning btn-sm rounded-pill px-3"
+                                    class="btn btn-primary btn-sm rounded-pill px-3"
                                     wire:click.prevent="$emit('editPengguna', {{ $user['ms_pengguna_id'] }})">
                                     <i class="ri-pencil-line me-1">
                                     </i>
                                     Edit
                                 </a>
+                                {{-- @can('is-superadmin' || 'is-admin') --}}
                                 {{-- RESET --}}
                                 <a href="#ModalKonfirmasiReset" data-bs-toggle="modal"
                                     class="btn btn-sm btn-danger rounded-pill px-3"
@@ -169,6 +170,7 @@
                                     </i>
                                     Reset
                                 </a>
+                                {{-- @endcan --}}
                             </div>
                         </td>
                     </tr>

@@ -80,9 +80,9 @@ Route::middleware(['auth'])->group(function () {
 
     
     // =========================
-    // ADMINISTRASI (SUPERADMIN, DAERAH, DESA, KELOMPOK)
+    // ADMINISTRASI
     // =========================
-    Route::middleware(['peran:SUPERADMIN,DAERAH,DESA,KELOMPOK'])->group(function () {
+    Route::middleware(['peran:SUPERADMIN,ADMIN'])->group(function () {
         Route::get('/administrasi/desa-kelompok', [DesaKelompok::class, 'index'])
             ->name('administrasi.desa-kelompok');
 

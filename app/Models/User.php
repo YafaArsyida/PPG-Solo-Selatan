@@ -62,6 +62,25 @@ class User extends Authenticatable
     ];
 
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->peran === 'SUPERADMIN';
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->peran === 'ADMIN';
+    }
+
+    public function isUser(): bool
+    {
+        return $this->peran === 'USER';
+    }
+    public function isAdminDaerah(): bool
+    {
+        return $this->aksesDaerah()->exists();
+    }
+    
     // Di model User
     public function ms_akses_pengguna()
     {
@@ -82,7 +101,5 @@ class User extends Authenticatable
     {
         return $this->ms_akses_pengguna()->where('scope_type', 'daerah');
     }
-
-
 
 }
