@@ -1,6 +1,6 @@
-<div class="card">
+<div class="card mb-0">
     <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
+        <table class="table table-hover align-middle table-nowrap mb-0">
             <thead class="table-light">
                 <tr class="text-uppercase fw-semibold">
                     <th width="60" class="text-center">No</th>
@@ -12,7 +12,7 @@
                     <th>Kelompok</th>
                     <th class="text-center">Usia</th>
                     <th>Jenjang</th>
-                    <th>Desa</th>
+                    {{-- <th>Desa</th> --}}
                     <th width="170" class="text-center">Aksi</th>
                 </tr>
             </thead>
@@ -117,7 +117,7 @@
                         @endif
                     </td>
                     {{-- DESA --}}
-                    <td>
+                    {{-- <td>
                         <div class="d-flex align-items-center text-muted">
                             <i class="ri-government-line text-primary me-2">
                             </i>
@@ -125,10 +125,10 @@
                                 {{ $row->ms_kelompok->ms_desa->nama_desa ?? '-' }}
                             </span>
                         </div>
-                    </td>
+                    </td> --}}
                     {{-- AKSI --}}
                     <td>
-                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+                        <div class="d-flex justify-content-center gap-2">
     
                             {{-- DETAIL --}}
                             <a href="#ModalDetailGenerus" data-bs-toggle="modal"

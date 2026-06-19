@@ -1,30 +1,4 @@
 <div class="card border-0 shadow-sm overflow-hidden">
-    {{-- TOP ALERT --}}
-    <div class="alert alert-primary rounded-0 border-0 m-0 d-flex align-items-center px-4 py-3">
-        <div class="flex-shrink-0">
-            <div class="avatar-sm">
-                <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-20">
-                    <i class="ri-team-line">
-                    </i>
-                </div>
-            </div>
-        </div>
-        <div class="flex-grow-1 ms-3">
-            <h6 class="mb-1 fw-semibold">
-                Kelola Data Generus Lebih Modern
-            </h6>
-            <p class="mb-0 text-muted fs-13">
-                Manajemen generasi penerus kini lebih terstruktur, cepat, dan terintegrasi.
-            </p>
-        </div>
-        <div class="flex-shrink-0">
-            <a href="{{ route('administrasi.generasi-penerus') }}" class="btn btn-primary rounded-pill px-3">
-                <i class="ri-arrow-right-line align-middle me-1">
-                </i>
-                Buka Data
-            </a>
-        </div>
-    </div>
     {{-- MAIN CONTENT --}}
     <div class="card-body p-0">
         <div class="row align-items-center g-0">

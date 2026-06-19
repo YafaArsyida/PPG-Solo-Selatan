@@ -134,7 +134,7 @@
     <div class="card-body">
         <div class="overflow-hidden">
             {{-- TAB NAV --}}
-            <div class="px-3 pt-3">
+            <div class="px-3">
                 <ul class="nav nav-pills gap-2 flex-nowrap overflow-auto pb-3" role="tablist">
                     {{-- SEMUA --}}
                     <li class="nav-item flex-shrink-0">
