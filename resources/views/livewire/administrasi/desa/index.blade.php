@@ -25,7 +25,7 @@
     <div class="row mt-3">
         {{-- TABLE --}}
         <div class="table-responsive">
-            <table class="table align-middle mb-0">
+            <table class="table table-nowrap table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr class="text-uppercase fw-semibold">
                         <th width="50" class="text-center">
@@ -54,7 +54,7 @@
                         <td class="text-center">
                             {{-- DELETE --}}
                             <a href="#ModalDeleteDesa" data-bs-toggle="modal"
-                                class="btn btn-soft-danger btn-sm rounded-pill" title="Hapus Data Generus"
+                                class="btn btn-soft-danger btn-sm rounded-pill px-3" title="Hapus Data Generus"
                                 wire:click.prevent="$emit('DesaDelete', {{ $kat->ms_desa_id }})">
                                 <i class="ri-delete-bin-5-line"></i>
                                 Hapus
@@ -92,7 +92,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="3">
+                        <td colspan="4">
                             <div class="text-center py-5">
                                 <div class="mb-3">
                                     <i class="ri-inbox-2-line text-muted" style="font-size: 48px;">
