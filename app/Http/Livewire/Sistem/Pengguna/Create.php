@@ -45,7 +45,8 @@ class Create extends Component
             'peran' => 'required|string|max:50',
             'scope_type' => 'required|in:daerah,desa,kelompok',
 
-            'scope_id' => 'required_if:scope_type,desa,kelompok|array|min:1',
+            // 'scope_id' => 'required_if:scope_type,desa,kelompok|array|min:1',
+            'scope_id' => 'exclude_if:scope_type,daerah|required|array|min:1',
         ];
     }
 

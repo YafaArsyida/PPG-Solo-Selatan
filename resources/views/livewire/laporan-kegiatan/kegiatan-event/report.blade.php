@@ -232,52 +232,25 @@
     </div>
 </div>
 <script>
-    document.getElementById('konfirmasiAttendanceEvent').addEventListener('click', function () {
-        alertify.success("Menyiapkan Dokumen");
+document.getElementById('konfirmasiAttendanceEvent').addEventListener('click', function () {
 
-        setTimeout(function () {
-            var table = document.getElementById("Attendance");
+    alertify.success("Menyiapkan Dokumen");
 
-            var data = [];
-            // Kolom yang ingin diexport 
-            var exportCols = [0,1,2,3,4,5];
+    setTimeout(function () {
 
-            // Ambil header
-            var headers = [];
-            for(var i=0; i<exportCols.length; i++){
-                headers.push(table.tHead.rows[0].cells[exportCols[i]].innerText.trim());
-            }
-            data.push(headers);
+        const table = document.getElementById("Attendance");
 
-            // Ambil data tbody
-            for(var i=0; i<table.tBodies[0].rows.length; i++){
-                var row = table.tBodies[0].rows[i];
-                var rowData = [];
-                for(var j=0; j<exportCols.length; j++){
-                    rowData.push(row.cells[exportCols[j]].innerText.trim());
-                }
-                data.push(rowData);
-            }
+        // Konversi seluruh tabel (thead, tbody, tfoot)
+        const ws = XLSX.utils.table_to_sheet(table);
 
-            // Ambil data tfoot (jika ada)
-            if(table.tFoot){
-                for(var i=0; i<table.tFoot.rows.length; i++){
-                    var row = table.tFoot.rows[i];
-                    var rowData = [];
-                    for(var j=0; j<exportCols.length; j++){
-                        rowData.push(row.cells[exportCols[j]].innerText.trim());
-                    }
-                    data.push(rowData);
-                }
-            }
+        // Workbook
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Attendance");
 
-            // Buat workbook
-            var wb = XLSX.utils.book_new();
-            var ws = XLSX.utils.aoa_to_sheet(data);
-            XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+        // Download
+        XLSX.writeFile(wb, "Laporan-Kehadiran-Generus.xlsx");
 
-            XLSX.writeFile(wb, "Laporan-Kehadiran-Generus.xlsx");
+    }, 1000);
 
-        }, 1000);
-    });
+});
 </script>

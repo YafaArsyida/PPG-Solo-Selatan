@@ -120,6 +120,9 @@
                             <div class="col-lg-3">
                                 <label class="form-label fw-semibold">
                                     Tanggal Lahir
+                                    <span class="text-danger">
+                                        *
+                                    </span>
                                 </label>
                                 <input type="date" class="form-control" wire:model.defer="tanggal_lahir">
                                 @error('tanggal_lahir')

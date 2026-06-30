@@ -38,7 +38,7 @@ class Create extends Component
         'nama_generus'   => 'required|string|min:3|max:150',
         'nomor_telepon'   => 'nullable|string|max:20',
         'tempat_lahir'   => 'nullable|string|max:120',
-        'tanggal_lahir'  => 'nullable|date',
+        'tanggal_lahir'  => 'required|date',
         'jenis_kelamin'  => 'required|in:laki-laki,perempuan',
         'alamat'         => 'nullable|string|max:255',
         'deskripsi'      => 'nullable|string|max:500',
@@ -51,6 +51,8 @@ class Create extends Component
         'nama_generus.required' => 'Nama generus wajib diisi.',
         'nama_generus.min'      => 'Nama terlalu pendek.',
         'nama_generus.max'      => 'Nama terlalu panjang.',
+
+        'tanggal_lahir.required' => 'Tanggal lahir wajib diisi.',
 
         'jenis_kelamin.required' => 'Pilih jenis kelamin.',
         'jenis_kelamin.in'       => 'Jenis kelamin tidak valid.',

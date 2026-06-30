@@ -39,12 +39,12 @@
                                 <h5 class="fw-bold mb-1">{{ $kegiatan->nama_kegiatan }} </h5>
                                 <p class="text-muted mb-0">{{ $kegiatan->lokasi_final['tempat'] ?? '-' }}</p>
                             </div>
-                            <div class="d-flex gap-2 flex-wrap">
+                            {{-- <div class="d-flex gap-2 flex-wrap">
                                 <button type="button" class="btn btn-light border rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#ExportMatrix">
                                     <i class="ri-database-2-line me-1 text-secondary"></i>
                                     Export Data
                                 </button>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="card-body border-top bg-light-subtle">
@@ -211,3 +211,99 @@
         @endif
     </div>
 </div>
+ {{-- MODAL EXPORT --}}
+<div class="modal fade" id="attendanceKhusus" tabindex="-1" aria-labelledby="exportRecordLabel" aria-hidden="true" wire:ignore.self>
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            {{-- HEADER --}}
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn btn-light btn-icon rounded-circle ms-auto" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ri-close-line fs-18"></i>
+                </button>
+            </div>
+
+            {{-- BODY --}}
+            <div class="modal-body px-4 pb-5 pt-2 text-center">
+                {{-- ICON --}}
+                <div class="mb-4">
+                    <div class="avatar-xl mx-auto">
+                        <div class="avatar-title bg-success-subtle text-success rounded-circle">
+                            <lord-icon src="https://cdn.lordicon.com/fjvfsqea.json" trigger="loop"
+                                colors="primary:#198754,secondary:#198754" style="width:70px;height:70px">
+                            </lord-icon>
+                        </div>
+                    </div>
+                </div>
+                {{-- TITLE --}}
+                <div class="mb-2">
+                    <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill mb-3">
+                        Export Kehadiran
+                    </span>
+                    <h3 class="fw-bold mb-2" id="exportRecordLabel">
+                        Export Data Kehadiran?
+                    </h3>
+
+                    <p class="text-muted mb-0 lh-lg px-lg-4">
+                        Laporan kehadiran generus akan diekspor sesuai
+                        filter dan data tabel yang sedang ditampilkan.
+                    </p>
+                </div>
+
+                {{-- INFO --}}
+                <div class="alert alert-light border rounded-4 text-start mt-4 mb-0">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="flex-shrink-0">
+                            <i class="ri-information-line text-primary fs-20"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-semibold mb-1">
+                                Informasi Export
+                            </h6>
+
+                            <p class="text-muted mb-0 fs-13">
+                                File akan diunduh dalam format Excel (.xlsx)
+                                dan hanya mencakup data yang tampil pada tabel.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- FOOTER --}}
+            <div class="modal-footer border-0 pt-0 px-4 pb-4 justify-content-center">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">
+                    <i class="ri-close-line me-1"></i>
+                    Batal
+                </button>
+
+                <button type="button" class="btn btn-success rounded-pill px-4" id="konfirmasiAttendanceKhusus"
+                    data-bs-dismiss="modal">
+                    <i class="ri-file-excel-2-line me-1"></i>
+                    Ya, Export
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.getElementById('konfirmasiAttendanceKhusus').addEventListener('click', function () {
+
+    alertify.success("Menyiapkan Dokumen");
+
+    setTimeout(function () {
+
+        const table = document.getElementById("AttendanceKhusus");
+
+        // Konversi seluruh tabel (thead, tbody, tfoot)
+        const ws = XLSX.utils.table_to_sheet(table);
+
+        // Workbook
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "AttendanceKhusus");
+
+        // Download
+        XLSX.writeFile(wb, "Laporan-Kehadiran-Generus.xlsx");
+
+    }, 1000);
+
+});
+</script>

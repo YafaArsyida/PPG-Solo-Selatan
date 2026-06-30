@@ -6,8 +6,9 @@
                 <p class="text-muted mb-0">Laporan kehadiran per peserta berdasarkan tanggal kegiatan</p>
             </div>
             <div class="d-flex gap-2 flex-wrap">
-                <button wire:click.prevent class="btn btn-soft-success rounded-pill px-3">
-                    <i class="ri-file-excel-2-line me-1"></i> Export Matrix
+                <button type="button" class="btn btn-light border rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#attendanceKhusus">
+                    <i class="ri-database-2-line me-1 text-secondary"></i>
+                    Export Data
                 </button>
             </div>
         </div>
@@ -47,7 +48,7 @@
 
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-hover align-middle table-nowrap mb-0">
+            <table id="AttendanceKhusus" class="table table-hover align-middle table-nowrap mb-0">
                 <thead class="table-light text-center align-middle">
                     <tr>
                         <th style="width:70px">#</th>
