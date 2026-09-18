@@ -12,7 +12,7 @@
 
                 <div>
                     <h5 class="fw-bold mb-1">
-                        Kegiatan Generus Desa {{ $nama_desa }}
+                        {{$kegiatan->nama_kegiatan ?? '-'}}
                     </h5>
                     <small class="text-muted">
                         Rekap kehadiran, izin, dan alfa peserta kegiatan generus
@@ -39,42 +39,10 @@
                                 {{ $kegiatan->nama_kegiatan }}
                             </h5>
                             <small class="text-muted">
-                                {{ $kegiatan->lokasi_final['tempat'] ?? '-' }} {{-- {{ $kegiatan->alamat
-                                }} --}}
+                                {{ $kegiatan->lokasi_final['tempat'] ?? '-' }}
                             </small>
                         </div>
-                        {{-- <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
-                            <div>
-                                <h5 class="fw-bold mb-1">{{ $kegiatan->nama_kegiatan }} </h5>
-                                <p class="text-muted mb-0">{{ $kegiatan->lokasi_final['tempat'] ?? '-' }}</p>
-                            </div>
-                            <div class="d-flex gap-2 flex-wrap">
-                                <button type="button" class="btn btn-light border rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#ExportMatrix">
-                                    <i class="ri-database-2-line me-1 text-secondary"></i>
-                                    Export Data
-                                </button>
-                            </div>
-                        </div> --}}
                     </div>
-                    {{-- <div class="card-body border-top bg-light-subtle">
-                        <div class="row g-3 align-items-end">
-                            <!-- Cari Kelompok -->
-                            <div class="col-xl-12 col-lg-12">
-                                <label class="form-label fw-semibold">
-                                    Cari Kelompok
-                                </label>
-
-                                <div class="search-box">
-                                    <input type="text"
-                                        class="form-control rounded-3"
-                                        placeholder="Ketik nama kelompok..."
-                                        wire:model.debounce.500ms="search">
-
-                                    <i class="ri-search-line search-icon"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
                     <div class="card-body p-0">
                         <!-- Tabel -->
                         <div class="table-responsive">

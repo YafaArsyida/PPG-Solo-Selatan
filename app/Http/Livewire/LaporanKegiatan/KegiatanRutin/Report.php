@@ -19,7 +19,9 @@ class Report extends Component
     public $search = '';
     public $listKelompok = [];
 
-    public $ms_kelompok_id = null;
+    public $targetTotal = 0;
+    public $persentaseTotal = 0;
+    public $totalInfaq = 0;
 
     public $startDate;
     public $endDate;
@@ -72,14 +74,6 @@ class Report extends Component
         ]);
     }
 
-    public function updatedMsKelompokId()
-    {
-        $this->generateTableReport();
-        $this->dispatchBrowserEvent('alertify-success', [
-            'message' => 'Memperbarui'
-        ]);
-    }
-
     protected $listeners = [
         'ReportRutin' => 'loadReport',
     ];
@@ -87,24 +81,29 @@ class Report extends Component
     public function loadReport($kegiatanId)
     {
         $this->resetReport();
+
         $this->kegiatanId = $kegiatanId;
-         $this->kegiatan = KegiatanGenerus::with([
+
+        $this->kegiatan = KegiatanGenerus::with([
             'ms_desa',
-            'ms_kelompok'
         ])->find($kegiatanId);
-
-        $this->ms_desa_id = $this->kegiatan?->ms_desa_id ?? null;
-
-        $this->nama_desa = $this->kegiatan?->ms_desa?->nama_desa ?? '-';
 
         if (!$this->kegiatan) {
             $this->dispatchBrowserEvent('alertify-error', [
                 'message' => 'Data kegiatan tidak ditemukan'
             ]);
+
             return;
         }
 
-         $this->listKelompok = Kelompok::where('ms_desa_id', $this->ms_desa_id)
+        $this->ms_desa_id = $this->kegiatan->ms_desa_id;
+        $this->nama_desa  = $this->kegiatan->ms_desa->nama_desa;
+
+        // Tetap digunakan untuk kebutuhan filter/UI kelompok.
+        $this->listKelompok = Kelompok::where(
+            'ms_desa_id',
+            $this->ms_desa_id
+        )
             ->orderBy('nama_kelompok')
             ->get();
 
@@ -124,7 +123,6 @@ class Report extends Component
     private function resetReport()
     {
         $this->search = '';
-        $this->ms_kelompok_id = null;
         $this->kegiatan = null;
         $this->laporanRows = [];
         $this->tanggalMatrix = [];
@@ -175,64 +173,80 @@ class Report extends Component
             !$this->kegiatanId ||
             !$this->startDate ||
             !$this->endDate ||
-            Carbon::parse($this->endDate)->lt(Carbon::parse($this->startDate))
+            Carbon::parse($this->endDate)->lt(
+                Carbon::parse($this->startDate)
+            )
         ) {
             return;
         }
 
-        $kelompoks = Kelompok::query()
-            ->where('ms_desa_id', $this->ms_desa_id)
+        // --------------------------------------------------------------------------
+        // TARGET PESERTA SESUAI SCOPE KEGIATAN
+        // --------------------------------------------------------------------------
 
-            ->when($this->search, function ($query) {
-                $query->where(
-                    'nama_kelompok',
-                    'like',
-                    '%' . $this->search . '%'
-                );
-            })
-
-            ->when($this->ms_kelompok_id, function ($query) {
-                $query->where(
-                    'ms_kelompok_id',
-                    $this->ms_kelompok_id
-                );
-            })
-
-            ->withCount('ms_generus')
-            ->orderBy('nama_kelompok')
+        $targetGenerus = $this->kegiatan
+            ->targetPesertaQuery()
+            ->with('ms_kelompok')
             ->get();
 
-        $targetTotal = $kelompoks->sum('ms_generus_count');
+        // --------------------------------------------------------------------------
+        // KELOMPOK TARGET
+        // --------------------------------------------------------------------------
 
-        /*
-        |--------------------------------------------------------------------------
-        | Tanggal Presensi (Kolom Tabel)
-        |--------------------------------------------------------------------------
-        */
+        $kelompoks = $targetGenerus
+            ->filter(fn ($generus) => $generus->ms_kelompok)
+            ->groupBy('ms_kelompok_id')
+            ->map(function ($members) {
+
+                $kelompok = $members->first()->ms_kelompok;
+
+                // Jumlah target hanya dari generus yang termasuk
+                // scope kegiatan ini.
+                $kelompok->target_count = $members->count();
+
+                return $kelompok;
+            })
+            ->filter(function ($kelompok) {
+
+                if (!$this->search) {
+                    return true;
+                }
+
+                return str_contains(
+                    strtolower($kelompok->nama_kelompok),
+                    strtolower($this->search)
+                );
+            })
+            ->sortBy('nama_kelompok')
+            ->values();
+
+        // Total target keseluruhan
+        $this->targetTotal = $kelompoks->sum('target_count');
+
+        // --------------------------------------------------------------------------
+        // TANGGAL PRESENSI (KOLOM TABEL)
+        // --------------------------------------------------------------------------
+
         $this->tanggalMatrix = $this->generateTanggalMatrix();
 
-        /*
-        |--------------------------------------------------------------------------
-        | Semua Presensi
-        |--------------------------------------------------------------------------
-        */
+        // --------------------------------------------------------------------------
+        // SEMUA PRESENSI
+        // --------------------------------------------------------------------------
         $presensis = PresensiKegiatanGenerus::query()
             ->with('ms_generus')
             ->where('ms_kegiatan_generus_id', $this->kegiatanId)
             ->where('status_hadir', 'hadir')
-            ->whereBetween('tanggal_presensi', [
-                $this->startDate,
-                $this->endDate
-            ])
+            ->whereIn(
+                'tanggal_presensi',
+                $this->tanggalMatrix
+            )
             ->get();
 
-        /*
-        |--------------------------------------------------------------------------
-        | Presensi Map
-        |--------------------------------------------------------------------------
-        */
+        // --------------------------------------------------------------------------
+        // PRESENSI MAP
+        // --------------------------------------------------------------------------
+
         $presensiMap = $presensis
-            ->filter(fn($item) => $item->ms_generus)
             ->groupBy(function ($item) {
 
                 return
@@ -243,34 +257,34 @@ class Report extends Component
                     )->format('Y-m-d');
             });
 
-        /*
-        |--------------------------------------------------------------------------
-        | Total Hadir Per Tanggal
-        |--------------------------------------------------------------------------
-        */
+        // --------------------------------------------------------------------------
+        // TOTAL HADIR PER TANGGAL
+        // --------------------------------------------------------------------------
+
         $hadirPerTanggal = $presensis
             ->groupBy(function ($item) {
+
                 return Carbon::parse(
                     $item->tanggal_presensi
                 )->format('Y-m-d');
             })
-            ->map(fn($items) => $items->count());
+            ->map(fn ($items) => $items->count());
 
-        /*
-        |--------------------------------------------------------------------------
-        | Rows Kelompok
-        |--------------------------------------------------------------------------
-        */
+        // --------------------------------------------------------------------------
+        // ROWS KELOMPOK
+        // --------------------------------------------------------------------------
+
         $rows = [];
 
         foreach ($kelompoks as $kelompok) {
 
-            $target = $kelompok->ms_generus_count;
+            $target = $kelompok->target_count;
 
             $row = [
                 'kelompok' => strtoupper($kelompok->nama_kelompok),
-                'target' => $target,
-                'tanggal' => [],
+                'target'   => $target,
+                'tanggal'  => [],
+                'persen'   => [],
             ];
 
             foreach ($this->tanggalMatrix as $tanggal) {
@@ -286,9 +300,13 @@ class Report extends Component
                     : 0;
 
                 $row['tanggal'][$tanggal] = [
-                    'hadir' => $hadir,
+                    'hadir'      => $hadir,
                     'persentase' => $persentase,
                 ];
+
+                // Agar konsisten dengan report khusus
+                // dan mudah dipanggil di Blade.
+                $row['persen'][$tanggal] = $persentase;
             }
 
             $rows[] = $row;
@@ -296,37 +314,41 @@ class Report extends Component
 
         $this->laporanRows = $rows;
 
-        /*
-        |--------------------------------------------------------------------------
-        | Footer Total Per Tanggal
-        |--------------------------------------------------------------------------
-        */
+        // --------------------------------------------------------------------------
+        // FOOTER TOTAL PER TANGGAL
+        // --------------------------------------------------------------------------
+
         foreach ($this->tanggalMatrix as $tanggal) {
 
             $hadirTotal = $hadirPerTanggal[$tanggal] ?? 0;
 
             $this->totalPerTanggal[$tanggal] = [
                 'hadir' => $hadirTotal,
-                'persentase' => $targetTotal > 0
-                    ? round(($hadirTotal / $targetTotal) * 100)
+
+                'persentase' => $this->targetTotal > 0
+                    ? round(($hadirTotal / $this->targetTotal) * 100)
                     : 0,
+
                 'infaq' => 0,
             ];
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Infaq Per Tanggal
-        |--------------------------------------------------------------------------
-        */
+        // --------------------------------------------------------------------------
+        // INFAQ PER TANGGAL
+        // --------------------------------------------------------------------------
+
         $infaqs = TRInfaq::query()
-            ->where('ms_kegiatan_generus_id', $this->kegiatanId)
+            ->where(
+                'ms_kegiatan_generus_id',
+                $this->kegiatanId
+            )
             ->whereBetween('tanggal', [
                 $this->startDate,
                 $this->endDate
             ])
             ->get()
             ->groupBy(function ($item) {
+
                 return Carbon::parse(
                     $item->tanggal
                 )->format('Y-m-d');
@@ -338,6 +360,30 @@ class Report extends Component
                 ($infaqs[$tanggal] ?? collect())
                     ->sum('nominal');
         }
+
+        // --------------------------------------------------------------------------
+        // TOTAL INFAQ
+        // --------------------------------------------------------------------------
+
+        $this->totalInfaq = collect(
+            $this->totalPerTanggal
+        )->sum('infaq');
+
+        // --------------------------------------------------------------------------
+        // PERSENTASE KESELURUHAN
+        // --------------------------------------------------------------------------
+
+        $totalHadir = collect(
+            $this->totalPerTanggal
+        )->sum('hadir');
+
+        $totalTarget =
+            $this->targetTotal *
+            count($this->tanggalMatrix);
+
+        $this->persentaseTotal = $totalTarget > 0
+            ? round(($totalHadir / $totalTarget) * 100)
+            : 0;
     }
     public function render()
     {

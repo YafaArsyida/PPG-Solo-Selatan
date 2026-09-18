@@ -26,14 +26,19 @@
             </div>
             <div class="col-xxl-3 col-lg-3 col-sm-6">
                 <label class="form-label fw-semibold">Kelompok</label>
-                <select class="form-select rounded-3" wire:model="ms_kelompok_id" {{ !$ms_desa_id ? 'disabled' : '' }}>
-                    <option value="">Semua Kelompok</option>
-                    @foreach($listKelompok as $kelompok)
-                    <option value="{{ $kelompok->ms_kelompok_id }}">
-                        Kelompok {{ $kelompok->nama_kelompok }}
-                    </option>
-                    @endforeach
-                </select>
+
+                @if($kegiatan?->scope === 'kelompok')
+                    <input type="text" class="form-control rounded-3" value="{{ $listKelompok->first()?->nama_kelompok ?? '-' }}" readonly>
+                @else
+                    <select class="form-select rounded-3" wire:model="ms_kelompok_id">
+                        <option value="">Semua Kelompok</option>
+                        @foreach($listKelompok as $kelompok)
+                            <option value="{{ $kelompok->ms_kelompok_id }}">
+                                Kelompok {{ $kelompok->nama_kelompok }}
+                            </option>
+                        @endforeach
+                    </select>
+                @endif
             </div>
             <div class="col-xxl-3 col-lg-3 col-sm-6">
                 <label class="form-label fw-semibold">Gender</label>

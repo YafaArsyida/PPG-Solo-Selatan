@@ -64,8 +64,9 @@
                                         </small>
                                         @enderror
                                     </div>
-                                    {{-- Kelompok --}} @if($scope === 'kelompok')
-                                    <div class="col-lg-5">
+                                    {{-- Kelompok --}} 
+                                    @if($scope === 'kelompok')
+                                    <div class="col-lg-5" wire:key="scope-kelompok">
                                         <label class="form-label fw-semibold">
                                             Penempatan Kelompok
                                             <span class="text-danger">*</span>
