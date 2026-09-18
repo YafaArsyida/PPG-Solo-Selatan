@@ -90,23 +90,47 @@ class Report extends Component
             return;
         }
 
-        $kelompoks = Kelompok::query()
-            ->where('ms_desa_id', $this->ms_desa_id)
+        // --------------------------------------------------------------------------
+        // TARGET PESERTA SESUAI SCOPE KEGIATAN
+        // --------------------------------------------------------------------------
 
-            ->when($this->search, function ($query) {
-                $query->where(
-                    'nama_kelompok',
-                    'like',
-                    '%' . $this->search . '%'
-                );
-            })
-
-            ->withCount('ms_generus')
-            ->orderBy('nama_kelompok')
+        $targetGenerus = $this->kegiatan
+            ->targetPesertaQuery()
+            ->with('ms_kelompok')
             ->get();
 
-        // $targetTotal = $kelompoks->sum('ms_generus_count');
-        $this->targetTotal = $kelompoks->sum('ms_generus_count');
+        // --------------------------------------------------------------------------
+        // KELOMPOK TARGET
+        // --------------------------------------------------------------------------
+
+        $kelompoks = $targetGenerus
+            ->filter(fn ($generus) => $generus->ms_kelompok)
+            ->groupBy('ms_kelompok_id')
+            ->map(function ($members) {
+
+                $kelompok = $members->first()->ms_kelompok;
+
+                // Tambahkan jumlah target dari peserta yang memang
+                // termasuk target kegiatan
+                $kelompok->target_count = $members->count();
+
+                return $kelompok;
+            })
+            ->filter(function ($kelompok) {
+
+                if (!$this->search) {
+                    return true;
+                }
+
+                return str_contains(
+                    strtolower($kelompok->nama_kelompok),
+                    strtolower($this->search)
+                );
+            })
+            ->sortBy('nama_kelompok')
+            ->values();
+
+        $this->targetTotal = $kelompoks->sum('target_count');
 
         /*
         |--------------------------------------------------------------------------
@@ -169,7 +193,7 @@ class Report extends Component
 
         foreach ($kelompoks as $kelompok) {
 
-            $target = $kelompok->ms_generus_count;
+            $target = $kelompok->target_count;
 
             $row = [
                 'kelompok' => strtoupper($kelompok->nama_kelompok),

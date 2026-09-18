@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\LaporanKegiatan\KegiatanEvent;
 
+use App\Models\KegiatanGenerus;
 use App\Models\Kelompok;
 use App\Models\PresensiKegiatanGenerus;
 use Livewire\Component;
@@ -36,18 +37,46 @@ class Attendance extends Component
     public function setKegiatan($kegiatanId, $desaId, $scope)
     {
         $this->ms_kegiatan_generus_id = $kegiatanId;
-        $this->ms_desa_id = $desaId; // FIXED
+        $this->ms_desa_id = $desaId;
         $this->scope = $scope;
         $this->ms_kelompok_id = null;
 
         // LIST KELOMPOK BERDASARKAN SCOPE
         if ($scope === 'daerah') {
+
             // Scope daerah → semua kelompok
             $this->listKelompok = Kelompok::orderBy('nama_kelompok')
                 ->get();
+
+        } elseif ($scope === 'desa') {
+
+            // Scope desa → semua kelompok dalam desa
+            $this->listKelompok = Kelompok::where(
+                    'ms_desa_id',
+                    $desaId
+                )
+                ->orderBy('nama_kelompok')
+                ->get();
+
+        } elseif ($scope === 'kelompok') {
+
+            // Scope kelompok → hanya kelompok target kegiatan
+            $kegiatan = KegiatanGenerus::find($kegiatanId);
+
+            $this->listKelompok = Kelompok::where(
+                    'ms_kelompok_id',
+                    $kegiatan->ms_kelompok_id
+                )
+                ->orderBy('nama_kelompok')
+                ->get();
+
         } else {
-            // Scope desa → hanya kelompok di desa tersebut
-            $this->listKelompok = Kelompok::where('ms_desa_id', $desaId)
+
+            // Fallback → kelompok dalam desa
+            $this->listKelompok = Kelompok::where(
+                    'ms_desa_id',
+                    $desaId
+                )
                 ->orderBy('nama_kelompok')
                 ->get();
         }

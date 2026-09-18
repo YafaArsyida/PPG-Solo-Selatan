@@ -41,18 +41,50 @@ class Attendance extends Component
     public function setKegiatan($kegiatanId)
     {
         $this->ms_kegiatan_generus_id = $kegiatanId;
-        $this->kegiatan = KegiatanGenerus::find($kegiatanId);
 
-        $this->ms_desa_id = $this->kegiatan?->ms_desa_id;
+        $this->kegiatan = KegiatanGenerus::with('ms_kelompok')
+            ->find($kegiatanId);
 
+        if (!$this->kegiatan) {
+            $this->listKelompok = collect();
+            return;
+        }
+
+        $this->ms_desa_id = $this->kegiatan->ms_desa_id;
         $this->ms_kelompok_id = null;
         $this->search = '';
         $this->gender = '';
 
-        $this->listKelompok = Kelompok::where('ms_desa_id', $this->ms_desa_id)
-            ->orderBy('nama_kelompok')
-            ->get();
-        
+        // LIST KELOMPOK BERDASARKAN SCOPE
+        if ($this->kegiatan->scope === 'daerah') {
+
+            // Scope daerah → semua kelompok
+            $this->listKelompok = Kelompok::orderBy('nama_kelompok')
+                ->get();
+
+        } elseif ($this->kegiatan->scope === 'desa') {
+
+            // Scope desa → semua kelompok dalam desa kegiatan
+            $this->listKelompok = Kelompok::where(
+                    'ms_desa_id',
+                    $this->ms_desa_id
+                )
+                ->orderBy('nama_kelompok')
+                ->get();
+
+        } elseif ($this->kegiatan->scope === 'kelompok') {
+
+            // Scope kelompok → hanya kelompok target kegiatan
+            $this->listKelompok = $this->kegiatan->ms_kelompok
+                ? collect([$this->kegiatan->ms_kelompok])
+                : collect();
+
+        } else {
+
+            // Fallback
+            $this->listKelompok = collect();
+        }
+
         $this->loadTanggalMatrix();
     }
 

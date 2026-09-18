@@ -54,9 +54,35 @@ class Attendance extends Component
         $this->search = '';
         $this->gender = '';
 
-        $this->listKelompok = Kelompok::where('ms_desa_id', $this->ms_desa_id)
-            ->orderBy('nama_kelompok')
-            ->get();
+        // LIST KELOMPOK BERDASARKAN SCOPE
+        if ($this->kegiatan->scope === 'daerah') {
+
+            // Scope daerah → semua kelompok
+            $this->listKelompok = Kelompok::orderBy('nama_kelompok')
+                ->get();
+
+        } elseif ($this->kegiatan->scope === 'desa') {
+
+            // Scope desa → semua kelompok dalam desa kegiatan
+            $this->listKelompok = Kelompok::where(
+                    'ms_desa_id',
+                    $this->ms_desa_id
+                )
+                ->orderBy('nama_kelompok')
+                ->get();
+
+        } elseif ($this->kegiatan->scope === 'kelompok') {
+
+            // Scope kelompok → hanya kelompok target kegiatan
+            $this->listKelompok = $this->kegiatan->ms_kelompok
+                ? collect([$this->kegiatan->ms_kelompok])
+                : collect();
+
+        } else {
+
+            // Fallback
+            $this->listKelompok = collect();
+        }
 
         $this->resetTanggal();
     }
