@@ -1,17 +1,5 @@
 @extends('template_machine.v_template')
 @section('content')
-
-@php
-$title = "Dashboard"
-@endphp
-@push('info-page')
-<div class="page-title-right">
-    <ol class="breadcrumb m-0">
-        <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li>
-        <li class="breadcrumb-item active">{{ $title ?? "SmartGate" }}</li>
-    </ol>
-</div>
-@endpush
 <div class="page-content">
     <div class="container-fluid" style="max-width: 100%">
         <div class="row mb-3 pb-1">
@@ -62,7 +50,7 @@ $title = "Dashboard"
                         </div>
                     </div> <!-- end row -->
                     
-                    <div class="row mt-3">
+                    <div class="row">
                         <div class="col-12">
                             @livewire('dashboard.ringkasan-kegiatan-hari-ini')
                         </div>
@@ -83,11 +71,6 @@ $title = "Dashboard"
                 </div> <!-- end row -->
             </div><!-- end col -->
         </div>
-        <div class="row">
-            {{-- @livewire('widget.kartu-transaksi-jurnal')
-            @livewire('widget.kartu-jurnal-detail') --}}
-        </div><!-- end row -->
     </div>
 </div>
-
 @endsection

@@ -1,4 +1,4 @@
-<div class="card border-0 shadow-sm overflow-hidden">
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
     {{-- MAIN CONTENT --}}
     <div class="card-body p-0">
         <div class="row align-items-center g-0">

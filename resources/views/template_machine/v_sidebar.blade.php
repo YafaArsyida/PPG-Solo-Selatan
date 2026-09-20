@@ -90,6 +90,14 @@
                         <span>Laporan Kegiatan</span>
                     </a>
                 </li>
+                {{-- Laporan Kehadiran --}}
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ request()->routeIs('operasional.laporan-kehadiran') ? 'active' : '' }}"
+                        href="{{ route('operasional.laporan-kehadiran') }}">
+                        <i class="mdi mdi-account-check-outline"></i>
+                        <span>Laporan Kehadiran</span>
+                    </a>
+                </li>
                 @endcan
                 @can('view-kurikulum')        
                 <li class="menu-title"><span data-key="t-menu">Kurikulum KBM</span></li>

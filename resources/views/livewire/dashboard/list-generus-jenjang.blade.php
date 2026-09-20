@@ -1,4 +1,4 @@
-<div class="card border-0 shadow-sm h-100 overflow-hidden">
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
     {{-- HEADER --}}
     <div class="card-header bg-white border-0 py-4">
         <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
@@ -31,13 +31,10 @@
         </div>
     </div>
     {{-- FILTER --}}
-    <div class="card-body border-top bg-light-subtle pb-0">
+    <div class="card-body border-top bg-light-subtle">
         <div class="row g-3 align-items-end">
             {{-- SEARCH --}}
             <div class="col-xxl-6 col-lg-6">
-                <label class="form-label fw-semibold">
-                    Cari Nama Generus
-                </label>
                 <div class="search-box">
                     <input type="text" class="form-control border-light shadow-sm rounded-3"
                         wire:model.debounce.400ms="search" placeholder="Ketik nama generus...">
@@ -47,9 +44,6 @@
             </div>
             {{-- JENJANG --}}
             <div class="col-xxl-6 col-lg-6">
-                <label class="form-label fw-semibold">
-                    Jenjang Usia
-                </label>
                 <select class="form-select rounded-3 shadow-sm border-light" wire:model="jenjangUsia">
                     <option value="">Semua Jenjang Usia</option>
                     <option value="caberawit">
@@ -77,7 +71,7 @@
             <table class="table table-hover align-middle table-nowrap mb-0">
                 <thead class="table-light">
                     <tr class="text-uppercase fw-semibold">
-                        <th width="60px" class="">No</th>
+                        <th width="30px" class="">No</th>
                         <th class="">Generus</th>
                         {{-- <th class="">Kelompok</th> --}}
                         <th class="text-center ">Usia</th>

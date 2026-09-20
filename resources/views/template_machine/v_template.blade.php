@@ -4,6 +4,20 @@
 
 <head>
     @include('template_machine.v_head')
+    <style>
+        .sticky-generus {
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            background-color: #fff !important;
+            box-shadow: 3px 0 6px rgba(0, 0, 0, 0.06);
+        }
+
+        thead .sticky-generus {
+            z-index: 3;
+            background-color: #f8f9fa !important;
+        }
+    </style>
 </head>
 
 <body>

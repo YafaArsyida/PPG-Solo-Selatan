@@ -70,7 +70,7 @@ class ListGenerusJenjang extends Component
     public function render()
     {
         return view('livewire.dashboard.list-generus-jenjang',[
-            'data' => $this->generus->paginate(15)
+            'data' => $this->generus->paginate(20)
         ]);
     }
 }
