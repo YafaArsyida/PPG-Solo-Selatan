@@ -5,7 +5,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>TemanGenerus | Sragen Barat - Sistem Administrasi Terintegrasi untuk Generus</title>
+    <title>TemanGenerus | {{ config('app.name') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Sistem Administrasi Terintegrasi untuk Generus" name="description" />
     <meta content="ManekaromaTeknologi" name="author" />
@@ -66,7 +66,7 @@
                                                     </div>
 
                                                     <h3 class="text-white fw-semibold">
-                                                        PPG Sragen Barat
+                                                        {{ config('app.name') }}
                                                     </h3>
 
                                                     <p class="text-white-75 mb-0">
