@@ -160,8 +160,15 @@
                         </td>
                         <td class="text-center">
                             {{-- DELETE --}}
-                            <a href="#ModalDeleteKegiatan" data-bs-toggle="modal" class="btn btn-soft-danger btn-sm rounded-pill px-3"
-                                title="Hapus Kegiatan" wire:click.prevent="$emit('KegiatanDelete', {{ $item->ms_kegiatan_generus_id }})">
+                            <a
+                                href="{{ $item->status !== 'selesai' ? '#ModalDeleteKegiatan' : 'javascript:void(0)' }}"
+                                @if ($item->status !== 'selesai')
+                                    data-bs-toggle="modal"
+                                    wire:click.prevent="$emit('KegiatanDelete', {{ $item->ms_kegiatan_generus_id }})"
+                                @endif
+                                class="btn btn-soft-danger btn-sm rounded-pill px-3 {{ $item->status === 'selesai' ? 'disabled opacity-50' : '' }}"
+                                title="{{ $item->status === 'selesai' ? 'Kegiatan sudah selesai' : 'Hapus Kegiatan' }}"
+                            >
                                 <i class="ri-delete-bin-5-line me-1"></i>
                                 Hapus
                             </a>
@@ -278,8 +285,15 @@
                                 </a>
 
                                 {{-- EDIT --}}
-                                <a href="#ModalEditKegiatan" data-bs-toggle="modal" class="btn btn-primary btn-sm rounded-pill px-3"
-                                    title="Edit Kegiatan" wire:click.prevent="$emit('KegiatanEdit', {{ $item->ms_kegiatan_generus_id }}, {{ $ms_desa_id }})">
+                                <a
+                                    href="{{ $item->status !== 'selesai' ? '#ModalEditKegiatan' : 'javascript:void(0)' }}"
+                                    @if ($item->status !== 'selesai')
+                                        data-bs-toggle="modal"
+                                        wire:click.prevent="$emit('KegiatanEdit', {{ $item->ms_kegiatan_generus_id }}, {{ $ms_desa_id }})"
+                                    @endif
+                                    class="btn btn-primary btn-sm rounded-pill px-3 {{ $item->status === 'selesai' ? 'disabled opacity-50' : '' }}"
+                                    title="{{ $item->status === 'selesai' ? 'Kegiatan sudah selesai' : 'Edit Kegiatan' }}"
+                                >
                                     <i class="ri-pencil-line me-1"></i>
                                     Edit
                                 </a>

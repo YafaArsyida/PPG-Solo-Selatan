@@ -48,16 +48,34 @@
                         </option>
 
                         <option value="daerah">
-                            Daerah
+                            Kegiatan Daerah
                         </option>
 
                         <option value="desa">
-                            Desa
+                            Kegiatan Desa
                         </option>
 
                         <option value="kelompok">
-                            Kelompok
+                            Kegiatan Kelompok
                         </option>
+                    </select>
+                </div>
+
+                {{-- KELOMPOK --}}
+                <div id="filterKelompokKegiatan" class="mb-4 d-none">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label for="PilihKelompokKegiatan" class="form-label text-uppercase fw-semibold mb-0">
+                            Kelompok
+                        </label>
+                        <i class="mdi mdi-information-outline fs-16 text-primary" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top" title="Filter kegiatan berdasarkan kelompok."></i>
+                    </div>
+
+                    <select id="PilihKelompokKegiatan" wire:model="selectedKelompok" class="form-select" style="cursor:pointer" multiple>
+                        @foreach($listKelompok as $kelompok)
+                            <option value="{{ $kelompok->ms_kelompok_id }}">
+                                {{ $kelompok->nama_kelompok }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
 
@@ -77,7 +95,7 @@
 
                     <select id="PilihJenjangKegiatan" wire:model="selectedJenjang" class="form-select" style="cursor:pointer" multiple>
                         <option value="caberawit">
-                            Cabe Rawit
+                            Caberawit
                         </option>
 
                         <option value="remaja">
@@ -90,24 +108,6 @@
 
                     </select>
 
-                </div>
-
-                {{-- KELOMPOK --}}
-                <div id="filterKelompokKegiatan" class="mb-4 d-none">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <label for="PilihKelompokKegiatan" class="form-label text-uppercase fw-semibold mb-0">
-                            Kelompok
-                        </label>
-                        <i class="mdi mdi-information-outline fs-16 text-primary" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top" title="Filter kegiatan berdasarkan kelompok."></i>
-                    </div>
-
-                    <select id="PilihKelompokKegiatan" wire:model="selectedKelompok" class="form-select" style="cursor:pointer" multiple>
-                        @foreach($listKelompok as $kelompok)
-                            <option value="{{ $kelompok->ms_kelompok_id }}">
-                                {{ $kelompok->nama_kelompok }}
-                            </option>
-                        @endforeach
-                    </select>
                 </div>
 
                 <div class="mb-0">
