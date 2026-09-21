@@ -13,8 +13,6 @@ class Edit extends Component
 {
     public $kegiatanId;
 
-    public $selectedDesa = null;
-
     public $ms_desa_id = null;
     public $scope = '';
     public $ms_kelompok_id = null;
@@ -53,9 +51,8 @@ class Edit extends Component
     /* =========================
      * LOAD DATA
      * ========================= */
-    public function loadData($id, $desaId = null)
+    public function loadData($id)
     {
-        $this->selectedDesa = $desaId;
         $kegiatan = KegiatanGenerus::find($id);
 
         if (!$kegiatan) {
@@ -390,7 +387,7 @@ class Edit extends Component
     public function render()
     {
         return view('livewire.administrasi.kegiatan-generus.edit',[
-            'listKelompok' => Kelompok::where('ms_desa_id', $this->selectedDesa)
+            'listKelompok' => Kelompok::where('ms_desa_id', $this->ms_desa_id)
                 ->orderBy('nama_kelompok')
                 ->get()
         ]);

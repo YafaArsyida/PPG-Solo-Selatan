@@ -41,20 +41,18 @@
                     <div class="row g-3">
                         <!-- CTA Laporan Generus -->
                         <div class="col-md-6">
-                            @livewire('dashboard.c-t-a-laporan-rutin-kelompok')
+                            @livewire('dashboard.c-t-a-laporan-kegiatan')
                         </div>
                     
                         <!-- CTA Laporan Aktivitas Generus -->
                         <div class="col-md-6">
-                            @livewire('dashboard.c-t-a-laporan-event-kelompok')
+                            @livewire('dashboard.c-t-a-laporan-kehadiran')
                         </div>
-                    </div> <!-- end row -->
-                    
-                    <div class="row">
+
                         <div class="col-12">
                             @livewire('dashboard.ringkasan-kegiatan-hari-ini')
                         </div>
-                    </div>
+                    </div> <!-- end row -->
                 </div>
             </div> <!-- end col-->
             <div class="col-xxl-7">

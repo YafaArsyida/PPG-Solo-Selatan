@@ -62,7 +62,7 @@
                 </div>
 
                 {{-- KELOMPOK --}}
-                <div id="filterKelompokKegiatan" class="mb-4 d-none">
+                <div id="filterKelompokKegiatan" class="mb-4 {{ $scope !== 'kelompok' ? 'd-none' : '' }}">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <label for="PilihKelompokKegiatan" class="form-label text-uppercase fw-semibold mb-0">
                             Kelompok
